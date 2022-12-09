@@ -1,0 +1,31 @@
+.landing-head{
+    font-size: 20px;
+    color: #6e44c2;
+}
+
+.landing-input {
+    border-radius: 20px;
+    border: black solid 2px;
+    background-color: #97dbc7;
+    color: #8f64ac;
+}
+
+.landing-input::placeholder{
+    color: #8f64ac;
+}
+
+.landing-input:focus {
+    background-color: #97dbc7;
+    color: #8f64ac;
+}
+
+.landing-btn {
+    background-color:#af5fa7;
+    color: #222222;
+    border-radius: 10px;
+    border-color: #af5fa7;
+}
+
+body {
+    background: #e7ddf7;
+}
