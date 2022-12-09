@@ -35,7 +35,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.formLogin()
                 .loginPage("/login")
                 .defaultSuccessUrl("/");
-        http.logout();    // для кастомизации логаута
+        http.logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .deleteCookies("JSESSIONID")
+                .clearAuthentication(true)
+                .invalidateHttpSession(true);
 
         http.csrf();
     }
