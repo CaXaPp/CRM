@@ -32,7 +32,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .anyRequest().permitAll();
 
-        http.formLogin(); // для кастомизации логина
+        http.formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/");
         http.logout();    // для кастомизации логаута
 
         http.csrf();
