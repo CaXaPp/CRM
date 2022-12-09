@@ -1,0 +1,7 @@
+.navbar_main_block {
+    padding: 10px 15px;
+}
+
+#navbarSupportedContent {
+    justify-content: space-between;
+}
