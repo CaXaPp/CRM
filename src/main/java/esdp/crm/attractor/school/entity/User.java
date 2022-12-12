@@ -48,6 +48,7 @@ public class User implements UserDetails {
     @Column(name = "status", nullable = false)
     private Status status;
 
+    @Column(name = "enabled")
     private boolean enabled;
 
     @Override

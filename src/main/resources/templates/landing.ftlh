@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h3 class="text-center landing-head">Оставьте нам вашу заявку и наши сотрудники обязательно  с вами свяжуться.
+        <h3 class="text-center landing-head">Оставьте нам вашу заявку и наши сотрудники обязательно с вами свяжутся.
             <br>(для заявки просим вас ответить на вопросы ниже)</h3>
         <div class="d-flex justify-content-center">
             <form id="application-form" action="#"  method="post" class="pt-4 w-50 row d-flex justify-content-center">
@@ -45,10 +45,7 @@
             </form>
         </div>
     </div>
-
-
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-</body>
 </html>
