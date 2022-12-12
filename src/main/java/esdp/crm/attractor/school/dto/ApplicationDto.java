@@ -30,5 +30,5 @@ public class ApplicationDto {
 
     private LocalDateTime createdAt;
 
-    private ClientSource source;
+    private String source;
 }

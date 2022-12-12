@@ -23,8 +23,13 @@
                 <div class="form-group mt-4">
                     <input type="text" class="form-control landing-input" name="company" id="company" placeholder="Наименование организации" required>
                 </div>
+
                 <div class="form-group mt-4">
-                    <input type="text" class="form-control landing-input" name="product" id="product" placeholder="Продукт или услуга компании" required>
+                    <select class="form-select landing-input" aria-label="Select product" name="product" id="product" required>
+                        <#list products as product>
+                            <option value="${product.name}">${product.name}</option>
+                        </#list>
+                    </select>
                 </div>
                 <div class="form-group mt-4">
                     <input type="tel" class="form-control landing-input" name="phone" id="phone" placeholder="Ваш номер телефона" required>
