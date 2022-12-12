@@ -30,10 +30,6 @@ public class ApplicationController {
     @PostMapping
     public String postApplicationFromLandingPage(@Valid @ModelAttribute ApplicationDto applicationDto) {
         applicationDto.setCreatedAt(LocalDateTime.now());
-        System.out.println(applicationDto.getName());
-        System.out.println(applicationDto.getProduct());
-        System.out.println(applicationDto.getEmail());
-        System.out.println(applicationDto.getSource());
         applicationService.save(applicationDto);
         return "redirect:/application";
     }
