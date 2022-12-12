@@ -1,0 +1,7 @@
+.editContainer {
+    max-width: 800px;
+    margin: 20px auto 0 auto;
+}
+.editContainer input {
+    width: 100%;
+}

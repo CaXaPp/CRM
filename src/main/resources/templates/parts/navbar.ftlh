@@ -2,12 +2,12 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="#">Рабочий стол</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">Список всех заявок</a>
+                <a class="nav-link" href="/applications">Список всех заявок</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Мои операции</a>
