@@ -28,7 +28,7 @@ public class ApplicationDto {
 
     private String email;
 
-    private LocalDateTime date;
+    private LocalDateTime createdAt;
 
     private ClientSource source;
 }

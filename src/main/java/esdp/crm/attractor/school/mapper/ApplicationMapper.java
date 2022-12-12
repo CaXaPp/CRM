@@ -11,10 +11,10 @@ public class ApplicationMapper {
                 .id(application.getId())
                 .name(application.getName())
                 .company(application.getCompany())
-                .product(application.getProduct())
+                .product(application.getProduct().getName())
                 .phone(application.getPhone())
                 .email(application.getEmail())
-                .date(application.getDate())
+                .createdAt(application.getCreatedAt())
                 .source(application.getSource())
                 .build();
     }

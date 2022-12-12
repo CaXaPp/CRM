@@ -23,8 +23,8 @@ public class Application {
     @Column(name = "company", nullable = false)
     private String company;
 
-    @Column(name = "product", nullable = false)
-    private String product;
+    @ManyToOne
+    private Product product;
 
     @Column(name = "phone", nullable = false)
     private String phone;
@@ -33,7 +33,7 @@ public class Application {
     private String email;
 
     @Column(name = "date", nullable = false)
-    private LocalDateTime date;
+    private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "source", nullable = false)
