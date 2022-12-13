@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddOperationDto {
+public class AddTaskDto {
     private String name;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

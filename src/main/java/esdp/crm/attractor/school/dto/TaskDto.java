@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OperationDto {
+public class TaskDto {
     private Long id;
 
     private String name;

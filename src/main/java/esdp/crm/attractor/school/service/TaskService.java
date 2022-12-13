@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class OperationService {
+public class TaskService {
     private final TaskRepository repository;
 
     public List<Task> findAll() {

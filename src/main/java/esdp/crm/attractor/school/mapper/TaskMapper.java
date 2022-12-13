@@ -1,6 +1,6 @@
 package esdp.crm.attractor.school.mapper;
 
-import esdp.crm.attractor.school.dto.OperationDto;
+import esdp.crm.attractor.school.dto.TaskDto;
 import esdp.crm.attractor.school.entity.Task;
 import esdp.crm.attractor.school.repository.DealRepository;
 import esdp.crm.attractor.school.repository.UserRepository;
@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class OperationMapper {
+public class TaskMapper {
     private final UserRepository userRepository;
     private final DealRepository dealRepository;
 
-    public OperationDto toTaskDto(Task task) {
-        return OperationDto.builder()
+    public TaskDto toTaskDto(Task task) {
+        return TaskDto.builder()
                 .id(task.getId())
                 .name(task.getName())
                 .deal(dealRepository.getById(task.getId()))
