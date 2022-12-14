@@ -1,17 +1,22 @@
 package esdp.crm.attractor.school.entity;
 
-public enum Role {
-    ROLE_ADMIN("ADMIN"),
-    ROLE_MANAGER("MANAGER"),
-    ROLE_EMPLOYEE("EMPLOYEE");
+import lombok.*;
 
-    private final String value;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-    Role(String value) {
-        this.value = value;
-    }
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Entity
+@Table(name = "roles")
+public class Role extends BaseEntity {
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    public String getValue() {
-        return value;
-    }
+    @Column(name = "value", nullable = false)
+    private String value;
 }

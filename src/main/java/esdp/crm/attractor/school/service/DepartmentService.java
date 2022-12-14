@@ -15,7 +15,7 @@ public class DepartmentService {
     private final DepartmentRepository departmentRepository;
     private final DepartmentMapper departmentMapper;
 
-    public List<DepartmentDto> findAll(){
+    public List<DepartmentDto> getAll(){
         var departments = departmentRepository.findAll();
         return departments.stream()
                 .map(departmentMapper::toDepartmentDto)

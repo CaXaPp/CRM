@@ -12,16 +12,12 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(name = "tasks")
-public class Task {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Task extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
     @ManyToOne
-    private Deal deal;
+    private Application application;
 
     @ManyToOne
     @JoinColumn(name = "employee_id")

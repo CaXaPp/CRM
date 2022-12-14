@@ -1,20 +1,13 @@
 package esdp.crm.attractor.school.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.math.BigDecimal;
-
-@Data
-@Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ProductDto {
     private Long id;
-
     private String name;
-
-    private BigDecimal price;
 }

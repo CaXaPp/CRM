@@ -1,12 +1,11 @@
 package esdp.crm.attractor.school.controller;
 
 import esdp.crm.attractor.school.dto.DepartmentDto;
-import esdp.crm.attractor.school.dto.RegisterFormDto;
+import esdp.crm.attractor.school.dto.request.RegisterFormDto;
 import esdp.crm.attractor.school.dto.UserDto;
-import esdp.crm.attractor.school.entity.Department;
-import esdp.crm.attractor.school.entity.Role;
 import esdp.crm.attractor.school.entity.User;
 import esdp.crm.attractor.school.service.DepartmentService;
+import esdp.crm.attractor.school.service.RoleService;
 import esdp.crm.attractor.school.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,21 +22,21 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
+    private final RoleService roleService;
     private final DepartmentService departmentService;
 
     @GetMapping("/create")
     public ModelAndView createUser(@AuthenticationPrincipal User principal) {
-        Role[] roles = Role.values();
-        List<DepartmentDto> departments = departmentService.findAll();
+        List<DepartmentDto> departments = departmentService.getAll();
         return new ModelAndView("register")
-                .addObject("roles",roles)
+                .addObject("roles", roleService.getAll())
                 .addObject("departments",departments);
     }
 
     @PostMapping(value = "/create")
     public String createUser(@Valid @ModelAttribute RegisterFormDto registerFormDto) {
         UserDto user = userService.createUser(registerFormDto);
-        return "redirect:/login";
+        return "redirect:/users/login";
     }
 
     @GetMapping("/login")

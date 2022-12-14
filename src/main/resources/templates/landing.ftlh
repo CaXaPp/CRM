@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Landing page</title>
+    <link rel="stylesheet" href="./css/landing.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="./css/landing.css">
 </head>
 <body>
     <div class="container mt-5">
@@ -25,9 +25,9 @@
                 </div>
 
                 <div class="form-group mt-4">
-                    <select class="form-select landing-input" aria-label="Select product" name="product" id="product" required>
+                    <select class="form-select landing-input" aria-label="Select product" name="productId" id="product" required>
                         <#list products as product>
-                            <option value="${product.name}">${product.name}</option>
+                            <option value="${product.id}">${product.name}</option>
                         </#list>
                     </select>
                 </div>
@@ -38,12 +38,13 @@
                     <input type="email" class="form-control landing-input" name="email" id="email" placeholder="Email" required>
                 </div>
                 <div class="form-group mt-4">
-                    <select class="form-select landing-input" aria-label="Select source" name="source" id="source" required>
-                        <option value="INTERNET">Нашел через поиск в интернете</option>
-                        <option value="FRIENDS">Друзья подсказали</option>
-                        <option value="ADVERTISE">Увидел рекламный баннер </option>
-                        <option value="MEDIA">Нашел через соцсети</option>
-                        <option value="ANOTHER">Другое</option>
+                    <input type="text" class="form-control landing-input" name="address" id="address" placeholder="Address" required>
+                </div>
+                <div class="form-group mt-4">
+                    <select class="form-select landing-input" aria-label="Select source" name="sourceId" id="source" required>
+                        <#list sources as source>
+                            <option value="${source.id}">${source.name}</option>
+                        </#list>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary mt-4 w-25 landing-btn">Оставить заявку</button>

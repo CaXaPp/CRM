@@ -3,6 +3,7 @@ package esdp.crm.attractor.school.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -12,11 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(name = "applications")
-public class Application {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Application extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -32,10 +29,21 @@ public class Application {
     @Column(name = "email", nullable = false)
     private String email;
 
+    @Column(name = "address")
+    private String address;
+
+    @ManyToOne
+    private User employee;
+
+    @Column(name = "price")
+    private BigDecimal price;
+
+    @ManyToOne
+    private ClientSource source;
+
+    @ManyToOne
+    private ApplicationStatus status;
+
     @Column(name = "date", nullable = false)
     private LocalDateTime createdAt;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "source", nullable = false)
-    private ClientSource source;
 }

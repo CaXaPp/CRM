@@ -1,20 +1,18 @@
 package esdp.crm.attractor.school.dto;
 
+import esdp.crm.attractor.school.entity.ApplicationStatus;
 import esdp.crm.attractor.school.entity.ClientSource;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import esdp.crm.attractor.school.entity.User;
+import lombok.*;
 
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Data
-@Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ApplicationDto {
     private Long id;
 
@@ -22,13 +20,21 @@ public class ApplicationDto {
 
     private String company;
 
-    private String product;
+    private ProductDto product;
 
     private String phone;
 
     private String email;
 
-    private LocalDateTime createdAt;
+    private String address;
 
-    private String source;
+    private UserDto employee;
+
+    private BigDecimal price;
+
+    private ClientSource source;
+
+    private ApplicationStatus status;
+
+    private LocalDateTime createdAt;
 }
