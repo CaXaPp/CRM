@@ -14,7 +14,6 @@ public class ProductMapper {
         return ProductDto.builder()
                 .id(product.getId())
                 .name(product.getName())
-                .price(product.getPrice())
                 .build();
     }
 

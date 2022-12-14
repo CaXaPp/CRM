@@ -11,11 +11,7 @@ import javax.persistence.*;
 @Builder
 @Entity
 @Table(name = "departments")
-public class Department {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Department extends BaseEntity {
+    @Column(name = "name", nullable = false)
     private String name;
-
 }

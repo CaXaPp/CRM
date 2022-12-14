@@ -17,11 +17,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class User extends BaseEntity implements UserDetails {
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
@@ -40,12 +36,10 @@ public class User implements UserDetails {
     @ManyToOne
     private Department department;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
+    @ManyToOne
     private Role role;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @ManyToOne
     private Status status;
 
     @Column(name = "enabled")
@@ -68,7 +62,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return status != Status.FIRED;
+        return !status.getName().equals("Fired");
     }
 
     @Override

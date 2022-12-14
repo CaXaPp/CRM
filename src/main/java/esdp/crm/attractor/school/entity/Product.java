@@ -2,8 +2,9 @@ package esdp.crm.attractor.school.entity;
 
 import lombok.*;
 
-import javax.persistence.*;
-import java.math.BigDecimal;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Getter
 @Setter
@@ -12,14 +13,7 @@ import java.math.BigDecimal;
 @Builder
 @Entity
 @Table(name = "products")
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Product extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
-
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
 }
