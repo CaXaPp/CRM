@@ -1,9 +1,11 @@
 package esdp.crm.attractor.school.dto;
 
-import esdp.crm.attractor.school.entity.Deal;
 import esdp.crm.attractor.school.entity.TaskType;
 import esdp.crm.attractor.school.entity.User;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -15,8 +17,6 @@ public class TaskDto {
     private Long id;
 
     private String name;
-
-    private Deal deal;
 
     private User employee;
 

@@ -1,6 +1,20 @@
-.body{
-    color: #6e44c2;
+body{
+    background-color: aquamarine;
 }
 .addOperation{
     color: #6e44c2;
+}
+
+.vl {
+    border-left: 6px solid green;
+    height: 500px;
+}
+.addTask{
+    color: black;
+    text-decoration: none;
+    border-radius: 15%;
+    background-color: green;
+    margin-left: 160px;
+    width: 15%;
+    height: 30px;
 }

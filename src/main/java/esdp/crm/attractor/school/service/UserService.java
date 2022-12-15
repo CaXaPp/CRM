@@ -25,7 +25,7 @@ public class UserService {
         var savedUser = userRepository.save(user);
         return userMapper.toUserDto(savedUser);
     }
-    public List<User> findAll(){
-        return userRepository.findAllByRole(Role.ROLE_ADMIN);
+    public List<User> findAll(Role role){
+        return userRepository.findAllByRole(role);
     }
 }
