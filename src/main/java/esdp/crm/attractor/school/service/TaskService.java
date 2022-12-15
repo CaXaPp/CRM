@@ -1,21 +1,28 @@
 package esdp.crm.attractor.school.service;
 
+import esdp.crm.attractor.school.dto.TaskDto;
 import esdp.crm.attractor.school.entity.Task;
 import esdp.crm.attractor.school.entity.TaskType;
 import esdp.crm.attractor.school.entity.User;
+import esdp.crm.attractor.school.mapper.TaskMapper;
 import esdp.crm.attractor.school.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class TaskService {
     private final TaskRepository repository;
+    private final TaskMapper taskMapper;
 
-    public List<Task> findAll() {
-        return repository.findAll();
+    public List<TaskDto> findAll() {
+        var tasks = repository.findAll();
+        return tasks.stream()
+                .map(taskMapper::toTaskDto)
+                .collect(Collectors.toList());
     }
 
     public Task assignUser(Task task, User user) {
