@@ -1,6 +1,6 @@
 package esdp.crm.attractor.school.service;
 
-import esdp.crm.attractor.school.dto.RegisterFormDto;
+import esdp.crm.attractor.school.dto.request.RegisterFormDto;
 import esdp.crm.attractor.school.dto.UserDto;
 import esdp.crm.attractor.school.entity.Role;
 import esdp.crm.attractor.school.entity.User;

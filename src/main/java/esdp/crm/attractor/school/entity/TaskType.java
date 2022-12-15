@@ -11,11 +11,7 @@ import javax.persistence.*;
 @Builder
 @Entity
 @Table(name = "task_types")
-public class TaskType {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class TaskType extends BaseEntity{
     @Column(name = "name")
     private String name;
 }

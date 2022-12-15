@@ -10,12 +10,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "deal_statuses")
-public class DealStatus {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+@Table(name = "application_statuses")
+public class ApplicationStatus extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 }

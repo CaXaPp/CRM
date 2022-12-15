@@ -1,11 +1,10 @@
-package esdp.crm.attractor.school.dto;
+package esdp.crm.attractor.school.dto.request;
+
+import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
-import esdp.crm.attractor.school.entity.Role;
-import lombok.Data;
 
 @Data
 public class RegisterFormDto {
@@ -30,5 +29,5 @@ public class RegisterFormDto {
 
     private Long departmentId;
 
-    private Role role;
+    private Long roleId;
 }

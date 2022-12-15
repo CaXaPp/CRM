@@ -24,25 +24,25 @@
                 <input type="text" name="firstName" placeholder="firstname" autocomplete="nope" required>
             </div>
             <div class="input-field">
-                <input type="text" name="email" placeholder="Email" autocomplete="nope" required>
-            </div>
-            <div class="input-field">
                 <input type="text" name="surname" placeholder="surname" autocomplete="nope" required>
             </div>
             <div class="input-field">
                 <input type="text" name="middleName" placeholder="middleName" autocomplete="nope" required>
             </div>
             <div class="input-field">
-                <label for="password" class="form-label">DEPARTMENTS</label>
-                <select name="role" id="option" class="form-control">
+                <input type="email" name="email" placeholder="Email" autocomplete="nope" required>
+            </div>
+            <div class="input-field">
+                <label for="password" class="form-label">Роли</label>
+                <select name="roleId" id="option" class="form-control">
                     <#list roles as role>
-                        <option value="${role}">${role.value}</option>
+                        <option value="${role.id}">${role.name}</option>
                     </#list>
                 </select>
             </div>
 
             <div class="input-field">
-                <label for="password" class="form-label">ROLS</label>
+                <label for="password" class="form-label">Отделы</label>
                 <select name="departmentId" id="option" class="form-control">
                     <#list departments as d>
                         <option value="${d.id}">${d.name}</option>
