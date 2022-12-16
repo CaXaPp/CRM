@@ -16,6 +16,9 @@ public class Task extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "description")
+    private String description;
+
     @ManyToOne
     private Application application;
 
