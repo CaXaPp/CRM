@@ -17,4 +17,15 @@ body{
     margin-left: 160px;
     width: 15%;
     height: 30px;
+    margin-bottom: 50px;
+    margin-top: 10px;
+}
+
+.btn  {
+    display: block;
+    text-decoration: none;
+}
+.deal{
+    text-decoration: none;
+    color: black;
 }

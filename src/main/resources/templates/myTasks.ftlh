@@ -20,10 +20,10 @@
 <div class="button">
     <button class="addTask">Задачи</button>
     <button class="addTask">Отчетность</button>
-    <button class="addTask">Добавить задачу</button>
+   <button class="addTask"> <a class="deal" href="/tasks/addTask">Добавить задачу</a> </button>
 </div>
 <div class="container">
-<form action="/tasks/create" method="post">
+<form action="/tasks/task" method="post">
     <table class="table table-dark table-striped-columns">
         <thead>
         <tr>
@@ -41,21 +41,19 @@
         <tbody>
         <tr>
         <tbody>
-        <select name="roleId" id="option" class="form-control">
             <#list tasks as task>
-            <option value="${task}">${task}</option>
             <tr>
-                <td>${task}</td>
-                <td>${task}</td>
-                <td>${task}</td>
-                <td>${task}</td>
-                <td>${task}</td>
-                <td>${task}</td>
-                <td>${task}</td>
+                <td>${task.createdAt}</td>
+                <td>${task.employee.getFIO()}</td>
+<#--                <td>${task}</td>-->
+                <td>${task.type.name}</td>
+                <td>${task.description}</td>
+<#--                <td>${task}</td>-->
+                <td>${task.name}</td>
             </tr>
 
         </tbody>
-        </select>
+<#--        </select>-->
         </#list>
         </tr>
         </tbody>

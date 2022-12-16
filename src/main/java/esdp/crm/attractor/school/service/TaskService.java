@@ -1,14 +1,17 @@
 package esdp.crm.attractor.school.service;
 
+import esdp.crm.attractor.school.dto.AddTaskDto;
 import esdp.crm.attractor.school.dto.TaskDto;
 import esdp.crm.attractor.school.entity.Task;
 import esdp.crm.attractor.school.entity.TaskType;
 import esdp.crm.attractor.school.entity.User;
 import esdp.crm.attractor.school.mapper.TaskMapper;
 import esdp.crm.attractor.school.repository.TaskRepository;
+import esdp.crm.attractor.school.repository.TaskTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +20,7 @@ import java.util.stream.Collectors;
 public class TaskService {
     private final TaskRepository repository;
     private final TaskMapper taskMapper;
+    private final TaskTypeRepository taskTypeRepository;
 
     public List<TaskDto> findAll() {
         var tasks = repository.findAll();
@@ -35,5 +39,16 @@ public class TaskService {
         task.setType(status);
         return repository.save(task);
     }
+
+
+    public Task create(AddTaskDto dto, User principal){
+        Task task = new Task();
+        task.setCreatedAt(dto.getCreatedTime());
+        task.setName(dto.getName());
+        task.setEmployee(principal);
+        task.setType(taskTypeRepository.getById(task.getId()));
+        return repository.save(task);
+    }
+
 
 }

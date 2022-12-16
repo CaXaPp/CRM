@@ -25,5 +25,6 @@ public class TaskDto {
     private LocalDateTime createdAt;
 
     private LocalDateTime deadline;
+    private String description;
 
 }
