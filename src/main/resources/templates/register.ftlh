@@ -13,7 +13,7 @@
 </head>
 <body>
 <div class="login-form">
-    <form action="admin/create/user" method="post" id="login-form">
+    <form action="/admin/create/user" method="post" id="login-form">
         <#if _csrf??>
             <input type="hidden"
                    name="${_csrf.parameterName}" value="${_csrf.token}">

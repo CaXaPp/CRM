@@ -46,7 +46,7 @@ public class AdminController {
     @PostMapping(value = "/create/user")
     public String createUser(@Valid @ModelAttribute RegisterFormDto registerFormDto) {
         UserDto user = userService.createUser(registerFormDto);
-        return "redirect:/create/user";
+        return "redirect:/admin";
     }
 
     @GetMapping("/create/product")
