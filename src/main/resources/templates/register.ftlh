@@ -13,7 +13,7 @@
 </head>
 <body>
 <div class="login-form">
-    <form action="/users/create" method="post" id="login-form">
+    <form action="admin/create/user" method="post" id="login-form">
         <#if _csrf??>
             <input type="hidden"
                    name="${_csrf.parameterName}" value="${_csrf.token}">
@@ -54,7 +54,7 @@
             </div>
         </div>
         <div class="action">
-            <button><a href="/" style="text-decoration: none; color: black">Back</a></button>
+            <button><a href="/admin" style="text-decoration: none; color: black">Back</a></button>
             <button type="submit">Register</button>
         </div>
     </form>

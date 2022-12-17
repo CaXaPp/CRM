@@ -19,7 +19,7 @@
                 <a class="nav-link" href="#">Аналитика</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Администрирование</a>
+                <a class="nav-link" href="/admin">Администрирование</a>
             </li>
         </ul>
         <form class="d-flex" action="/logout" method="post">

@@ -1,6 +1,7 @@
 package esdp.crm.attractor.school.service;
 
 import esdp.crm.attractor.school.dto.ProductDto;
+import esdp.crm.attractor.school.entity.Product;
 import esdp.crm.attractor.school.mapper.ProductMapper;
 import esdp.crm.attractor.school.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,5 +21,9 @@ public class ProductService {
         return products.stream()
                 .map(productMapper::toProductDto)
                 .collect(Collectors.toList());
+    }
+
+    public void save(ProductDto dto) {
+        productRepository.save(Product.builder().name(dto.getName()).build());
     }
 }
