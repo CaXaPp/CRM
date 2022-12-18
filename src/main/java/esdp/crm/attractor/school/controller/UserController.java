@@ -25,20 +25,6 @@ public class UserController {
     private final RoleService roleService;
     private final DepartmentService departmentService;
 
-    @GetMapping("/create")
-    public ModelAndView createUser(@AuthenticationPrincipal User principal) {
-        List<DepartmentDto> departments = departmentService.getAll();
-        return new ModelAndView("register")
-                .addObject("roles", roleService.getAll())
-                .addObject("departments",departments);
-    }
-
-    @PostMapping(value = "/create")
-    public String createUser(@Valid @ModelAttribute RegisterFormDto registerFormDto) {
-        UserDto user = userService.createUser(registerFormDto);
-        return "redirect:/users/login";
-    }
-
     @GetMapping("/login")
     public ModelAndView getLoginPage(){
         return new ModelAndView("login");
