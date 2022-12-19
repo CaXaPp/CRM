@@ -10,16 +10,16 @@
                 <a class="nav-link" href="/application">Список всех заявок</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Мои операции</a>
+                <a class="nav-link" href="">Мои операции</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Задачи</a>
+                <a class="nav-link" href="/tasks/task">Задачи</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Аналитика</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Администрирование</a>
+                <a class="nav-link" href="/admin">Администрирование</a>
             </li>
         </ul>
         <form class="d-flex" action="/logout" method="post">

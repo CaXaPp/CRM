@@ -34,20 +34,6 @@ public class UserController {
         return new ResponseEntity<>(userService.getAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/create")
-    public ModelAndView createUser(@AuthenticationPrincipal User principal) {
-        List<DepartmentDto> departments = departmentService.getAll();
-        return new ModelAndView("register")
-                .addObject("roles", roleService.getAll())
-                .addObject("departments",departments);
-    }
-
-    @PostMapping(value = "/create")
-    public String createUser(@Valid @ModelAttribute RegisterFormDto registerFormDto) {
-        UserDto user = userService.createUser(registerFormDto);
-        return "redirect:/users/login";
-    }
-
     @GetMapping("/login")
     public ModelAndView getLoginPage(){
         return new ModelAndView("login");

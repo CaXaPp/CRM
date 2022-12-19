@@ -29,4 +29,7 @@ public class ProductService {
         return productMapper.toProductDto(product.get());
     }
 
+    public void save(ProductDto dto) {
+        productRepository.save(Product.builder().name(dto.getName()).build());
+    }
 }
