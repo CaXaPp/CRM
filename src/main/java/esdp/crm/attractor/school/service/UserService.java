@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,6 +21,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
+    public List<User> getAll() {
+        return userRepository.findAll();
+    }
+
     public UserDto createUser(RegisterFormDto dto) {
         if (userRepository.existsByEmail(dto.getEmail()))
             throw new EmailExistsException("User with email " + dto.getEmail() + " exists!");
@@ -27,6 +32,11 @@ public class UserService {
         var savedUser = userRepository.save(user);
         return userMapper.toUserDto(savedUser);
     }
+
+    public UserDto getUserById(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        return userMapper.toUserDto(user.get());
+
     public List<User> findAll(Role role){
         return userRepository.findAllByRole(role);
     }

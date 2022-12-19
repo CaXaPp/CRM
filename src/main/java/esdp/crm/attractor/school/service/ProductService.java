@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +22,11 @@ public class ProductService {
         return products.stream()
                 .map(productMapper::toProductDto)
                 .collect(Collectors.toList());
+    }
+
+    public ProductDto getProductById(Long id) {
+        Optional<Product> product = productRepository.findById(id);
+        return productMapper.toProductDto(product.get());
     }
 
     public void save(ProductDto dto) {
