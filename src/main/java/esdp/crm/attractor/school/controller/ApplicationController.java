@@ -1,22 +1,23 @@
 package esdp.crm.attractor.school.controller;
 
-import esdp.crm.attractor.school.dto.request.ApplicationFormDto;
+import esdp.crm.attractor.school.dto.ApplicationDto;
 import esdp.crm.attractor.school.entity.Application;
-import esdp.crm.attractor.school.service.ApplicationService;
-import esdp.crm.attractor.school.service.ApplicationStatusService;
-import esdp.crm.attractor.school.service.ClientSourceService;
-import esdp.crm.attractor.school.service.ProductService;
+import esdp.crm.attractor.school.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/application")
@@ -25,7 +26,11 @@ public class ApplicationController {
     private final ApplicationService applicationService;
     private final ProductService productService;
     private final ClientSourceService clientSourceService;
-    private final ApplicationStatusService applicationStatusService;
+
+    @GetMapping
+    public String mainApplications() {
+        return "applications";
+    }
 
     @GetMapping("/save")
     public ModelAndView getLandingPage() {
@@ -41,26 +46,28 @@ public class ApplicationController {
     }
 
     @GetMapping("/all")
-    public String applications(Model model,
-                               @PageableDefault(sort = {"name"}, direction = Sort.Direction.ASC) Pageable pageable) {
-        Page<Application> page = applicationService.getAll(pageable);
-        model.addAttribute("page", page);
-        return "applications";
+    public ResponseEntity<List<Application>> applications() {
+        return new ResponseEntity<>(applicationService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/edit/{id}")
-    public String editApplication(@PathVariable Long id, Model model) {
-        model.addAttribute("application", applicationService.getApplicationById(id));
-        model.addAttribute("products", productService.getAll());
-        model.addAttribute("statuses", applicationStatusService.getAll());
-        return "editApplication";
+    public ResponseEntity<ApplicationDto> getApplicationForEdit(@PathVariable Long id) {
+        return new ResponseEntity<>(applicationService.getApplicationById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/edit/{id}")
-    public String saveApplicationAfterEdit(@PathVariable Long id,
-                                           @Valid @ModelAttribute ApplicationFormDto form) {
-        applicationService.save(form);
-        return "redirect:/application/edit/" + id;
+    @PostMapping(value = "/edit/{id}")
+    public void updateApplication(@PathVariable Long id,
+                                  @RequestParam("company") String company,
+                                  @RequestParam("price") BigDecimal price,
+                                  @RequestParam("product") Long productId,
+                                  @RequestParam("name") String name,
+                                  @RequestParam("phone") String phone,
+                                  @RequestParam("email") String email,
+                                  @RequestParam("address") String address,
+                                  @RequestParam("employee") Long employeeId,
+                                  @RequestParam("status") Long statusId) {
+
+        applicationService.updateApplication(id, company, price, productId, name, phone, email, address, employeeId, statusId);
     }
 
 }

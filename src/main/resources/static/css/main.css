@@ -1,5 +1,4 @@
 .main_block {
-    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -42,4 +41,36 @@
 .employee_info {
     display: flex;
     justify-content: space-between;
+}
+
+.alert_success_msg {
+    max-width: 300px;
+    z-index: 10000;
+    position: absolute;
+    top: 12px;
+    left: 50%;
+}
+
+.application_list_class {
+    max-width: 95%;
+    margin: 0 auto;
+}
+.info_block {
+    width: 30%;
+}
+.log_block {
+    width: 70%;
+    border-left: 1px solid gray;
+}
+
+.log_block .modal-header {
+    padding: 23px 20px 23px 0;
+}
+
+.modal-dialog {
+    max-width: 80%;
+}
+
+.modal-content {
+    flex-direction: row;
 }
