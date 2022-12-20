@@ -8,8 +8,8 @@
                     Добавить операцию
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Выбрать из всех заявок</a></li>
-                    <li><a class="dropdown-item" href="#">Добавить новую</a></li>
+                    <li><a class="dropdown-item" href="/operations/add">Выбрать из всех заявок</a></li>
+                    <li><a class="dropdown-item" href="/operations/add/new">Добавить новую</a></li>
                 </ul>
             </div>
             <button class="btn btn-dark" id="editOperation">Редактировать</button>
@@ -18,8 +18,8 @@
                     Настройки
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Выбрать воронку продаж</a></li>
-                    <li><a class="dropdown-item" href="#">Изменить статус</a></li>
+                    <li><a class="dropdown-item">Выбрать воронку продаж</a></li>
+                    <li><a class="dropdown-item">Изменить статус</a></li>
                 </ul>
             </div>
         </div>

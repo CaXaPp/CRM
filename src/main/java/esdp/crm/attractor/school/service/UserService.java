@@ -42,8 +42,12 @@ public class UserService {
         return userRepository.findAllByRole(role);
     }
 
-    public List<UserDto> findAllByUser() {
-        var users = userRepository.findAll();
+    public List<UserDto> findAllByUser(User user) {
+        List<User> users;
+        if ("Сотрудник".equals(user.getRole().getName()))
+            users = List.of(user);
+        else
+            users = userRepository.findAllEmployees();
         return users.stream()
                 .map(userMapper::toUserDto)
                 .collect(Collectors.toList());
