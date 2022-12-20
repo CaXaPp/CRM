@@ -1,4 +1,4 @@
-package esdp.crm.attractor.school.dto;
+package esdp.crm.attractor.school.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,10 +12,9 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddTaskDto {
+public class TaskFormDto {
     private String name;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createdTime;
-
 }

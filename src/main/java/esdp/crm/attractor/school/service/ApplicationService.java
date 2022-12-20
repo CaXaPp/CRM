@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,8 +33,8 @@ public class ApplicationService {
         return applicationMapper.toDto(application);
     }
 
-    public List<Application> getAll() {
-        return applicationRepository.findAll();
+    public Page<Application> getAll(Pageable pageable) {
+        return this.applicationRepository.findAll(pageable);
     }
 
     public ApplicationDto getApplicationById(Long id) {
@@ -43,6 +44,13 @@ public class ApplicationService {
         return applicationMapper.toDto(application.get());
     }
 
+    public List<ApplicationDto> getAllFreeApplications() {
+        var applications = applicationRepository.findAllFree();
+        return applications.stream()
+                .map(applicationMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
     public void updateApplication(Long id, String company, BigDecimal price, Long productId, String name, String phone, String email, String address, Long employeeId, Long statusId) {
         ProductDto productDto = productService.getProductById(productId);
         UserDto employee = userService.getUserById(employeeId);
@@ -50,5 +58,4 @@ public class ApplicationService {
 
         applicationRepository.updateApplicationById(id, company, price, productDto.getId(), name, phone, email, address, employee.getId(), status.get().getId());
     }
-
 }

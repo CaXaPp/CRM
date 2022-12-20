@@ -43,6 +43,24 @@
     justify-content: space-between;
 }
 
+.td-hover:hover {
+    background-color: #dbdbdb !important;
+}
+
+.operations {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
 .alert_success_msg {
     max-width: 300px;
     z-index: 10000;

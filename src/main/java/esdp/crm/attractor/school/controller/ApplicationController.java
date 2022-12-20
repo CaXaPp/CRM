@@ -46,8 +46,8 @@ public class ApplicationController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Application>> applications() {
-        return new ResponseEntity<>(applicationService.getAll(), HttpStatus.OK);
+    public ResponseEntity<Page<Application>> applications(@PageableDefault Pageable pageable) {
+        return new ResponseEntity<>(applicationService.getAll(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/edit/{id}")
