@@ -4,14 +4,9 @@ import esdp.crm.attractor.school.dto.ApplicationDto;
 import esdp.crm.attractor.school.entity.Application;
 import esdp.crm.attractor.school.service.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -46,8 +41,8 @@ public class ApplicationController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Page<Application>> applications(@PageableDefault Pageable pageable) {
-        return new ResponseEntity<>(applicationService.getAll(pageable), HttpStatus.OK);
+    public ResponseEntity<List<Application>> applications() {
+        return new ResponseEntity<>(applicationService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/edit/{id}")
