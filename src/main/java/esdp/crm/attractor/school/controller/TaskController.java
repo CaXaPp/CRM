@@ -1,6 +1,6 @@
 package esdp.crm.attractor.school.controller;
 
-import esdp.crm.attractor.school.dto.AddTaskDto;
+import esdp.crm.attractor.school.dto.request.TaskFormDto;
 import esdp.crm.attractor.school.dto.TaskDto;
 import esdp.crm.attractor.school.dto.TaskTypeDto;
 import esdp.crm.attractor.school.entity.Task;
@@ -44,7 +44,7 @@ public class TaskController {
     @PostMapping(value = "/save")
     public ModelAndView createTask(
             @ModelAttribute("taskDto")
-            @Valid AddTaskDto dto,
+            @Valid TaskFormDto dto,
             @AuthenticationPrincipal User principal) {
         Task task = taskService.create(dto, principal);
         return RedirectUtil.redirect("/");

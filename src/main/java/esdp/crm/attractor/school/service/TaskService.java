@@ -1,6 +1,6 @@
 package esdp.crm.attractor.school.service;
 
-import esdp.crm.attractor.school.dto.AddTaskDto;
+import esdp.crm.attractor.school.dto.request.TaskFormDto;
 import esdp.crm.attractor.school.dto.TaskDto;
 import esdp.crm.attractor.school.entity.Task;
 import esdp.crm.attractor.school.entity.TaskType;
@@ -11,7 +11,6 @@ import esdp.crm.attractor.school.repository.TaskTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +40,7 @@ public class TaskService {
     }
 
 
-    public Task create(AddTaskDto dto, User principal){
+    public Task create(TaskFormDto dto, User principal){
         Task task = new Task();
         task.setCreatedAt(dto.getCreatedTime());
         task.setName(dto.getName());

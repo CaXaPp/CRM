@@ -36,6 +36,7 @@ public class UserService {
     public UserDto getUserById(Long id) {
         Optional<User> user = userRepository.findById(id);
         return userMapper.toUserDto(user.get());
+    }
 
     public List<User> findAll(Role role){
         return userRepository.findAllByRole(role);

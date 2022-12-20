@@ -1,9 +1,7 @@
 package esdp.crm.attractor.school.mapper;
 
-import esdp.crm.attractor.school.dto.AddTaskDto;
 import esdp.crm.attractor.school.dto.TaskDto;
 import esdp.crm.attractor.school.entity.Task;
-import esdp.crm.attractor.school.entity.User;
 import esdp.crm.attractor.school.repository.TaskTypeRepository;
 import esdp.crm.attractor.school.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
