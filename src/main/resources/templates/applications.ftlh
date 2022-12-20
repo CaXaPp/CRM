@@ -88,7 +88,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Отв-ный сотрудник</td>
+                                <td>Отв-ный</td>
                                 <td><select class="form-select" aria-label="Select employee" id="modal_employee"
                                             name="employee" required></select></td>
                             </tr>

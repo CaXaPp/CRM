@@ -10,8 +10,6 @@ import esdp.crm.attractor.school.exception.NotFoundException;
 import esdp.crm.attractor.school.mapper.ApplicationMapper;
 import esdp.crm.attractor.school.repository.ApplicationRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -33,8 +31,8 @@ public class ApplicationService {
         return applicationMapper.toDto(application);
     }
 
-    public Page<Application> getAll(Pageable pageable) {
-        return this.applicationRepository.findAll(pageable);
+    public List<Application> getAll() {
+        return this.applicationRepository.findAll();
     }
 
     public ApplicationDto getApplicationById(Long id) {
@@ -57,5 +55,21 @@ public class ApplicationService {
         Optional<ApplicationStatus> status = statusService.getStatusById(statusId);
 
         applicationRepository.updateApplicationById(id, company, price, productDto.getId(), name, phone, email, address, employee.getId(), status.get().getId());
+    }
+
+    public List<Application> getApplicationByProduct(Long id) {
+        return this.applicationRepository.findApplicationByProductId(id);
+    }
+
+    public List<Application> getApplicationBySource(Long id) {
+        return this.applicationRepository.findApplicationBySourceId(id);
+    }
+
+    public List<Application> getApplicationByEmployee(Long id) {
+        return this.applicationRepository.findApplicationByEmployeeId(id);
+    }
+
+    public List<Application> getApplicationByStatus(Long id) {
+        return this.applicationRepository.findApplicationByStatusId(id);
     }
 }

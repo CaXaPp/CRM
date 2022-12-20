@@ -28,4 +28,9 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
             "status_id=:status " +
             "WHERE id = :id ")
     void updateApplicationById(Long id, String company, BigDecimal price, Long product, String name, String phone, String email, String address, Long employee, Long status);
+
+    List<Application> findApplicationByProductId(Long id);
+    List<Application> findApplicationBySourceId(Long id);
+    List<Application> findApplicationByEmployeeId(Long id);
+    List<Application> findApplicationByStatusId(Long id);
 }
