@@ -1,0 +1,158 @@
+body {
+    background-color: rgb(207, 207, 207)!important;
+}
+
+.wrapper {
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: row;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.left-bar {
+    margin: 0;
+    padding: 0;
+    background-color: cornflowerblue;
+    width: 30%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.right-bar {
+    margin: 0;
+    padding: 30px;
+    width: 70%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.left-bar-header {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 30px 20px;
+    height: 10%;
+    background-color: rgb(66, 66, 66);
+}
+
+.left-bar-header a {
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+.left-bar-header-title p {
+    color: white;
+    font-size: 18px;
+    margin: 0;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.left-bar-body {
+    padding: 30px 20px;
+}
+
+.left-bar-body form {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.left-bar-body form input {
+    font-size: 14px;
+    border-radius: 5px;
+    border: 0;
+    padding: 8px 12px;
+}
+
+.left-bar-body form select {
+    font-size: 14px;
+    border-radius: 5px;
+    border: 0;
+    padding: 8px 12px;
+}
+
+.left-bar-body form label {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+    color: black;
+}
+
+.left-bar-body form button {
+    cursor: pointer!important;
+}
+
+.right-bar-body {
+    width: 100%;
+    height: 100%;
+}
+
+.right-bar-form {
+    padding: 20px;
+    background-color: rgb(207, 207, 207);
+    width: 100%;
+    min-height: 200px;
+    height: 200px;
+    border-radius: 5px;
+    flex-grow: 1;
+}
+
+.right-bar-form form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.right-bar-form form textarea {
+    width: 100%;
+    max-width: 100%;
+    height: 120px;
+    max-height: 120px;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.right-bar-body {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.right-bar-body text {
+    padding: 10px;
+}
+
+.right-bar-body p {
+    line-height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.left-bar-body form .label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 13px;
+}
+
+.left-bar-body form .label p{
+    text-align: left;
+    padding-left: 5px;
+    margin: 0;
+}

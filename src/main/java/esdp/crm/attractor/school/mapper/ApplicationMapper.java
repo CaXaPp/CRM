@@ -32,7 +32,6 @@ public class ApplicationMapper {
                 .email(application.getEmail())
                 .address(application.getAddress())
                 .createdAt(application.getCreatedAt())
-                .employee(null)
                 .price(application.getPrice())
                 .status(application.getStatus())
                 .source(application.getSource())
@@ -51,6 +50,7 @@ public class ApplicationMapper {
                 .email(form.getEmail())
                 .address(form.getAddress())
                 .status(applicationStatusRepository.getByName("Новое"))
+                .price(form.getPrice())
                 .source(clientSourceRepository.getById(form.getSourceId()))
                 .createdAt(LocalDateTime.now())
                 .build();
@@ -58,7 +58,26 @@ public class ApplicationMapper {
             application.setId(form.getId());
             application.setCreatedAt(form.getCreatedAt());
             application.setEmployee(userRepository.getById(form.getEmployeeId()));
+            application.setStatus(applicationStatusRepository.getById(form.getStatusId()));
         }
+        return application;
+    }
+
+    public Application toOperation(ApplicationFormDto form) {
+        var application =  Application.builder()
+                .name(form.getName())
+                .company(form.getCompany())
+                .product(productRepository.getById(form.getProductId()))
+                .phone(form.getPhone())
+                .email(form.getEmail())
+                .address(form.getAddress())
+                .status(applicationStatusRepository.getById(form.getStatusId()))
+                .price(form.getPrice())
+                .source(clientSourceRepository.getById(form.getSourceId()))
+                .createdAt(form.getCreatedAt())
+                .employee(userRepository.getById(form.getEmployeeId()))
+                .build();
+        application.setId(form.getId());
         return application;
     }
 }
