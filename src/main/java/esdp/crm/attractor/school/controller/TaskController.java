@@ -29,7 +29,7 @@ public class TaskController {
     @GetMapping("/task")
     public ModelAndView task(@AuthenticationPrincipal User principal) {
         List<TaskDto> tasks = taskService.findAll();
-        return new ModelAndView("/myTasks")
+        return new ModelAndView("tasks")
                 .addObject("tasks", tasks);
     }
 

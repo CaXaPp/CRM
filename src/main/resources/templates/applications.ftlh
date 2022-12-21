@@ -10,14 +10,14 @@
             <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Наименование клиента</th>
-                <th scope="col">Сумма сделки</th>
+                <th scope="col">Наименование</th>
+                <th scope="col">Бюджет</th>
                 <th scope="col">Товар/услуга</th>
-                <th scope="col">Имя контактного лица (если организация)</th>
-                <th scope="col">Телефон для обратной связи</th>
-                <th scope="col">Email</th>
+                <th scope="col">Контактное лицо</th>
+                <th scope="col">Телефон</th>
+                <th scope="col">Почта</th>
                 <th scope="col">Адрес</th>
-                <th scope="col">Статус операции</th>
+                <th scope="col">Статус</th>
                 <th scope="col">Ответственный сотрудник</th>
                 <th></th>
             </tr>

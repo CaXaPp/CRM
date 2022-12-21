@@ -1,26 +1,24 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light navbar_main_block">
-
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <div class="container d-flex flex-row justify-content-between">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="#">Рабочий стол</a>
                 </li>
-
                 <li class="nav-item">
                     <a class="nav-link" href="/application">Список всех заявок</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Мои операции</a>
+                    <a class="nav-link" href="/operations">Мои операции</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Задачи</a>
+                    <a class="nav-link" href="/tasks/task">Задачи</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/analytics">Аналитика</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Администрирование</a>
+                    <a class="nav-link" href="/admin">Администрирование</a>
                 </li>
             </ul>
             <form class="d-flex" action="/logout" method="post">

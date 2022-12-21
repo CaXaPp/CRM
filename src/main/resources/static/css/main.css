@@ -1,6 +1,10 @@
 .main_block {
     margin: 0 auto;
 }
+.dashboard_block {
+    max-width: 1400px;
+    margin: 20px auto 0;
+}
 
 .dashboard {
     overflow: hidden;
@@ -20,17 +24,13 @@
     display: block;
 }
 
-.dashboard a.icon {
-    background: black;
-    display: block;
-    position: absolute;
-    right: 0;
-    top: 0;
+.fa-bars {
+    float: right;
 }
 
 .dashboard a:hover {
-    background-color: #ddd;
-    color: black;
+    background-color: #3f537a;
+    color: white;
 }
 
 .active {
