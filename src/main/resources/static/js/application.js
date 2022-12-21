@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function getAllApplication() {
     await axios.get(BASE_URL + "/application/all").then(function (response) {
-
         for (let i = 0; i < response.data.length; i++) {
             createTdElemOnBody(response.data[i]);
         }

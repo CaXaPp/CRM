@@ -1,21 +1,15 @@
 <#import "parts/general.ftlh" as g>
 
-<@g.general>
-  <br>
-  <br>
-  <div>
-    <button type="button" class="btn btn-success">
-      <a href="/admin/create/product" style="text-decoration: none; color: white">Добавить продукт</a>
-    </button>
-    <button type="button" class="btn btn-success">
-      <a href="/admin/create/user" style="text-decoration: none; color: white">Добавить пользователя</a>
-    </button>
-  </div>
-  <br>
-  <br>
+<@g.general styles=["/css/login.css"]>
+    <div class="admin_main_block">
+        <a href="/admin/create/product" class="btn btn-success">Добавить
+            продукт</a>
 
-  <div>
+        <a href="/#" class="btn btn-success">Добавить воронку продаж</a>
 
-  </div>
+        <a href="/admin/create/user" class="btn btn-success">Добавить
+            пользователя</a>
+
+    </div>
 
 </@g.general>
