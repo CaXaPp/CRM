@@ -5,6 +5,7 @@ import esdp.crm.attractor.school.dto.TaskDto;
 import esdp.crm.attractor.school.dto.TaskTypeDto;
 import esdp.crm.attractor.school.entity.Task;
 import esdp.crm.attractor.school.entity.User;
+import esdp.crm.attractor.school.service.ApplicationService;
 import esdp.crm.attractor.school.service.RedirectUtil;
 import esdp.crm.attractor.school.service.TaskService;
 import esdp.crm.attractor.school.service.TaskTypeService;
@@ -26,6 +27,8 @@ public class TaskController {
     private final TaskService taskService;
     private final TaskTypeService taskTypeService;
 
+    private final ApplicationService applicationService;
+
     @GetMapping("/task")
     public ModelAndView task(@AuthenticationPrincipal User principal) {
         List<TaskDto> tasks = taskService.findAll();
@@ -40,12 +43,15 @@ public class TaskController {
                 .addObject("user", user)
                 .addObject("tasks", tasks);
     }
+    @GetMapping("/save")
+    public ModelAndView createUser(@AuthenticationPrincipal User principal) {
+        return new ModelAndView("/deal")
+                .addObject("taskDto", new TaskFormDto());
+    }
 
     @PostMapping(value = "/save")
-    public ModelAndView createTask(
-            @ModelAttribute("taskDto")
-            @Valid TaskFormDto dto,
-            @AuthenticationPrincipal User principal) {
+    public ModelAndView createUser(@ModelAttribute("taskDto") @Valid TaskFormDto dto,
+                                   @AuthenticationPrincipal User principal) {
         Task task = taskService.create(dto, principal);
         return RedirectUtil.redirect("/");
     }

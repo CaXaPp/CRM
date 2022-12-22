@@ -1,5 +1,7 @@
 package esdp.crm.attractor.school.service;
 
+import esdp.crm.attractor.school.dto.ApplicationDto;
+import esdp.crm.attractor.school.dto.request.ApplicationFormDto;
 import esdp.crm.attractor.school.dto.request.TaskFormDto;
 import esdp.crm.attractor.school.dto.TaskDto;
 import esdp.crm.attractor.school.entity.Task;
@@ -48,6 +50,5 @@ public class TaskService {
         task.setType(taskTypeRepository.getById(task.getId()));
         return repository.save(task);
     }
-
 
 }

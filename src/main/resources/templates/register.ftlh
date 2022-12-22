@@ -22,7 +22,7 @@
                     <input type="email" name="email" placeholder="Почта" autocomplete="nope" required>
                 </div>
                 <div class="input-field">
-                    <label for="password" class="form-label">Роли</label>
+                    <label class="form-label">Роли</label>
                     <select name="roleId" id="option" class="form-control">
                         <#list roles as role>
                             <option value="${role.id}">${role.name}</option>
@@ -31,7 +31,7 @@
                 </div>
 
                 <div>
-                    <label for="password" class="form-label">Отделы</label>
+                    <label  class="form-label">Отделы</label>
                     <select name="departmentId" id="option" class="form-control">
                         <#list departments as d>
                             <option value="${d.id}">${d.name}</option>
@@ -39,7 +39,7 @@
                     </select>
                 </div>
                 <div class="input-field">
-                    <input type="password" name="Пароль" placeholder="Password" autocomplete="new-password" required>
+                    <input type="password" name="password" placeholder="Password" autocomplete="new-password" required>
                 </div>
             </div>
             <div class="action">

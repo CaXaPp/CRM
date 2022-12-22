@@ -8,9 +8,7 @@
     <form action="/tasks/addTask" method="post">
     <div class="container">
         <label for="name" class="form-label">Для</label>
-        <#if user??>
-            ${user.firstName}
-        </#if>
+<#--            ${user.firstName}-->
         <input type="datetime-local" class="form-control" id="createdTime" name="createdTime" required minlength="1">
         <div class="input-field">
             <select name="taskId" id="option" class="form-control">
@@ -21,7 +19,6 @@
         </div>
     </div>
     <input type="submit">
-    <button><a class="deal" href="/tasks/save">Поставить</a></button>
     <button><a class="deal" href="/">Отменить</a></button>
 
 </@g.general>
