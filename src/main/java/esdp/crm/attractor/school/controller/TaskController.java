@@ -44,14 +44,14 @@ public class TaskController {
                 .addObject("tasks", tasks);
     }
     @GetMapping("/save")
-    public ModelAndView createUser(@AuthenticationPrincipal User principal) {
+    public ModelAndView createTasks(User principal) {
         return new ModelAndView("/deal")
                 .addObject("taskDto", new TaskFormDto());
     }
 
     @PostMapping(value = "/save")
-    public ModelAndView createUser(@ModelAttribute("taskDto") @Valid TaskFormDto dto,
-                                   @AuthenticationPrincipal User principal) {
+    public ModelAndView createTasks(@ModelAttribute("taskDto") @Valid TaskFormDto dto,
+                                    User principal) {
         Task task = taskService.create(dto, principal);
         return RedirectUtil.redirect("/");
     }

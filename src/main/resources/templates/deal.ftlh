@@ -5,7 +5,7 @@
         <input type="hidden"
                name="${_csrf.parameterName}" value="${_csrf.token}">
     </#if>
-    <form action="/tasks/addTask" method="post">
+    <form action="/tasks/save" method="post">
     <div class="container">
         <label for="name" class="form-label">Для</label>
 <#--            ${user.firstName}-->
