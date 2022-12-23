@@ -5,6 +5,7 @@ import esdp.crm.attractor.school.dto.ProductDto;
 import esdp.crm.attractor.school.dto.UserDto;
 import esdp.crm.attractor.school.dto.request.RegisterFormDto;
 import esdp.crm.attractor.school.entity.User;
+import esdp.crm.attractor.school.exception.ProductExistsException;
 import esdp.crm.attractor.school.service.DepartmentService;
 import esdp.crm.attractor.school.service.ProductService;
 import esdp.crm.attractor.school.service.RoleService;
@@ -55,7 +56,7 @@ public class AdminController {
     }
 
     @PostMapping("/create/product")
-    public String createProduct(@Valid @ModelAttribute ProductDto productDto) {
+    public String createProduct(@Valid @ModelAttribute ProductDto productDto) throws ProductExistsException {
         productService.save(productDto);
         return "redirect:/admin";
     }
