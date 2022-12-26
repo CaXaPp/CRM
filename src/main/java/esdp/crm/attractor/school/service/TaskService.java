@@ -47,7 +47,7 @@ public class TaskService {
         task.setCreatedAt(dto.getCreatedTime());
         task.setName(dto.getName());
         task.setEmployee(principal);
-        task.setType(taskTypeRepository.getById(task.getId()));
+        task.setType(taskTypeRepository.getById(dto.getTaskId()));
         return repository.save(task);
     }
 
