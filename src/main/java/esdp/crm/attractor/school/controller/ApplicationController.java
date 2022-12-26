@@ -12,12 +12,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
 @RequestMapping("/application")
 @RequiredArgsConstructor
 public class ApplicationController {
+    public static final int MINUTE_IN_DAY = 1439;
     private final ApplicationService applicationService;
     private final ProductService productService;
     private final ClientSourceService clientSourceService;
@@ -65,4 +67,31 @@ public class ApplicationController {
         applicationService.updateApplication(id, company, price, productId, name, phone, email, address, employeeId, statusId);
     }
 
+    @GetMapping("/all/dashboard/today")
+    public ResponseEntity<List<Application>> applicationsCountToday() {
+        LocalDateTime start = LocalDateTime.now().minusDays(1).plusMinutes(MINUTE_IN_DAY - (LocalDateTime.now().getHour() * 60) + LocalDateTime.now().getMinute());
+        LocalDateTime end = LocalDateTime.now().plusDays(1).minusMinutes((LocalDateTime.now().getHour() * 60) + LocalDateTime.now().getMinute());
+        return new ResponseEntity<>(applicationService.getAllForDashboardByDate(start, end), HttpStatus.OK);
+    }
+
+    @GetMapping("/all/dashboard/yesterday")
+    public ResponseEntity<List<Application>> applicationsCountYesterday() {
+        LocalDateTime start = LocalDateTime.now().minusDays(2).plusMinutes(1439 - (LocalDateTime.now().getHour() * 60) + LocalDateTime.now().getMinute());
+        LocalDateTime end = LocalDateTime.now().minusMinutes((LocalDateTime.now().getHour() * 60) + LocalDateTime.now().getMinute());
+        return new ResponseEntity<>(applicationService.getAllForDashboardByDate(start, end), HttpStatus.OK);yukuuh
+    }
+
+    @GetMapping("/all/dashboard/week")
+    public ResponseEntity<List<Application>> applicationsCountWeek() {
+        LocalDateTime start = LocalDateTime.now().minusDays(8).plusMinutes(1439 - (LocalDateTime.now().getHour() * 60) + LocalDateTime.now().getMinute());
+        LocalDateTime end = LocalDateTime.now().minusMinutes((LocalDateTime.now().getHour() * 60) + LocalDateTime.now().getMinute());
+        return new ResponseEntity<>(applicationService.getAllForDashboardByDate(start, end), HttpStatus.OK);
+    }
+
+    @GetMapping("/all/dashboard/month")
+    public ResponseEntity<List<Application>> applicationsCountMonth() {
+        LocalDateTime start = LocalDateTime.now().minusDays(31).plusMinutes(1439 - (LocalDateTime.now().getHour() * 60) + LocalDateTime.now().getMinute());
+        LocalDateTime end = LocalDateTime.now();
+        return new ResponseEntity<>(applicationService.getAllForDashboardByDate(start, end), HttpStatus.OK);
+    }
 }
