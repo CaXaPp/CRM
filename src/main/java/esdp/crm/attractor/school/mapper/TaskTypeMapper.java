@@ -5,18 +5,12 @@ import esdp.crm.attractor.school.dto.TaskTypeDto;
 import esdp.crm.attractor.school.entity.Task;
 import esdp.crm.attractor.school.entity.TaskType;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.InjectionStrategy;
+import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
-@Component
-@RequiredArgsConstructor
-public class TaskTypeMapper {
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+public interface TaskTypeMapper {
 
-    public TaskTypeDto toTaskDto(TaskType type) {
-        return TaskTypeDto.builder()
-                .id(type.getId())
-                .name(type.getName())
-                .build();
-
-
-    }
+    TaskTypeDto toTaskDto(TaskType type);
 }

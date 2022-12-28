@@ -7,39 +7,29 @@ import esdp.crm.attractor.school.repository.DepartmentRepository;
 import esdp.crm.attractor.school.repository.RoleRepository;
 import esdp.crm.attractor.school.repository.StatusRepository;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.InjectionStrategy;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-@Component
-@RequiredArgsConstructor
-public class UserMapper {
-    private final StatusRepository statusRepository;
-    private final RoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final DepartmentRepository departmentRepository;
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+public abstract class UserMapper {
+    @Autowired
+    StatusRepository statusRepository;
+    @Autowired
+    RoleRepository roleRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
+    @Autowired
+    DepartmentRepository departmentRepository;
 
-    public User toUser(RegisterFormDto dto) {
-        return User.builder()
-                .firstName(dto.getFirstName())
-                .surname(dto.getSurname())
-                .middleName(dto.getMiddleName())
-                .email(dto.getEmail())
-                .enabled(true)
-                .status(statusRepository.getByName("Active"))
-                .password(passwordEncoder.encode(dto.getPassword()))
-                .department(departmentRepository.getById(dto.getDepartmentId()))
-                .role(roleRepository.getById(dto.getRoleId()))
-                .build();
-    }
+    @Mapping(target = "status", expression = "java(statusRepository.getByName(\"Active\"))")
+    @Mapping(target = "password", expression = "java(passwordEncoder.encode(dto.getPassword()))")
+    @Mapping(target = "department", expression = "java(departmentRepository.getById(dto.getDepartmentId()))")
+    @Mapping(target = "role", expression = "java(roleRepository.getById(dto.getRoleId()))")
+    public abstract User toUser(RegisterFormDto dto);
 
-    public UserDto toUserDto(User user) {
-        return UserDto.builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .surname(user.getSurname())
-                .middleName(user.getMiddleName())
-                .email(user.getEmail())
-                .role(user.getRole())
-                .build();
-    }
+    public abstract UserDto toUserDto(User user);
 }
