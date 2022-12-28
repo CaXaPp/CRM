@@ -1,6 +1,7 @@
 package esdp.crm.attractor.school.controller;
 
 import esdp.crm.attractor.school.dto.ApplicationDto;
+import esdp.crm.attractor.school.dto.request.ApplicationFormDto;
 import esdp.crm.attractor.school.entity.Application;
 import esdp.crm.attractor.school.service.*;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class ApplicationController {
     }
 
     @PostMapping("/save")
-    public String postApplicationFromLandingPage(@Valid @ModelAttribute esdp.crm.attractor.school.dto.request.ApplicationFormDto application) {
+    public String postApplicationFromLandingPage(@Valid @ModelAttribute ApplicationFormDto application) {
         applicationService.save(application);
         return "redirect:/application/save";
     }

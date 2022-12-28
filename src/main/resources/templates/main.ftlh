@@ -1,6 +1,6 @@
 <#import "parts/general.ftlh" as g>
 
-<@g.general>
+<@g.general scripts=[]>
     <div class="dashboard_block">
 
         <div class="dashboard">

@@ -16,15 +16,20 @@ import java.time.LocalDateTime;
 public class TaskDto {
     private Long id;
 
-    private String name;
+    private String description;
 
-    private User employee;
+    private String quotes;
+
+    private String result;
+
+    private ApplicationDto application;
+
+    private UserDto employee;
 
     private TaskType type;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime deadline;
-    private String description;
 
 }

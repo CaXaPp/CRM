@@ -77,8 +77,4 @@ public class User extends BaseEntity implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
-
-    public String getFIO(){
-        return String.format("%s %s %s", surname, firstName, middleName);
-    }
 }

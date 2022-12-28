@@ -4,7 +4,6 @@
     <form action="/tasks/save" method="post">
         <div class="container">
             <label for="name" class="form-label">Для</label>
-            <#--            ${user.firstName}-->
             <input type="datetime-local" class="form-control" id="createdTime" name="createdTime" required
                    minlength="1">
             <div class="input-field">
