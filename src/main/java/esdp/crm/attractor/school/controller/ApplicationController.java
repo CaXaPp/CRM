@@ -42,7 +42,7 @@ public class ApplicationController {
     }
 
     @PostMapping("/save")
-    public String postApplicationFromLandingPage(@Valid @ModelAttribute esdp.crm.attractor.school.dto.request.ApplicationFormDto application) {
+    public String postApplicationFromLandingPage(@Valid @ModelAttribute ApplicationFormDto application) {
         applicationService.save(application);
         return "redirect:/application/save";
     }

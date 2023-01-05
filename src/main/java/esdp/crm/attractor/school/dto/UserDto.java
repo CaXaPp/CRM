@@ -1,12 +1,10 @@
 package esdp.crm.attractor.school.dto;
 
 import esdp.crm.attractor.school.entity.Role;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,4 +15,8 @@ public class UserDto {
     private String middleName;
     private String email;
     private Role role;
+
+    public String getFIO(){
+        return String.format("%s %s %s", surname, firstName, middleName);
+    }
 }

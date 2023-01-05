@@ -1,6 +1,7 @@
 <#import "parts/general.ftlh" as g>
 
 <@g.general scripts=["/js/main.js"] styles=["/css/analytics.css"]>
+
     <div class="dashboard_block">
 
         <div class="dashboard_block_inner">
