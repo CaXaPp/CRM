@@ -3,10 +3,7 @@ package esdp.crm.attractor.school.mapper;
 import esdp.crm.attractor.school.dto.ApplicationDto;
 import esdp.crm.attractor.school.dto.request.ApplicationFormDto;
 import esdp.crm.attractor.school.entity.Application;
-import esdp.crm.attractor.school.repository.ApplicationStatusRepository;
-import esdp.crm.attractor.school.repository.ClientSourceRepository;
-import esdp.crm.attractor.school.repository.ProductRepository;
-import esdp.crm.attractor.school.repository.UserRepository;
+import esdp.crm.attractor.school.repository.*;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class ApplicationMapper {
     @Autowired
     protected ProductMapper productMapper;
+    @Autowired
+    ApplicationRepository applicationRepository;
     @Autowired
     protected UserMapper userMapper;
     @Autowired
@@ -39,6 +38,10 @@ public abstract class ApplicationMapper {
     @Mapping(target = "createdAt", expression = "java(form.getId() == null ? form.getCreatedAt() : java.time.LocalDateTime.now())")
     @Mapping(target = "employee", expression = "java(form.getId() == null ? userRepository.getById(form.getEmployeeId()) : null)")
     public abstract Application toEntity(ApplicationFormDto form);
+
+    public Application toEntity(ApplicationDto dto) {
+        return applicationRepository.getApplicationById(dto.getId());
+    }
 
     @Mapping(target = "product", expression = "java(productRepository.getById(form.getProductId()))")
     @Mapping(target = "status", expression = "java(applicationStatusRepository.getById(form.getStatusId()))")

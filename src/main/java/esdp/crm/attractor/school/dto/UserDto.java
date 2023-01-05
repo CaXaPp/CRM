@@ -1,6 +1,7 @@
 package esdp.crm.attractor.school.dto;
 
 import esdp.crm.attractor.school.entity.Role;
+import esdp.crm.attractor.school.entity.Status;
 import lombok.*;
 
 @Getter
@@ -14,7 +15,10 @@ public class UserDto {
     private String surname;
     private String middleName;
     private String email;
-    private Role role;
+    private String role;
+    private boolean enabled;
+    private DepartmentDto department;
+    private String status;
 
     public String getFIO(){
         return String.format("%s %s %s", surname, firstName, middleName);

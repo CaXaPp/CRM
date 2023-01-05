@@ -10,14 +10,16 @@ import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public abstract class ProductMapper {
     @Autowired
     protected ProductRepository repository;
     public abstract ProductDto toProductDto(Product product);
 
-    public Product toEntity(ProductDto dto) {
-        return repository.findByName(dto.getName()).get();
+    public Optional<Product> toEntity(ProductDto dto) {
+        return repository.findByName(dto.getName());
     }
 
 }

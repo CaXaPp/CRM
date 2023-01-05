@@ -1,5 +1,6 @@
 package esdp.crm.attractor.school.repository;
 
+import esdp.crm.attractor.school.dto.ApplicationDto;
 import esdp.crm.attractor.school.entity.Application;
 import esdp.crm.attractor.school.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,6 +16,8 @@ import java.util.List;
 @Repository
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
     List<Application> findAllByEmployee(User employee);
+
+    Application getApplicationById(Long id);
 
     @Query("SELECT a FROM Application as a WHERE a.employee is null")
     List<Application> findAllFree();
