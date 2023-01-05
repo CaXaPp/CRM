@@ -33,7 +33,7 @@ function createTdElemOnBody(response) {
     document.getElementById('tdsBlock').insertAdjacentHTML('beforeend',
         '<tr>' +
         '<td>' +
-        '<button type="button" class="btn btn-primary" id="modalBtn"' +
+        '<button type="button" class="'+ createClassForBtn(response.status.name) +'" id="modalBtn"' +
         '  onclick="applicationEditModalWindow(' + response.id + ')" data-bs-toggle="modal" data-bs-target="#exampleModal">' + response.id + '</button>' +
         '</td>' +
         '<td>' + response.company + '</td>' +
@@ -47,6 +47,23 @@ function createTdElemOnBody(response) {
         '<td>' + employee_name + '</td>' +
         '</tr>'
     )
+
+}
+
+function createClassForBtn(status) {
+    if(status === "Новое") {
+        return "btn btn-warning";
+    } else if(status === "На обслуживании") {
+        return "btn btn-primary";
+    } else if(status === "Переговоры") {
+        return "btn btn-primary";
+    }else if(status === "Отказ") {
+        return "btn btn-danger";
+    } else if(status === "Успешно") {
+        return "btn btn-success";
+    } else if(status === "Принятие решения") {
+        return "btn btn-primary";
+    }
 }
 
 // При клике на id заявления открывается соответсвующее модальное окно для редактирования
@@ -68,24 +85,28 @@ function applicationEditModalWindow(id) {
 
 function fillFields(response) {
     document.getElementById('modal_title_from_js').innerText = "Заявление # " + response.data.id;
-    document.getElementById('modal_company').value = response.data.company;
-    document.getElementById('modal_product').insertAdjacentHTML('beforeend',
+    document.getElementById('id').value = response.data.id;
+    document.getElementById('company').value = response.data.company;
+    document.getElementById('productId').insertAdjacentHTML('beforeend',
         '<option selected value="' + response.data.product.id + '">' + response.data.product.name + '</option>');
-    document.getElementById('modal_deal_sum').value = response.data.price;
-    document.getElementById('modal_name').value = response.data.name;
-    document.getElementById('modal_phone').value = response.data.phone;
-    document.getElementById('modal_email').value = response.data.email;
-    document.getElementById('modal_address').value = response.data.address;
+    document.getElementById('price').value = response.data.price;
+    document.getElementById('name').value = response.data.name;
+    document.getElementById('phone').value = response.data.phone;
+    document.getElementById('email').value = response.data.email;
+    document.getElementById('address').value = response.data.address;
     document.getElementById('hiddenApplicationId').value = response.data.id;
-    document.getElementById('modal_status').insertAdjacentHTML('beforeend',
+    document.getElementById('status').insertAdjacentHTML('beforeend',
         '<option value="' + response.data.status.id + '" selected>' + response.data.status.name + '</option>');
 
+    document.getElementById('createdAt').value = response.data.created_at.slice(0, 16);
+    document.getElementById('sourceId').value = response.data.source.id;
+
     if (response.data.employee === null) {
-        document.getElementById('modal_employee').insertAdjacentHTML('beforeend',
+        document.getElementById('employee').insertAdjacentHTML('beforeend',
             '<option selected value="0">' + "--- Назначить ---" + '</option>'
         );
     } else {
-        document.getElementById('modal_employee').insertAdjacentHTML('beforeend',
+        document.getElementById('employee').insertAdjacentHTML('beforeend',
             '<option selected value="' + response.data.employee.id + '">' + response.data.employee.firstName + " " + response.data.employee.surname + '</option>'
         );
         employee_id = response.data.employee.id;
@@ -93,9 +114,9 @@ function fillFields(response) {
 }
 
 function deleteItems() {
-    let removeEmployeeElem = document.getElementById('modal_employee').querySelectorAll('option');
-    let removeProductElem = document.getElementById('modal_product').querySelectorAll('option');
-    let removeStatusElem = document.getElementById('modal_status').querySelectorAll('option');
+    let removeEmployeeElem = document.getElementById('employee').querySelectorAll('option');
+    let removeProductElem = document.getElementById('productId').querySelectorAll('option');
+    let removeStatusElem = document.getElementById('status').querySelectorAll('option');
     for (let i = 0; i < removeEmployeeElem.length; i++) {
         removeEmployeeElem[i].remove();
     }
@@ -118,7 +139,7 @@ function getUsers(id) {
 }
 
 function switchOptionEmployeeSelect(employee) {
-    document.getElementById('modal_employee').insertAdjacentHTML('beforeend',
+    document.getElementById('employee').insertAdjacentHTML('beforeend',
         '<option value="' + employee.id + '">' + employee.firstName + " " + employee.surname + '</option>'
     );
 }
@@ -134,14 +155,14 @@ function getProducts(id) {
 }
 
 function switchOptionProductSelect(product) {
-    document.getElementById('modal_product').insertAdjacentHTML('beforeend',
+    document.getElementById('productId').insertAdjacentHTML('beforeend',
         '<option value="' + product.id + '">' + product.name + '</option>')
 }
 
 function getStatuses(id) {
     axios.get(BASE_URL + "/statuses/all").then(function (response) {
         for (let i = 0; i < response.data.length; i++) {
-            if(response.data[i].id !== id) {
+            if (response.data[i].id !== id) {
                 switchOptionStatusSelect(response.data[i]);
             }
         }
@@ -149,7 +170,7 @@ function getStatuses(id) {
 }
 
 function switchOptionStatusSelect(status) {
-    document.getElementById('modal_status').insertAdjacentHTML('beforeend',
+    document.getElementById('status').insertAdjacentHTML('beforeend',
         '<option value="' + status.id + '">' + status.name + '</option>')
 }
 
@@ -164,8 +185,8 @@ function updateEditedApplication(e) {
 
     const id = document.getElementById('hiddenApplicationId').value;
 
-    fetch(BASE_URL + "/application/edit/" + id, {
-        method: 'POST',
+    fetch(BASE_URL + "/application/edit", {
+        method: 'PUT',
         body: data
     })
         .then((response) => {

@@ -48,58 +48,70 @@
                     <table>
 
                         <form id="modal_edit_form" class="modal_edit_form">
+                            <input type="hidden" name="id" value="" id="id">
                             <#if _csrf??>
                                 <input type="hidden"
                                        name="${_csrf.parameterName}" value="${_csrf.token}">
                             </#if>
                             <tr>
                                 <td><label for="modal_company">Клиент</label></td>
-                                <td><input type="text" class="form-control" name="company" id="modal_company" value="">
+                                <td><input type="text" class="form-control" name="company" id="company" value="">
                                 </td>
                             </tr>
                             <tr>
                                 <td><label for="modal_deal_sum">Бюджет</label></td>
-                                <td><input type="number" class="form-control" step="any" min="0" name="price" id="modal_deal_sum" value=""></td>
+                                <td><input type="number" class="form-control" step="any" min="0" name="price" id="price"
+                                           value=""></td>
                             </tr>
                             <tr>
                                 <td>Товар/услуга</td>
-                                <td><select class="form-select" aria-label="Select product" id="modal_product"
-                                            name="product" required> </select></td>
+                                <td><select class="form-select" aria-label="Select product" id="productId"
+                                            name="productId" required> </select></td>
                             </tr>
                             <tr>
                                 <td><label for="modal_name">Контактное лицо</label></td>
-                                <td><input type="text" class="form-control" name="name" id="modal_name" value=""></td>
+                                <td><input type="text" class="form-control" name="name" id="name" value=""></td>
                             </tr>
                             <tr>
-                                <td><hr>Компания:</td>
+                                <td>
+                                    <hr>
+                                    Компания:
+                                </td>
                             </tr>
                             <tr>
                                 <td><label for="modal_phone">Раб. тел</label></td>
-                                <td><input type="text" class="form-control" name="phone" id="modal_phone" value=""></td>
+                                <td><input type="text" class="form-control" name="phone" id="phone" value=""></td>
                             </tr>
                             <tr>
                                 <td><label for="modal_email">Email</label></td>
-                                <td><input type="email" class="form-control" name="email" id="modal_email" value="">
+                                <td><input type="email" class="form-control" name="email" id="email" value="">
                                 </td>
                             </tr>
                             <tr>
                                 <td><label for="modal_address">Адрес</label></td>
-                                <td><input type="text" class="form-control" name="address" id="modal_address" value="">
+                                <td><input type="text" class="form-control" name="address" id="address" value="">
                                 </td>
                             </tr>
                             <tr>
                                 <td>Отв-ный</td>
-                                <td><select class="form-select" aria-label="Select employee" id="modal_employee"
-                                            name="employee" required></select></td>
+                                <td><select class="form-select" aria-label="Select employee" id="employee"
+                                            name="employeeId" required></select></td>
                             </tr>
                             <tr>
                                 <td>Статус</td>
-                                <td><select class="form-select" aria-label="Select status" id="modal_status"
-                                            name="status" required></select></td>
+                                <td><select class="form-select" aria-label="Select status" id="status"
+                                            name="statusId" required></select></td>
+                            </tr>
+                            <tr>
+                                <td><label for="createdAt">Создано</label></td>
+                                <td>
+                                    <input type="datetime-local" class="form-control" disabled value="" name="createdAt"
+                                           id="createdAt">
+                                </td>
                             </tr>
 
                             <input type="hidden" value="" id="hiddenApplicationId">
-
+                            <input type="hidden" value="" name="sourceId" id="sourceId">
 
                         </form>
                     </table>

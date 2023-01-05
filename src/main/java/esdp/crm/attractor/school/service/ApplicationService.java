@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -50,12 +51,12 @@ public class ApplicationService {
                 .collect(Collectors.toList());
     }
 
-    public void updateApplication(Long id, String company, BigDecimal price, Long productId, String name, String phone, String email, String address, Long employeeId, Long statusId) {
-        ProductDto productDto = productService.getProductById(productId);
-        UserDto employee = userService.getUserById(employeeId);
-        Optional<ApplicationStatus> status = statusService.getStatusById(statusId);
+    public void updateApplication(ApplicationFormDto application) {
+        ProductDto productDto = productService.getProductById(application.getProductId());
+        UserDto employee = userService.getUserById(application.getEmployeeId());
+        Optional<ApplicationStatus> status = statusService.getStatusById(application.getStatusId());
 
-        applicationRepository.updateApplicationById(id, company, price, productDto.getId(), name, phone, email, address, employee.getId(), status.get().getId());
+        applicationRepository.updateApplicationById(application.getId(), application.getCompany(), application.getPrice(), productDto.getId(), application.getName(), application.getPhone(), application.getEmail(), application.getAddress(), employee.getId(), status.get().getId());
     }
 
     public List<Application> getApplicationByProduct(Long id) {
@@ -72,5 +73,13 @@ public class ApplicationService {
 
     public List<Application> getApplicationByStatus(Long id) {
         return this.applicationRepository.findApplicationByStatusId(id);
+    }
+
+    public Float getApplicationByPriceAndStatus(LocalDateTime start, LocalDateTime end, Long status) {
+        return this.applicationRepository.getPriceByDateAndStatus(start, end, status);
+    }
+
+    public Float getApplicationCount(LocalDateTime start, LocalDateTime end, Long status) {
+        return this.applicationRepository.getCountByDateAndStatus(start, end, status);
     }
 }

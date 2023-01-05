@@ -1,50 +1,13 @@
 .main_block {
     margin: 0 auto;
 }
+
 .dashboard_block {
-    max-width: 1400px;
-    margin: 20px auto 0;
+    padding-top: 50px;
 }
-
-.dashboard {
-    overflow: hidden;
-    background-color: #333;
-    position: relative;
-}
-
-#dashboard_links {
-    display: none;
-}
-
-.dashboard a {
-    color: white;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-size: 17px;
-    display: block;
-}
-
-.fa-bars {
-    float: right;
-}
-
-.dashboard a:hover {
-    background-color: #3f537a;
-    color: white;
-}
-
-.active {
-    background-color: #3c4d6d;
-    color: white;
-}
-
 .employee_info {
     display: flex;
     justify-content: space-between;
-}
-
-.td-hover:hover {
-    background-color: #dbdbdb !important;
 }
 
 .operations {
@@ -73,9 +36,7 @@
     max-width: 95%;
     margin: 0 auto;
 }
-.info_block {
-    width: 30%;
-}
+
 .log_block {
     width: 70%;
     border-left: 1px solid gray;
@@ -91,4 +52,85 @@
 
 .modal-content {
     flex-direction: row;
+}
+
+.dashboard_statistic {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: end;
+
+    margin: 30px auto;
+
+    text-align: center;
+}
+
+.dashboard_statistic_left {
+    width: 20%;
+}
+.dashboard_statistic_center {
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.dashboard_statistic_inner {
+    width: 20%;
+}
+.dashboard_statistic_right {
+    width: 20%;
+}
+
+.dashboard_block_inner {
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.dashboard_info_sort_block {
+    display: flex;
+    justify-content: center;
+}
+
+.title_stat_block {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.btn_group_right {
+    margin-left: 30px;
+}
+
+#btnradio5 {
+    top: 25px;
+    left: 95%;
+}
+
+.section_info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.sections {
+    width: 30%;
+}
+
+.information {
+    width: 70%;
+}
+
+.sections_inner {
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    width: 100%;
+}
+
+.sections_inner label {
+    width: 100%;
+    text-align: left;
+}
+
+.information_inner {
+    padding: 0 20px;
 }
