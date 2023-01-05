@@ -26,3 +26,90 @@
     text-decoration: none;
     color: black;
 }
+
+body {
+    background-color: rgb(238, 238, 238);
+}
+
+.modal-window {
+    border-radius: 10px;
+    background-color: white;
+    padding: 20px 30px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#edit-task-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+
+#edit-task-form select, #edit-task-form option {
+    padding: 8px;
+    font-size: 16px;
+}
+
+#edit-task-form input {
+    padding: 8px;
+    font-size: 16px;
+}
+
+.form-body {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+.form-body label {
+    font-size: 18px;
+    text-transform: lowercase;
+}
+
+.button-wrap {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+}
+
+.button-wrap button {
+    padding: 8px 20px;
+    font-size: 16px;
+    border: 0;
+    background: transparent;
+    border-radius: 5px;
+}
+
+.submit {
+    background-color: rgb(132, 132, 132)!important;
+    cursor: pointer;
+    color: white;
+}
+
+.cancel:hover {
+    background-color: rgb(0, 0, 0);
+    color: white;
+    cursor: pointer;
+}
+
+label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+textarea {
+    padding: 5px;
+    font-size: 16px;
+    height: 90px;
+    min-height: 90px;
+    max-height: 90px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+}

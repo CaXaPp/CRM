@@ -1,22 +1,35 @@
 package esdp.crm.attractor.school.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskFormDto {
-    private String name;
+    @JsonProperty("operation_id")
+    @NotNull
+    private Long operationId;
 
+    @JsonProperty("deadline")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime createdTime;
+    @NotNull
+    private LocalDateTime deadline;
 
-    private Long taskId;
+    @JsonProperty("employee_id")
+    @NotNull
+    private Long employeeId;
+
+    @JsonProperty("type_id")
+    @NotNull
+    private Long typeId;
+
+    @JsonProperty("description")
+    private String description;
 }
