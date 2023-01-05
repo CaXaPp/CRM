@@ -9,29 +9,33 @@ import esdp.crm.attractor.school.entity.User;
 import esdp.crm.attractor.school.repository.TaskTypeRepository;
 import esdp.crm.attractor.school.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.InjectionStrategy;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
-@Component
-@RequiredArgsConstructor
-public class TaskMapper {
-    private final UserMapper userMapper;
-    private final ApplicationMapper applicationMapper;
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+public abstract class TaskMapper {
+    @Autowired
+    protected UserRepository userRepository;
+    @Autowired
+    protected TaskTypeRepository taskTypeRepository;
+    @Autowired
+    protected UserMapper userMapper;
+    @Autowired
+    protected ApplicationMapper applicationMapper;
 
-    public TaskDto toDto(Task task) {
-        return TaskDto.builder()
-                .id(task.getId())
-                .description(task.getDescription())
-                .quotes(task.getQuotes())
-                .result(task.getResult())
-                .application(applicationMapper.toDto(task.getApplication()))
-                .employee(userMapper.toUserDto(task.getEmployee()))
-                .type(task.getType())
-                .createdAt(task.getCreatedAt())
-                .deadline(task.getDeadline())
-                .build();
-    }
+    @Mapping(target="employee", expression = "java(userMapper.toUserDto(task.getEmployee()))")
+    @Mapping(target = "type", expression = "java(taskTypeRepository.getById(task.getId()))")
+    @Mapping(target = "application", expression = "java(applicationMapper.toDto(task.getApplication()))")
+    public abstract TaskDto toDto(Task task);
+
+    @Mapping(target = "employee", expression = "java(userMapper.toUser(taskDto.getEmployee()).get())")
+    @Mapping(target = "application", expression = "java(applicationMapper.toEntity(taskDto.getApplication()))")
+    public abstract Task toEntity(TaskDto taskDto);
 
     public Task toEntity(Application application, LocalDateTime deadline, User user,
                          TaskType type, String description) {

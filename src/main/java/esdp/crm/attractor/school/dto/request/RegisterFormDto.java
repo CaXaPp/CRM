@@ -30,4 +30,5 @@ public class RegisterFormDto {
     private Long departmentId;
 
     private Long roleId;
+    private boolean enabled = true;
 }
