@@ -81,6 +81,11 @@
             <artifactId>mapstruct</artifactId>
             <version>${org.mapstruct.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.javers</groupId>
+            <artifactId>javers-spring-boot-starter-sql</artifactId>
+            <version>6.8.2</version>
+        </dependency>
     </dependencies>
 
     <build>

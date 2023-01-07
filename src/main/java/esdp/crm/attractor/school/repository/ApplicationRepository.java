@@ -3,6 +3,7 @@ package esdp.crm.attractor.school.repository;
 import esdp.crm.attractor.school.dto.ApplicationDto;
 import esdp.crm.attractor.school.entity.Application;
 import esdp.crm.attractor.school.entity.User;
+import org.javers.spring.annotation.JaversSpringDataAuditable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
+@JaversSpringDataAuditable
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
     List<Application> findAllByEmployee(User employee);
 

@@ -52,11 +52,7 @@ public class ApplicationService {
     }
 
     public void updateApplication(ApplicationFormDto application) {
-        ProductDto productDto = productService.getProductById(application.getProductId());
-        UserDto employee = userService.getUserById(application.getEmployeeId());
-        Optional<ApplicationStatus> status = statusService.getStatusById(application.getStatusId());
-
-        applicationRepository.updateApplicationById(application.getId(), application.getCompany(), application.getPrice(), productDto.getId(), application.getName(), application.getPhone(), application.getEmail(), application.getAddress(), employee.getId(), status.get().getId());
+        applicationRepository.save(applicationMapper.toEntity(application));
     }
 
     public List<Application> getApplicationByProduct(Long id) {

@@ -1,4 +1,4 @@
-<#import "parts/general.ftlh" as g>
+g<#import "parts/general.ftlh" as g>
 
 <@g.general styles=["/css/login.css"]>
     <div class="login-form">
@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="action">
-                <button><a href="/admin" style="text-decoration: none; color: black">Вернуться</a></button>
+                <button type="submit">Добавить</button>
             </div>
         </form>
     </div>

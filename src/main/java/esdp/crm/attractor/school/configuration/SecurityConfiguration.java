@@ -1,6 +1,8 @@
 package esdp.crm.attractor.school.configuration;
 
 import lombok.RequiredArgsConstructor;
+import org.javers.spring.auditable.AuthorProvider;
+import org.javers.spring.auditable.SpringSecurityAuthorProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -19,6 +21,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthorProvider authorProvider() {
+        return new SpringSecurityAuthorProvider();
     }
 
     @Override

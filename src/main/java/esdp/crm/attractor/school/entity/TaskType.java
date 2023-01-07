@@ -1,6 +1,7 @@
 package esdp.crm.attractor.school.entity;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
@@ -8,7 +9,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @Entity
 @Table(name = "task_types")
 public class TaskType extends BaseEntity{
