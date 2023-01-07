@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div class="action">
-                <button><a href="/admin" style="text-decoration: none; color: black">Назад</a></button>
+                <button type="submit">Добавить</button>
             </div>
         </form>
     </div>
