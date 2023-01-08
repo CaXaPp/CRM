@@ -17,9 +17,6 @@ public class Task extends BaseEntity {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "quotes")
-    private String quotes;
-
     @Column(name = "result")
     private String result;
 

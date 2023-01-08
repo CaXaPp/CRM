@@ -5,10 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.javers.core.metamodel.annotation.PropertyName;
 
-import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Getter
 @Setter
@@ -16,11 +17,9 @@ import java.util.Set;
 @AllArgsConstructor
 @SuperBuilder
 @Entity
-@Table(name = "departments")
-public class Department extends BaseEntity {
+@Table(name = "funnels")
+public class Funnel extends BaseEntity {
     @Column(name = "name", nullable = false)
+    @PropertyName("Название воронки")
     private String name;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    private Set<Funnel> funnels = new HashSet<>();
 }
