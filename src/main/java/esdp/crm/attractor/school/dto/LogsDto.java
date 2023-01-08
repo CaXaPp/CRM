@@ -14,9 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LogsDto {
-    private Long id;
     private LocalDateTime date;
     private String description;
-    private UserDto employee;
-    private String status;
+    private String author;
 }
