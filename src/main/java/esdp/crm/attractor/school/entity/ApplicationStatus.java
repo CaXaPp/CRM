@@ -2,6 +2,8 @@ package esdp.crm.attractor.school.entity;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -15,4 +17,8 @@ import javax.persistence.*;
 public class ApplicationStatus extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
+
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Funnel funnel;
 }
