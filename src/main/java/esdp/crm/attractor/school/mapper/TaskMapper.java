@@ -29,7 +29,6 @@ public abstract class TaskMapper {
     protected ApplicationMapper applicationMapper;
 
     @Mapping(target="employee", expression = "java(userMapper.toUserDto(task.getEmployee()))")
-    @Mapping(target = "type", expression = "java(taskTypeRepository.getById(task.getId()))")
     @Mapping(target = "application", expression = "java(applicationMapper.toDto(task.getApplication()))")
     public abstract TaskDto toDto(Task task);
 

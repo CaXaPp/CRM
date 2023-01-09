@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/operations")
@@ -23,9 +24,11 @@ public class OperationController {
     private final ClientSourceService clientSourceService;
 
     @GetMapping
-    public String getOperations(@AuthenticationPrincipal User user, Model model) {
-        model.addAttribute("operations", operationService.getAll(user));
-        model.addAttribute("operation_statuses", applicationStatusService.getAll());
+    public String getOperations(@AuthenticationPrincipal User user, Model model,
+                                @RequestParam(name = "funnel", defaultValue = "0") Long funnelId) {
+        Map<String, Object> operations = operationService.getAll(user, funnelId);
+        model.addAttribute("operations", operations.get("operations"));
+        model.addAttribute("operation_statuses", operations.get("operation_statuses"));
         return "operations";
     }
 

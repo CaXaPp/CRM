@@ -18,8 +18,6 @@ public class TaskDto {
 
     private String description;
 
-    private String quotes;
-
     private String result;
 
     private ApplicationDto application;

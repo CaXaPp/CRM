@@ -39,7 +39,6 @@ function createTaskElement(task) {
         <td>${task.type.name}</td>
         <td>${task.description}</td>
         <td>${replaceNull(task.result)}</td>
-        <td>${replaceNull(task.quotes)}</td>
     `
     return tr
 }
