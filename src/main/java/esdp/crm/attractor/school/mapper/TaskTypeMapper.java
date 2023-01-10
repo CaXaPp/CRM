@@ -12,5 +12,5 @@ import org.springframework.stereotype.Component;
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface TaskTypeMapper {
 
-    TaskTypeDto toTaskDto(TaskType type);
+    TaskTypeDto toTaskTypeDto(TaskType type);
 }

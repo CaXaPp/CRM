@@ -28,8 +28,11 @@ public abstract class TaskMapper {
     @Autowired
     protected ApplicationMapper applicationMapper;
 
+    @Autowired
+    protected TaskTypeMapper taskTypeMapper;
+
     @Mapping(target="employee", expression = "java(userMapper.toUserDto(task.getEmployee()))")
-    @Mapping(target = "type", expression = "java(taskTypeRepository.getById(task.getId()))")
+    @Mapping(target = "type", expression = "java(taskTypeMapper.toTaskTypeDto(taskTypeRepository.getById(task.getType().getId())))")
     @Mapping(target = "application", expression = "java(applicationMapper.toDto(task.getApplication()))")
     public abstract TaskDto toDto(Task task);
 
