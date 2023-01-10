@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ApplicationStatusRepository extends JpaRepository<ApplicationStatus, Long> {
-    ApplicationStatus getByName(String name);
+    List<ApplicationStatus> getByName(String name);
     List<ApplicationStatus> findAllByFunnel(Funnel funnel);
 }

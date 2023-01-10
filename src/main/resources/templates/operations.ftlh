@@ -12,16 +12,18 @@
                     <li><a class="dropdown-item" href="/operations/add/new">Добавить новую</a></li>
                 </ul>
             </div>
-            <button class="btn btn-dark" id="editOperation">Редактировать</button>
-            <div class="dropdown">
-                <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Настройки
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item">Выбрать воронку продаж</a></li>
-                    <li><a class="dropdown-item">Изменить статус</a></li>
-                </ul>
-            </div>
+            <#if user.role != 'Сотрудник'>
+                <div class="dropdown">
+                    <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Воронки
+                    </button>
+                    <ul class="dropdown-menu">
+                        <#list funnels as funnel>
+                            <li><a class="dropdown-item" href="/operations?funnel=${funnel.id}">${funnel.name}</a></li>
+                        </#list>
+                    </ul>
+                </div>
+            </#if>
         </div>
         <div class="operations">
             <#list operation_statuses as status>

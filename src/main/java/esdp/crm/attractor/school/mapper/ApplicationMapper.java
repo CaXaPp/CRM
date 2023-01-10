@@ -33,7 +33,7 @@ public abstract class ApplicationMapper {
     @Mapping(target = "product", expression = "java(productRepository.getById(form.getProductId()))")
     @Mapping(target = "status",
             expression = "java(form.getStatusId() != null ? " +
-                    "applicationStatusRepository.getById(form.getStatusId()) : applicationStatusRepository.getByName(\"Новое\"))")
+                    "applicationStatusRepository.getById(form.getStatusId()) : applicationStatusRepository.getByName(\"Новое\").get(0))")
     @Mapping(target = "source", expression = "java(clientSourceRepository.getById(form.getSourceId()))")
     @Mapping(target = "createdAt", expression = "java(form.getCreatedAt() != null ? form.getCreatedAt() : java.time.LocalDateTime.now())")
     @Mapping(target = "employee", expression = "java(form.getEmployeeId() != null ? userRepository.getById(form.getEmployeeId()) : null)")

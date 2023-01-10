@@ -51,6 +51,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     @Query("select count (a.price) FROM Application a WHERE a.createdAt BETWEEN :startDate AND :endDate AND a.status.id = :status")
     Float getCountByDateAndStatus (LocalDateTime startDate, LocalDateTime endDate, Long status);
 
-    @Query("SELECT a FROM Application a WHERE a.status IN :statuses")
+    @Query("SELECT a FROM Application a WHERE a.status IN :statuses AND a.employee IS NOT NULL")
     List<Application> findOperationsByFunnel(List<ApplicationStatus> statuses);
 }

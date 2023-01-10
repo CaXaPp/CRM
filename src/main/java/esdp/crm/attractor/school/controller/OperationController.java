@@ -24,6 +24,7 @@ public class OperationController {
     private final UserService userService;
     private final ProductService productService;
     private final ClientSourceService clientSourceService;
+    private final FunnelService funnelService;
 
     @GetMapping
     public String getOperations(@AuthenticationPrincipal User user, Model model,
@@ -31,6 +32,8 @@ public class OperationController {
         Map<String, Object> operations = operationService.getAll(user, funnelId);
         model.addAttribute("operations", operations.get("operations"));
         model.addAttribute("operation_statuses", operations.get("operation_statuses"));
+        model.addAttribute("user", userService.mapToDto(user));
+        model.addAttribute("funnels", funnelService.findAll());
         return "operations";
     }
 
