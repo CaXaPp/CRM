@@ -1,5 +1,6 @@
 package esdp.crm.attractor.school.controller;
 
+import esdp.crm.attractor.school.dto.UserDto;
 import esdp.crm.attractor.school.dto.request.ApplicationFormDto;
 import esdp.crm.attractor.school.entity.User;
 import esdp.crm.attractor.school.service.*;
@@ -10,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -45,15 +47,16 @@ public class OperationController {
             var application = applicationService.getApplicationById(applicationId);
             model.addAttribute("application", application);
         }
-        model.addAttribute("employees", userService.findAllByUser(user));
+        List<UserDto> users = userService.findAllByUser(user);
+        model.addAttribute("employees", users);
         model.addAttribute("products", productService.getAll());
         model.addAttribute("sources", clientSourceService.getAll());
-        model.addAttribute("statuses", applicationStatusService.getAll());
+        model.addAttribute("statuses", applicationStatusService.findByUserId(users.get(0).getId()));
         return "createNewOperation";
     }
 
     @PostMapping
-    public String createOperation(@Valid @ModelAttribute ApplicationFormDto form) {
+    public String saveOperation(@Valid @ModelAttribute ApplicationFormDto form) {
         operationService.createOrEditOperation(form);
         return "redirect:/operations";
     }

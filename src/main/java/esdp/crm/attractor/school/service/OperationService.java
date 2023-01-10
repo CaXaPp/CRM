@@ -48,6 +48,16 @@ public class OperationService {
         return applicationMapper.toDto(saved);
     }
 
+    public ApplicationDto getById(Long id, User user) throws NotFoundException, NotPermittedException {
+        Application application = applicationRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Operation with id " + id + " not found!"));
+        if ("Сотрудник".equals(user.getRole().getName())) {
+            if (!application.getEmployee().equals(user))
+                throw new NotPermittedException("You can't see other employees' operation!");
+        }
+        return applicationMapper.toDto(application);
+    }
+
     private Map<String, Object> getDefaultFunnel(User user) {
         Department department = user.getDepartment();
         Optional<Funnel> funnel = department.getFunnels().stream()
