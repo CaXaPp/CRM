@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -15,6 +16,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class LogsDto {
     private LocalDateTime date;
-    private String description;
+    private List<ChangesDto> changes;
     private String author;
 }

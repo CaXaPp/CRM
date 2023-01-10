@@ -1,5 +1,6 @@
 package esdp.crm.attractor.school.service;
 
+import esdp.crm.attractor.school.dto.ChangesDto;
 import esdp.crm.attractor.school.dto.LogsDto;
 import esdp.crm.attractor.school.entity.Application;
 import esdp.crm.attractor.school.repository.*;
@@ -23,7 +24,6 @@ public class LogsService {
     private final ProductRepository productRepository;
     private final ClientSourceRepository clientSourceRepository;
     private final Javers javers;
-    private final StatusRepository statusRepository;
 
     public List<LogsDto> getApplicationChanges(Long applicationId) {
         Changes changes = javers.findChanges(QueryBuilder.byInstanceId(applicationId, Application.class).build());
@@ -39,54 +39,58 @@ public class LogsService {
         CommitMetadata commit = changesByCommit.getCommit();
         logsDto.setAuthor(commit.getAuthor());
         logsDto.setDate(commit.getCommitDate());
-        StringBuilder str = new StringBuilder();
         Changes changes = javers.findChanges(QueryBuilder.byInstanceId(applicationId, Application.class)
                 .withCommitId(commit.getId()).build());
+        List<ChangesDto> changesList = new ArrayList<>();
         changes.getChangesByType(PropertyChange.class).forEach(propertyChange -> {
-            str.append(getPropertyDescription(propertyChange)).append("\n");
+            changesList.add(getPropertyDescription(propertyChange));
         });
-        logsDto.setDescription(str.toString());
+        logsDto.setChanges(changesList);
         return logsDto;
     }
 
-    public String getPropertyDescription(PropertyChange propertyChange) {
-        StringBuilder desc = new StringBuilder().append(propertyChange.getPropertyName()).append(": ");
+    public ChangesDto getPropertyDescription(PropertyChange propertyChange) {
+        final String UNDEFINED = "Не объявлено";
         switch (propertyChange.getPropertyName()) {
             case "Продукт":
-                desc.append(propertyChange.getLeft() != null ? productRepository.getById(getIdFromPropertyStr(
-                        propertyChange.getLeft().toString())).getName() : "Не объявлено")
-                        .append(" ---> ")
-                        .append(propertyChange.getLeft() != null ? productRepository.getById(getIdFromPropertyStr(
-                                propertyChange.getRight().toString())).getName() : "Не объявлено");
-                break;
+                return ChangesDto.builder()
+                        .property(propertyChange.getPropertyName())
+                        .oldRecord(propertyChange.getLeft() != null ? productRepository.getById(getIdFromPropertyStr(
+                                propertyChange.getLeft().toString())).getName() : UNDEFINED)
+                        .newRecord(propertyChange.getRight() != null ? productRepository.getById(getIdFromPropertyStr(
+                                propertyChange.getRight().toString())).getName() : UNDEFINED)
+                        .build();
             case "Статус":
-                desc.append(propertyChange.getLeft() != null ? applicationStatusRepository.getById(getIdFromPropertyStr(
-                                propertyChange.getLeft().toString())).getName() : "Не объявлено")
-                        .append(" ---> ")
-                        .append(propertyChange.getLeft() != null ? applicationStatusRepository.getById(getIdFromPropertyStr(
-                                propertyChange.getRight().toString())).getName() : "Не объявлено");
-                break;
+                return ChangesDto.builder()
+                        .property(propertyChange.getPropertyName())
+                        .oldRecord(propertyChange.getLeft() != null ? applicationStatusRepository.getById(getIdFromPropertyStr(
+                                propertyChange.getLeft().toString())).getName() : UNDEFINED)
+                        .newRecord(propertyChange.getRight() != null ? applicationStatusRepository.getById(getIdFromPropertyStr(
+                                propertyChange.getRight().toString())).getName() : UNDEFINED)
+                        .build();
             case "Источник":
-                desc.append(propertyChange.getLeft() != null ? clientSourceRepository.getById(getIdFromPropertyStr(
-                                propertyChange.getLeft().toString())).getName() : "Не объявлено")
-                        .append(" ---> ")
-                        .append(propertyChange.getLeft() != null ? clientSourceRepository.getById(getIdFromPropertyStr(
-                                propertyChange.getRight().toString())).getName() : "Не объявлено");
-                break;
+                return ChangesDto.builder()
+                        .property(propertyChange.getPropertyName())
+                        .oldRecord(propertyChange.getLeft() != null ? clientSourceRepository.getById(getIdFromPropertyStr(
+                                propertyChange.getLeft().toString())).getName() : UNDEFINED)
+                        .newRecord(propertyChange.getRight() != null ? clientSourceRepository.getById(getIdFromPropertyStr(
+                                propertyChange.getRight().toString())).getName() : UNDEFINED)
+                        .build();
             case "Сотрудник":
-                desc.append(propertyChange.getLeft() != null ? userRepository.getById(getIdFromPropertyStr(
-                                propertyChange.getLeft().toString())).getEmail() : "Не объявлено")
-                        .append(" ---> ")
-                        .append(propertyChange.getLeft() != null ? userRepository.getById(getIdFromPropertyStr(
-                                propertyChange.getRight().toString())).getEmail() : "Не объявлено");
-                break;
+                return ChangesDto.builder()
+                        .property(propertyChange.getPropertyName())
+                        .oldRecord(propertyChange.getLeft() != null ? userRepository.getById(getIdFromPropertyStr(
+                                propertyChange.getLeft().toString())).getUsername() : UNDEFINED)
+                        .newRecord(propertyChange.getRight() != null ? userRepository.getById(getIdFromPropertyStr(
+                                propertyChange.getRight().toString())).getUsername() : UNDEFINED)
+                        .build();
             default:
-                desc.append(propertyChange.getLeft())
-                        .append(" ---> ")
-                        .append(propertyChange.getRight());
-                break;
+                return ChangesDto.builder()
+                        .property(propertyChange.getPropertyName())
+                        .oldRecord(propertyChange.getLeft() != null ? propertyChange.getLeft().toString() : UNDEFINED)
+                        .newRecord(propertyChange.getRight() != null ? propertyChange.getRight().toString() : UNDEFINED)
+                        .build();
         }
-        return desc.toString();
     }
 
     public Long getIdFromPropertyStr(String propertyStr) {

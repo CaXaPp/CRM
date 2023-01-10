@@ -18,7 +18,7 @@ public class TaskTypeService {
     public List<TaskTypeDto> findAll() {
         var tasks = taskTypeRepository.findAll();
         return tasks.stream()
-                .map(taskTypeMapper::toTaskDto)
+                .map(taskTypeMapper::toTaskTypeDto)
                 .collect(Collectors.toList());
     }
 }

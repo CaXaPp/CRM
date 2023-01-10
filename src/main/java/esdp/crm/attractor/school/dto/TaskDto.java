@@ -24,7 +24,7 @@ public class TaskDto {
 
     private UserDto employee;
 
-    private TaskType type;
+    private TaskTypeDto type;
 
     private LocalDateTime createdAt;
 
