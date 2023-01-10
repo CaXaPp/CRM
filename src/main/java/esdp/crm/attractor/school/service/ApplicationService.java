@@ -45,8 +45,10 @@ public class ApplicationService {
                 .collect(Collectors.toList());
     }
 
-    public void updateApplication(ApplicationFormDto application) {
-        applicationRepository.save(applicationMapper.toEntity(application));
+    public Application updateApplication(ApplicationFormDto application) {
+        if (application.getId() != null) application.setCreatedAt
+                (applicationRepository.getApplicationById(application.getId()).getCreatedAt()); // TODO Временное решение
+        return applicationRepository.save(applicationMapper.toEntity(application));
     }
 
     public List<Application> getApplicationByProduct(Long id) {
