@@ -24,6 +24,7 @@ public class LogsService {
     private final ProductRepository productRepository;
     private final ClientSourceRepository clientSourceRepository;
     private final Javers javers;
+    private final String UNDEFINED = "Не объявлено";
 
     public List<LogsDto> getApplicationChanges(Long applicationId) {
         Changes changes = javers.findChanges(QueryBuilder.byInstanceId(applicationId, Application.class).build());
@@ -55,39 +56,39 @@ public class LogsService {
                 return ChangesDto.builder()
                         .property(propertyChange.getPropertyName())
                         .oldRecord(propertyChange.getLeft() != null ? productRepository.getById(getIdFromPropertyStr(
-                                propertyChange.getLeft().toString())).getName() : "Не объявлено")
+                                propertyChange.getLeft().toString())).getName() : UNDEFINED)
                         .newRecord(propertyChange.getRight() != null ? productRepository.getById(getIdFromPropertyStr(
-                                propertyChange.getRight().toString())).getName() : "Не объявлено")
+                                propertyChange.getRight().toString())).getName() : UNDEFINED)
                         .build();
             case "Статус":
                 return ChangesDto.builder()
                         .property(propertyChange.getPropertyName())
                         .oldRecord(propertyChange.getLeft() != null ? applicationStatusRepository.getById(getIdFromPropertyStr(
-                                propertyChange.getLeft().toString())).getName() : "Не объявлено")
+                                propertyChange.getLeft().toString())).getName() : UNDEFINED)
                         .newRecord(propertyChange.getRight() != null ? applicationStatusRepository.getById(getIdFromPropertyStr(
-                                propertyChange.getRight().toString())).getName() : "Не объявлено")
+                                propertyChange.getRight().toString())).getName() : UNDEFINED)
                         .build();
             case "Источник":
                 return ChangesDto.builder()
                         .property(propertyChange.getPropertyName())
                         .oldRecord(propertyChange.getLeft() != null ? clientSourceRepository.getById(getIdFromPropertyStr(
-                                propertyChange.getLeft().toString())).getName() : "Не объявлено")
+                                propertyChange.getLeft().toString())).getName() : UNDEFINED)
                         .newRecord(propertyChange.getRight() != null ? clientSourceRepository.getById(getIdFromPropertyStr(
-                                propertyChange.getRight().toString())).getName() : "Не объявлено")
+                                propertyChange.getRight().toString())).getName() : UNDEFINED)
                         .build();
             case "Сотрудник":
                 return ChangesDto.builder()
                         .property(propertyChange.getPropertyName())
                         .oldRecord(propertyChange.getLeft() != null ? userRepository.getById(getIdFromPropertyStr(
-                                propertyChange.getLeft().toString())).getUsername() : "Не объявлено")
+                                propertyChange.getLeft().toString())).getUsername() : UNDEFINED)
                         .newRecord(propertyChange.getRight() != null ? userRepository.getById(getIdFromPropertyStr(
-                                propertyChange.getRight().toString())).getUsername() : "Не объявлено")
+                                propertyChange.getRight().toString())).getUsername() : UNDEFINED)
                         .build();
             default:
                 return ChangesDto.builder()
                         .property(propertyChange.getPropertyName())
-                        .oldRecord(propertyChange.getLeft() != null ? propertyChange.getLeft().toString() : "Не объявлено")
-                        .newRecord(propertyChange.getRight() != null ? propertyChange.getRight().toString() : "Не объявлено")
+                        .oldRecord(propertyChange.getLeft() != null ? propertyChange.getLeft().toString() : UNDEFINED)
+                        .newRecord(propertyChange.getRight() != null ? propertyChange.getRight().toString() : UNDEFINED)
                         .build();
         }
     }
