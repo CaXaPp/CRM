@@ -15,7 +15,7 @@
                     <th scope="col">Ответственный</th>
                     <th scope="col">Объект</th>
                     <th scope="col">Тип задачи</th>
-                    <th scope="col">Текст Задачи</th>
+                    <th scope="col">Описание</th>
                     <th scope="col">Результат</th>
                 </tr>
             </thead>

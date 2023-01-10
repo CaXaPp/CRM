@@ -22,4 +22,15 @@ public class Funnel extends BaseEntity {
     @Column(name = "name", nullable = false)
     @PropertyName("Название воронки")
     private String name;
+
+    @Override
+    public int hashCode() {
+        return super.getId().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Funnel that = (Funnel) obj;
+        return super.getId().equals(that.getId());
+    }
 }

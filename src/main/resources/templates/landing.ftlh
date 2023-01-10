@@ -13,7 +13,7 @@
         <h3 class="text-center landing-head">Оставьте нам вашу заявку и наши сотрудники обязательно с вами свяжутся.
             <br>(для заявки просим вас ответить на вопросы ниже)</h3>
         <div class="d-flex justify-content-center">
-            <form id="application-form" action="#"  method="post" class="pt-4 w-50 row d-flex justify-content-center">
+            <form id="application-form" action="/application/save"  method="post" class="pt-4 w-50 row d-flex justify-content-center">
                 <#if _csrf??>
                     <input type="hidden"
                        name="${_csrf.parameterName}" value="${_csrf.token}">

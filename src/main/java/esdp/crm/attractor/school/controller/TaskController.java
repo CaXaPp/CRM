@@ -31,9 +31,9 @@ public class TaskController {
     private final UserService userService;
 
     @GetMapping
-    public ModelAndView task(@AuthenticationPrincipal User principal) {
+    public ModelAndView getTasks(@AuthenticationPrincipal User principal) {
         List<TaskDto> tasks = taskService.findAll();
-        List<ApplicationDto> operations = operationService.getAll(principal);
+        List<ApplicationDto> operations = (List<ApplicationDto>) operationService.getAll(principal, 0L).get("operations");
         List<UserDto> employees = userService.findAllByUser(principal);
         List<TaskTypeDto> types = taskTypeService.findAll();
         return new ModelAndView("tasks")

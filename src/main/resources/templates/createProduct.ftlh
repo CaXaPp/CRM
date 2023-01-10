@@ -1,4 +1,4 @@
-g<#import "parts/general.ftlh" as g>
+<#import "parts/general.ftlh" as g>
 
 <@g.general styles=["/css/login.css"]>
     <div class="login-form">
