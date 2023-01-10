@@ -17,7 +17,6 @@
                     <th scope="col">Тип задачи</th>
                     <th scope="col">Текст Задачи</th>
                     <th scope="col">Результат</th>
-                    <th scope="col">Котировки</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -29,7 +28,6 @@
                         <td>${(task.type.name)!''}</td>
                         <td>${(task.description)!''}</td>
                         <td>${(task.result)!'-'}</td>
-                        <td>${(task.quotes)!'-'}</td>
                     </tr>
                 </#list>
             </tbody>

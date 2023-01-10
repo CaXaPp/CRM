@@ -18,15 +18,13 @@ public class TaskDto {
 
     private String description;
 
-    private String quotes;
-
     private String result;
 
     private ApplicationDto application;
 
     private UserDto employee;
 
-    private TaskType type;
+    private TaskTypeDto type;
 
     private LocalDateTime createdAt;
 

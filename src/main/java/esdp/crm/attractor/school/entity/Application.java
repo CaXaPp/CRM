@@ -28,6 +28,10 @@ public class Application extends BaseEntity {
     @PropertyName("Продукт")
     private Product product;
 
+    @Column(name = "description")
+    @PropertyName("Примечания")
+    private String description;
+
     @Column(name = "phone", nullable = false)
     @PropertyName("Телефон")
     private String phone;
