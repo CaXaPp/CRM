@@ -23,7 +23,6 @@ public class LogsService {
     private final ProductRepository productRepository;
     private final ClientSourceRepository clientSourceRepository;
     private final Javers javers;
-    private final StatusRepository statusRepository;
 
     public List<LogsDto> getApplicationChanges(Long applicationId) {
         Changes changes = javers.findChanges(QueryBuilder.byInstanceId(applicationId, Application.class).build());
