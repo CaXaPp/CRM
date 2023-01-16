@@ -1,12 +1,13 @@
 package esdp.crm.attractor.school.repository;
 
-import esdp.crm.attractor.school.dto.ApplicationDto;
 import esdp.crm.attractor.school.entity.Application;
+import esdp.crm.attractor.school.entity.ApplicationStatus;
 import esdp.crm.attractor.school.entity.User;
 import org.javers.spring.annotation.JaversSpringDataAuditable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,11 +18,12 @@ import java.util.List;
 @Repository
 @JaversSpringDataAuditable
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
-    List<Application> findAllByEmployee(User employee);
+    @Query("SELECT a FROM Application a WHERE a.status IN :statuses AND a.employee = :employee")
+    List<Application> findAllByEmployee(@Param("employee") User employee, @Param("statuses") List<ApplicationStatus> statuses);
 
     Application getApplicationById(Long id);
 
-    @Query("SELECT a FROM Application as a WHERE a.employee is null")
+    @Query("SELECT a FROM Application as a WHERE a.employee IS NULL")
     List<Application> findAllFree();
 
     @Transactional
@@ -48,4 +50,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     @Query("select count (a.price) FROM Application a WHERE a.createdAt BETWEEN :startDate AND :endDate AND a.status.id = :status")
     Float getCountByDateAndStatus (LocalDateTime startDate, LocalDateTime endDate, Long status);
+
+    @Query("SELECT a FROM Application a WHERE a.status IN :statuses AND a.employee IS NOT NULL")
+    List<Application> findOperationsByFunnel(List<ApplicationStatus> statuses);
 }

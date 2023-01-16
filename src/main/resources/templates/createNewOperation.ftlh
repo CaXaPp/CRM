@@ -1,5 +1,6 @@
 <#import "parts/general.ftlh" as g>
-<@g.general>
+
+<@g.general scripts=["/js/operation.js"]>
     <link rel="stylesheet" href="./css/operation.css">
     <div class="container mt-4">
         <div class="wrapper">
@@ -11,13 +12,13 @@
                     </div>
                 </div>
                 <div class="left-bar-body">
-                    <form action="/operations" method="post">
+                    <form action="/operations" method="post" id="operation-form">
                         <#if _csrf??>
                             <input type="hidden"
                                    name="${_csrf.parameterName}" value="${_csrf.token}">
                         </#if>
-                        <label for="employeeId">Ответственный
-                            <select name="employeeId" id="employeeId" required>
+                        <label for="employees">Ответственный
+                            <select name="employeeId" id="employees" required>
                                 <#list employees as employee>
                                     <option value="${employee.id}">${employee.firstName} ${employee.middleName}</option>
                                 </#list>
@@ -65,9 +66,9 @@
                                 </#list>
                             </select>
                         </label>
-                        <label for="status" class="label">
+                        <label for="statuses" class="label">
                             <p>Статус</p>
-                            <select name="statusId" id="status" required>
+                            <select name="statusId" id="statuses" required>
                                 <#list statuses as status>
                                     <option value="${status.id}">${status.name}</option>
                                 </#list>

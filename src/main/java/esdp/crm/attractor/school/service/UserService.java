@@ -1,18 +1,17 @@
 package esdp.crm.attractor.school.service;
 
-import esdp.crm.attractor.school.dto.TaskDto;
-import esdp.crm.attractor.school.dto.request.RegisterFormDto;
 import esdp.crm.attractor.school.dto.UserDto;
+import esdp.crm.attractor.school.dto.request.RegisterFormDto;
 import esdp.crm.attractor.school.entity.Role;
 import esdp.crm.attractor.school.entity.User;
 import esdp.crm.attractor.school.exception.EmailExistsException;
+import esdp.crm.attractor.school.exception.NotFoundException;
 import esdp.crm.attractor.school.mapper.UserMapper;
 import esdp.crm.attractor.school.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,9 +32,10 @@ public class UserService {
         return userMapper.toUserDto(savedUser);
     }
 
-    public UserDto getUserById(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        return userMapper.toUserDto(user.get());
+    public UserDto getUserById(Long id) throws NotFoundException {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User with id " + id + " not found!"));
+        return userMapper.toUserDto(user);
     }
 
     public List<User> findAll(Role role){
@@ -51,5 +51,9 @@ public class UserService {
         return users.stream()
                 .map(userMapper::toUserDto)
                 .collect(Collectors.toList());
+    }
+
+    public UserDto mapToDto(User user) {
+        return userMapper.toUserDto(user);
     }
 }

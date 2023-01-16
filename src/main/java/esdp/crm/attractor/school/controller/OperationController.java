@@ -1,5 +1,6 @@
 package esdp.crm.attractor.school.controller;
 
+import esdp.crm.attractor.school.dto.UserDto;
 import esdp.crm.attractor.school.dto.request.ApplicationFormDto;
 import esdp.crm.attractor.school.entity.User;
 import esdp.crm.attractor.school.service.*;
@@ -10,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/operations")
@@ -21,11 +24,16 @@ public class OperationController {
     private final UserService userService;
     private final ProductService productService;
     private final ClientSourceService clientSourceService;
+    private final FunnelService funnelService;
 
     @GetMapping
-    public String getOperations(@AuthenticationPrincipal User user, Model model) {
-        model.addAttribute("operations", operationService.getAll(user));
-        model.addAttribute("operation_statuses", applicationStatusService.getAll());
+    public String getOperations(@AuthenticationPrincipal User user, Model model,
+                                @RequestParam(name = "funnel", defaultValue = "0") Long funnelId) {
+        Map<String, Object> operations = operationService.getAll(user, funnelId);
+        model.addAttribute("operations", operations.get("operations"));
+        model.addAttribute("operation_statuses", operations.get("operation_statuses"));
+        model.addAttribute("user", userService.mapToDto(user));
+        model.addAttribute("funnels", funnelService.findAll());
         return "operations";
     }
 
@@ -42,15 +50,16 @@ public class OperationController {
             var application = applicationService.getApplicationById(applicationId);
             model.addAttribute("application", application);
         }
-        model.addAttribute("employees", userService.findAllByUser(user));
+        List<UserDto> users = userService.findAllByUser(user);
+        model.addAttribute("employees", users);
         model.addAttribute("products", productService.getAll());
         model.addAttribute("sources", clientSourceService.getAll());
-        model.addAttribute("statuses", applicationStatusService.getAll());
+        model.addAttribute("statuses", applicationStatusService.findByUserId(users.get(0).getId()));
         return "createNewOperation";
     }
 
     @PostMapping
-    public String createOperation(@Valid @ModelAttribute ApplicationFormDto form) {
+    public String saveOperation(@Valid @ModelAttribute ApplicationFormDto form) {
         operationService.createOrEditOperation(form);
         return "redirect:/operations";
     }

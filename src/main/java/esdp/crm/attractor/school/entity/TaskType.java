@@ -12,7 +12,7 @@ import javax.persistence.*;
 @SuperBuilder
 @Entity
 @Table(name = "task_types")
-public class TaskType extends BaseEntity{
+public class TaskType extends BaseEntity {
     @Column(name = "name")
     private String name;
 }
