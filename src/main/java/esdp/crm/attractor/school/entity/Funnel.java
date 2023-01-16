@@ -7,9 +7,9 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.javers.core.metamodel.annotation.PropertyName;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -22,6 +22,9 @@ public class Funnel extends BaseEntity {
     @Column(name = "name", nullable = false)
     @PropertyName("Название воронки")
     private String name;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Funnel> funnels = new HashSet<>();
 
     @Override
     public int hashCode() {
