@@ -7,9 +7,8 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.javers.core.metamodel.annotation.PropertyName;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,4 +21,15 @@ public class Funnel extends BaseEntity {
     @Column(name = "name", nullable = false)
     @PropertyName("Название воронки")
     private String name;
+
+    @OneToMany(mappedBy = "funnel")
+    private List<ApplicationStatus> statuses;
+
+    @ManyToMany
+    @JoinTable(
+            name = "departments_funnels",
+            joinColumns = {@JoinColumn(name = "funnels_id")},
+            inverseJoinColumns = {@JoinColumn(name = "department_id")}
+    )
+    private List<Department> departments;
 }

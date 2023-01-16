@@ -1,6 +1,7 @@
 package esdp.crm.attractor.school.service;
 
 import esdp.crm.attractor.school.dto.ProductDto;
+import esdp.crm.attractor.school.dto.request.ProductFormDto;
 import esdp.crm.attractor.school.entity.Product;
 import esdp.crm.attractor.school.exception.ProductExistsException;
 import esdp.crm.attractor.school.mapper.ProductMapper;
@@ -30,10 +31,10 @@ public class ProductService {
         return productMapper.toProductDto(product.get());
     }
 
-    public void save(ProductDto dto) throws ProductExistsException {
-        if (productRepository.existsByName(dto.getName())) {
-            throw new ProductExistsException("Продукт с названием " + dto.getName() + " уже существует");
+    public void save(ProductFormDto form) throws ProductExistsException {
+        if (productRepository.existsByName(form.getName())) {
+            throw new ProductExistsException("Продукт с названием " + form.getName() + " уже существует");
         }
-        productRepository.save(Product.builder().name(dto.getName()).build());
+        productRepository.save(productMapper.formToEntity(form));
     }
 }
