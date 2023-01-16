@@ -19,6 +19,7 @@ public class ApplicationStatus extends BaseEntity {
     private String name;
 
     @ManyToOne
+    @JoinColumn(name = "funnel_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Funnel funnel;
 }
