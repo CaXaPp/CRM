@@ -10,10 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @Controller
@@ -32,6 +34,12 @@ public class UserController {
     @GetMapping("/login")
     public ModelAndView getLoginPage(){
         return new ModelAndView("login");
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<String> getUsernameByEmail(@PathVariable String email) {
+        Optional<User> user = userService.findByEmail(email);
+        return new ResponseEntity<>(user.get().getFirstName() + " " + user.get().getSurname(), HttpStatus.OK);
     }
 
 }
