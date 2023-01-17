@@ -22,5 +22,10 @@ public class Department extends BaseEntity {
     private String name;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "departments_funnels",
+            joinColumns = {@JoinColumn(name = "funnels_id")},
+            inverseJoinColumns = {@JoinColumn(name = "department_id")}
+    )
     private Set<Funnel> funnels = new HashSet<>();
 }

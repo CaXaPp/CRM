@@ -23,8 +23,8 @@ public class Funnel extends BaseEntity {
     @PropertyName("Название воронки")
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Funnel> funnels = new HashSet<>();
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "funnels")
+    private Set<Department> departments = new HashSet<>();
 
     @Override
     public int hashCode() {
