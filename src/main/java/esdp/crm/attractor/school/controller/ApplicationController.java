@@ -3,7 +3,6 @@ package esdp.crm.attractor.school.controller;
 import esdp.crm.attractor.school.dto.ApplicationDto;
 import esdp.crm.attractor.school.dto.request.ApplicationFormDto;
 import esdp.crm.attractor.school.entity.Application;
-import esdp.crm.attractor.school.entity.ApplicationStatus;
 import esdp.crm.attractor.school.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,17 +16,14 @@ import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/application")
 @RequiredArgsConstructor
 public class ApplicationController {
-    public static final int MINUTE_IN_DAY = 1439;
     private final ApplicationService applicationService;
     private final ProductService productService;
     private final ClientSourceService clientSourceService;
-    private final ApplicationStatusService statusService;
 
     @GetMapping
     public String mainApplications() {

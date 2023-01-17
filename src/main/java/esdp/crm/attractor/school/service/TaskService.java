@@ -58,4 +58,8 @@ public class TaskService {
         return taskMapper.toDto(saved);
     }
 
+    public List<Task> getTasksByApplicationId(Long id) {
+        return taskRepository.findAllById(id);
+    }
+
 }

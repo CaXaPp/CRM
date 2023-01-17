@@ -127,7 +127,32 @@
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div>Блок для задач и логов</div>
+                <div class="blockForLogsInApplication">
+                    <div id="blockForLogsInApplication"></div>
+                </div>
+                <div class="log_block_footer" id="log_block_footer">
+                    <form class="log_block_footer_inner" id="updateAddedTask">
+                        <div>
+                            <input id="operationId" name="operationId" value="" type="hidden">
+                            <#if _csrf??>
+                                <input type="hidden"
+                                       name="${_csrf.parameterName}" value="${_csrf.token}">
+                            </#if>
+                            <a>Задача на </a>
+                            <input type="datetime-local" class="form-control w-25 d-inline-block" id="deadline_for_task_in_application" name="deadline" required>
+                            <select name="typeId" id="taskTypeChoose" class="form-select d-inline-block" required></select>
+                            <label for="taskForEmployee"> Для </label>
+                            <select class="form-select d-inline-block" name="employeeId" id="taskForEmployee" required></select>
+                        </div>
+
+                        <textarea class="form-control" name="description" id="textareaValue" placeholder="Примечания к задаче"></textarea>
+
+                        <div>
+                            <button type="submit" class="btn btn-primary">Поставить</button>
+                            <button type="button" class="btn btn-secondary">Отменить</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
