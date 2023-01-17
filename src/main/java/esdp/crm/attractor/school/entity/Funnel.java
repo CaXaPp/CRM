@@ -9,6 +9,7 @@ import org.javers.core.metamodel.annotation.PropertyName;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -25,6 +26,9 @@ public class Funnel extends BaseEntity {
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "funnels")
     private Set<Department> departments = new HashSet<>();
+
+    @OneToMany(mappedBy = "funnel")
+    private List<ApplicationStatus> statuses;
 
     @Override
     public int hashCode() {
