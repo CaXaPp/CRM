@@ -54,4 +54,9 @@ public class TaskController {
     public ResponseEntity<List<Task>> getApplicationForEdit(@PathVariable Long id) {
         return new ResponseEntity<>(taskService.getTasksByApplicationId(id), HttpStatus.OK);
     }
+
+    @PutMapping("/task{id}")
+    public ResponseEntity<List<Task>> editTask(@PathVariable Long taskId){
+        return new ResponseEntity<>(taskService.getTasksByApplicationId(taskId), HttpStatus.OK);
+    }
 }

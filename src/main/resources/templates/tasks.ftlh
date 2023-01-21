@@ -21,7 +21,7 @@
             </thead>
             <tbody id="tbody">
                 <#list tasks as task>
-                    <tr>
+                    <tr class="task">
                         <td>${(task.deadline)!''}</td>
                         <td>${(task.employee.getFIO())!''}</td>
                         <td>${(task.application.name)!''}</td>

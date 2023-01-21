@@ -4,7 +4,7 @@
 <div class="application_list_class">
     <div>
         <div>
-            <a href="/application/save">Добавить заявку</a>
+            <a class="addRequest" href="/application/save">Добавить заявку</a>
         </div>
         <table class="table table-striped">
             <thead>
