@@ -1,5 +1,7 @@
 package esdp.crm.attractor.school.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,11 +23,12 @@ public class Department extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
             name = "departments_funnels",
             joinColumns = {@JoinColumn(name = "funnels_id")},
             inverseJoinColumns = {@JoinColumn(name = "department_id")}
     )
+    @JsonIgnore
     private Set<Funnel> funnels = new HashSet<>();
 }

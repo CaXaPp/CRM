@@ -1,5 +1,7 @@
 package esdp.crm.attractor.school.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,10 +26,12 @@ public class Funnel extends BaseEntity {
     @PropertyName("Название воронки")
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "funnels")
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "funnels")
+    @JsonIgnore
     private Set<Department> departments = new HashSet<>();
 
     @OneToMany(mappedBy = "funnel")
+    @JsonIgnore
     private List<ApplicationStatus> statuses;
 
     @Override
