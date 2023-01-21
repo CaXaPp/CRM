@@ -23,7 +23,7 @@ public class Department extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "departments_funnels",
             joinColumns = {@JoinColumn(name = "funnels_id")},

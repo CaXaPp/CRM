@@ -1,11 +1,15 @@
 package esdp.crm.attractor.school.controller;
 
+import esdp.crm.attractor.school.dto.ApplicationDto;
 import esdp.crm.attractor.school.dto.UserDto;
 import esdp.crm.attractor.school.dto.request.ApplicationFormDto;
 import esdp.crm.attractor.school.entity.User;
 import esdp.crm.attractor.school.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -62,5 +66,11 @@ public class OperationController {
     public String saveOperation(@Valid @ModelAttribute ApplicationFormDto form) {
         operationService.createOrEditOperation(form);
         return "redirect:/operations";
+    }
+
+    @GetMapping("/id/{id}")
+    public ResponseEntity<ApplicationDto> getById(@PathVariable Long id,
+                                                  @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(operationService.getById(id, user));
     }
 }
