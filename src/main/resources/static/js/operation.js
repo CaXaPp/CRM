@@ -43,3 +43,19 @@ function createStatusElement(status) {
 function removeStatuses() {
     statusSelect.innerHTML = ``
 }
+
+async function getOperationById(id) {
+    let response = await axios.get(BASE_URL + '/operations/id/' + id, {
+        headers: {
+            'Authorization': btoa('user1@user.com:123')
+        }
+    })
+        .catch((error) => {
+            alert(error)
+        })
+    return await response.data
+}
+
+function fillFields(operation) {
+
+}
