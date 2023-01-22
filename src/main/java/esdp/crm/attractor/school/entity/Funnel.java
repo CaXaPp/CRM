@@ -22,7 +22,7 @@ import java.util.Set;
 @Entity
 @Table(name = "funnels")
 public class Funnel extends BaseEntity {
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     @PropertyName("Название воронки")
     private String name;
 
