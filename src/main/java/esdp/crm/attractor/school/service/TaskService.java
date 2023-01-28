@@ -15,6 +15,7 @@ import esdp.crm.attractor.school.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,4 +63,19 @@ public class TaskService {
         return taskRepository.findAllById(id);
     }
 
+    public List<Object[]> getOverdueTask(LocalDateTime now) {
+        return taskRepository.findAllByDate(now);
+    }
+
+    public List<Object[]> getOverdueTaskByUserId(LocalDateTime now, Long userId) {
+        return taskRepository.findAllByDateAndByUserId(now, userId);
+    }
+
+    public List<Object[]> getAllActiveTask(LocalDateTime now) {
+        return taskRepository.findAllActiveTask(now);
+    }
+
+    public List<Object[]> getAllActiveTaskByUserId(LocalDateTime now, Long userId) {
+        return taskRepository.findAllActiveTaskByUserId(now, userId);
+    }
 }

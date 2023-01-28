@@ -25,6 +25,10 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public List<Object[]> getAllEmployee() {
+        return userRepository.findAllEmployeeByRole();
+    }
+
     public UserDto createUser(RegisterFormDto dto) {
         if (userRepository.existsByEmail(dto.getEmail()))
             throw new EmailExistsException("User with email " + dto.getEmail() + " exists!");
@@ -60,5 +64,17 @@ public class UserService {
 
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public Long getUserIdByEmail(String email) {
+        return userRepository.getIdByEmail(email);
+    }
+
+    public Long getDepartmentId(String email) {
+        return userRepository.getDepartmentIdByEmail(email);
+    }
+
+    public List<Long> getAllUserId(Long id) {
+        return userRepository.getAllIdByDepartmentId(id);
     }
 }

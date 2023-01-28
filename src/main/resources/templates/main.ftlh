@@ -6,35 +6,36 @@
 
         <div class="dashboard_block_inner">
             <div class="dashboard_info">
-                <div class="dashboard_info_sort_block">
-                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                        <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off"
+                <div class="dashboard_info_sort_block" id="dashboard_info_sort_block">
+                    <div class="btn-group" role="group" id="input_group_1" aria-label="Basic radio toggle button group">
+                        <input type="radio" class="btn-check" value="today" name="btnradio" id="btnradio1"
+                               autocomplete="off"
                                checked>
                         <label class="btn btn-outline-primary" for="btnradio1"
-                               onclick="dataForToday('today')">Сегодня</label>
+                               onclick="dataForToday()">Сегодня</label>
 
-                        <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                        <input type="radio" class="btn-check" value="yesterday" name="btnradio" id="btnradio2"
+                               autocomplete="off">
                         <label class="btn btn-outline-primary" for="btnradio2"
-                               onclick="dataForToday('yesterday')">Вчера</label>
+                               onclick="dataForToday()">Вчера</label>
 
-                        <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                        <input type="radio" class="btn-check" value="week" name="btnradio" id="btnradio3"
+                               autocomplete="off">
                         <label class="btn btn-outline-primary" for="btnradio3"
-                               onclick="dataForToday('week')">Неделя</label>
+                               onclick="dataForToday()">Неделя</label>
 
-                        <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off">
+                        <input type="radio" class="btn-check" value="month" name="btnradio" id="btnradio4"
+                               autocomplete="off">
                         <label class="btn btn-outline-primary" for="btnradio4"
-                               onclick="dataForToday('month')">Месяц</label>
+                               onclick="dataForToday()">Месяц</label>
 
                         <input type="radio" class="btn-check" name="btnradio" id="btnradio5" autocomplete="off"/>
                         <label class="btn btn-outline-primary" id="btnradio5_text" for="btnradio5"></label>
                     </div>
 
-                    <div class="btn-group btn_group_right" role="group" aria-label="Basic radio toggle button group">
-                        <input type="radio" class="btn-check" name="btnradio" id="btnradio6" autocomplete="off">
-                        <label class="btn btn-outline-primary" for="btnradio6">Все</label>
+                    <div class="btn-group btn_group_right" role="group" id="input_group_2"
+                         aria-label="Basic radio toggle button group">
 
-                        <input type="radio" class="btn-check" name="btnradio" id="btnradio7" autocomplete="off">
-                        <label class="btn btn-outline-primary" for="btnradio7">Мои</label>
                     </div>
                 </div>
 
@@ -113,38 +114,121 @@
                 </div>
             </div>
             <div class="section_info">
-                <div class="sections">
                     <h2>Разделы</h2>
-                    <div class="btn-group sections_inner" role="group" aria-label="Basic radio toggle button group">
-                        <input type="radio" class="btn-check" name="btnradio" id="btnradio8" autocomplete="off" checked>
-                        <label class="btn btn-outline-primary" for="btnradio8" onclick="completedDealToday()">Активные сделки за сегодня</label>
-
-                        <input type="radio" class="btn-check" name="btnradio" id="btnradio9" autocomplete="off">
-                        <label class="btn btn-outline-primary" for="btnradio9" onclick="completedDealToday()">Выполненные сделки за сегодня</label>
-
-                        <input type="radio" class="btn-check" name="btnradio" id="btnradio10" autocomplete="off">
-                        <label class="btn btn-outline-primary" for="btnradio10" onclick="overdueTasks()">Просроченные задачи</label>
-
-                        <input type="radio" class="btn-check" name="btnradio" id="btnradio11" autocomplete="off">
-                        <label class="btn btn-outline-primary" for="btnradio11" onclick="transactionSources()">Источники сделок</label>
-
-                        <input type="radio" class="btn-check" name="btnradio" id="btnradio12" autocomplete="off">
-                        <label class="btn btn-outline-primary" for="btnradio12" onclick="completedDealToday()">Сделки по сотрудникам</label>
-
-                        <input type="radio" class="btn-check" name="btnradio" id="btnradio13" autocomplete="off">
-                        <label class="btn btn-outline-primary" for="btnradio13" onclick="tasksCompleted()">Задачи к выполнению</label>
-
-                        <input type="radio" class="btn-check" name="btnradio" id="btnradio14" autocomplete="off">
-                        <label class="btn btn-outline-primary" for="btnradio14" onclick="denialService()">Отказы в обслуживании</label>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="list-group" id="list-tab" role="tablist">
+                                <a class="list-group-item list-group-item-action active" id="list_active_list"
+                                   data-bs-toggle="list" href="#list_active" onclick="getActiveDealForToday()" role="tab" aria-controls="home">Активные сделки за сегодня</a>
+                                <a class="list-group-item list-group-item-action" id="list_done_list" data-bs-toggle="list"
+                                   href="#list_active" onclick="getAllApplicationForMainPage()" role="tab" aria-controls="profile">Выполненные сделки за сегодня</a>
+                                <a class="list-group-item list-group-item-action" id="list_overdue_list"
+                                   data-bs-toggle="list" href="#list_overdue" onclick="getOverdueTasks()" role="tab" aria-controls="messages">Просроченные задачи</a>
+                                <a class="list-group-item list-group-item-action" id="list_sources_list"
+                                   data-bs-toggle="list" href="#list_sources" onclick="getSourceDeal()" role="tab" aria-controls="settings">Источники сделок</a>
+                                <a class="list-group-item list-group-item-action" id="list_employee_list"
+                                   data-bs-toggle="list" href="#list_active" onclick="getAllDealByEmployee()" role="tab" aria-controls="settings">Сделки по сотрудникам</a>
+                                <a class="list-group-item list-group-item-action" id="list_tasks_list"
+                                   data-bs-toggle="list" href="#list_tasks" onclick="getAllActiveTask()" role="tab" aria-controls="settings">Задачи к выполнению</a>
+                                <a class="list-group-item list-group-item-action" id="list_failures_list"
+                                   data-bs-toggle="list" href="#list_failures" onclick="getAllFailuresApplication()" role="tab" aria-controls="settings">Отказы в обслуживании</a>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <div class="tab-content" id="nav-tabContent">
+                                <div class="tab-pane fade show active" id="list_active" role="tabpanel"
+                                     aria-labelledby="list_active_list">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Сотрудник</th>
+                                            <th scope="col">Наименование клиента</th>
+                                            <th scope="col">Статус обращения</th>
+                                            <th scope="col">Сумма</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <#--                                <div class="tab-pane fade" id="list_done" role="tabpanel"-->
+                                <#--                                     aria-labelledby="list_done_list">...-->
+                                <#--                                </div>-->
+                                <div class="tab-pane fade" id="list_overdue" role="tabpanel"
+                                     aria-labelledby="list_overdue_list">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Сотрудник</th>
+                                            <th scope="col">Наименование клиента</th>
+                                            <th scope="col">Статус обращения</th>
+                                            <th scope="col">Сумма</th>
+                                            <th scope="col">Начало задачи</th>
+                                            <th scope="col">Конец задачи</th>
+                                            <th scope="col">Результат</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="list_sources" role="tabpanel"
+                                     aria-labelledby="list_sources_list">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Сотрудник</th>
+                                            <th scope="col">Наименование клиента</th>
+                                            <th scope="col">Статус обращения</th>
+                                            <th scope="col">Сумма</th>
+                                            <th scope="col">Источник</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <#--                                <div class="tab-pane fade" id="list_employee" role="tabpanel"-->
+                                <#--                                     aria-labelledby="list_employee_list">-->
+                                <#--                                    -->
+                                <#--                                </div>-->
+                                <div class="tab-pane fade" id="list_tasks" role="tabpanel"
+                                     aria-labelledby="list_tasks_list">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Сотрудник</th>
+                                            <th scope="col">Наименование клиента</th>
+                                            <th scope="col">Статус обращения</th>
+                                            <th scope="col">Сумма</th>
+                                            <th scope="col">Начала задачи</th>
+                                            <th scope="col">Результат</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="list_failures" role="tabpanel"
+                                     aria-labelledby="list_failures_list">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Сотрудник</th>
+                                            <th scope="col">Наименование клиента</th>
+                                            <th scope="col">Статус обращения</th>
+                                            <th scope="col">Продукт/услуга</th>
+                                            <th scope="col">Причина отказа</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
                 </div>
-                <div class="information">
-                    <h2>Информация</h2>
-                    <div id="information_inner" class="information_inner"></div>
-                </div>
-
-            </div>
         </div>
     </div>
 

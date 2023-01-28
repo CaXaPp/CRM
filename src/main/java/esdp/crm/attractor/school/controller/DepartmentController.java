@@ -1,7 +1,7 @@
 package esdp.crm.attractor.school.controller;
 
-import esdp.crm.attractor.school.entity.ApplicationStatus;
-import esdp.crm.attractor.school.service.ApplicationStatusService;
+import esdp.crm.attractor.school.dto.DepartmentDto;
+import esdp.crm.attractor.school.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,13 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/statuses")
+@RequestMapping("/departments")
 @RequiredArgsConstructor
-public class StatusController {
-    private final ApplicationStatusService applicationStatusService;
+public class DepartmentController {
+    private final DepartmentService departmentService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<ApplicationStatus>> getAll() {
-        return new ResponseEntity<>(applicationStatusService.getAll(), HttpStatus.OK);
+    public ResponseEntity<List<DepartmentDto>> getAll() {
+        return new ResponseEntity<>(departmentService.getAll(), HttpStatus.OK);
     }
+
 }
