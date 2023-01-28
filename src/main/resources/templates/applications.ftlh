@@ -36,7 +36,7 @@
     <div class="alert alert-success alert_success_msg" id="alert_msg" hidden role="alert">
         Изменения сохранены!
     </div>
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-fullscreen">
         <div class="modal-content">
 
             <div class="info_block">
@@ -44,15 +44,20 @@
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="modal_title_from_js"></h1>
                 </div>
-                <div class="modal-body" id="modal_body_form">
+                <div class="modal-body modal_edit_form" id="modal_body_form">
                     <table>
 
-                        <form id="modal_edit_form" class="modal_edit_form">
+                        <form id="modal_edit_form">
                             <input type="hidden" name="id" value="" id="id">
                             <#if _csrf??>
                                 <input type="hidden"
                                        name="${_csrf.parameterName}" value="${_csrf.token}">
                             </#if>
+                            <tr>
+                                <td>
+                                    Компания:
+                                </td>
+                            </tr>
                             <tr>
                                 <td><label for="modal_company">Клиент</label></td>
                                 <td><input type="text" class="form-control" name="company" id="company" value="">
@@ -64,19 +69,8 @@
                                            value=""></td>
                             </tr>
                             <tr>
-                                <td>Товар/услуга</td>
-                                <td><select class="form-select" aria-label="Select product" id="productId"
-                                            name="productId" required> </select></td>
-                            </tr>
-                            <tr>
                                 <td><label for="modal_name">Контактное лицо</label></td>
                                 <td><input type="text" class="form-control" name="name" id="name" value=""></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <hr>
-                                    Компания:
-                                </td>
                             </tr>
                             <tr>
                                 <td><label for="modal_phone">Раб. тел</label></td>
@@ -93,14 +87,35 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td>
+                                    <hr>
+                                    Дополнительная информация:
+                                </td>
+                            </tr>
+                            <tr>
                                 <td>Отв-ный</td>
                                 <td><select class="form-select" aria-label="Select employee" id="employee"
-                                            name="employeeId" required></select></td>
+                                            name="employeeId" onchange="updateContentForApplication()" required></select>
+                                </td>
                             </tr>
+                            <tr>
+                                <td>Воронка</td>
+                                <td><select class="form-select" aria-label="Select funnel" id="funnelInApplication"></select></td>
+                            </tr>
+                            <tr>
+                                <td>Товар/услуга</td>
+                                <td><select class="form-select" aria-label="Select product" id="productId"
+                                            name="productId" required></select></td>
+                            </tr>
+
                             <tr>
                                 <td>Статус</td>
                                 <td><select class="form-select" aria-label="Select status" id="status"
                                             name="statusId" required></select></td>
+                            </tr>
+                            <tr>
+                                <td><label for="departmentInApplication">Департамент</label></td>
+                                <td><input type="text" class="form-control" id="departmentInApplication" disabled></td>
                             </tr>
                             <tr>
                                 <td><label for="createdAt">Создано</label></td>
@@ -139,13 +154,17 @@
                                        name="${_csrf.parameterName}" value="${_csrf.token}">
                             </#if>
                             <a>Задача на </a>
-                            <input type="datetime-local" class="form-control w-25 d-inline-block" id="deadline_for_task_in_application" name="deadline" required>
-                            <select name="typeId" id="taskTypeChoose" class="form-select d-inline-block" required></select>
+                            <input type="datetime-local" class="form-control w-25 d-inline-block"
+                                   id="deadline_for_task_in_application" name="deadline" required>
+                            <select name="typeId" id="taskTypeChoose" class="form-select d-inline-block"
+                                    required></select>
                             <label for="taskForEmployee"> Для </label>
-                            <select class="form-select d-inline-block" name="employeeId" id="taskForEmployee" required></select>
+                            <select class="form-select d-inline-block" name="employeeId" id="taskForEmployee"
+                                    required></select>
                         </div>
 
-                        <textarea class="form-control" name="description" id="textareaValue" placeholder="Примечания к задаче"></textarea>
+                        <textarea class="form-control" name="description" id="textareaValue"
+                                  placeholder="Примечания к задаче"></textarea>
 
                         <div>
                             <button type="submit" class="btn btn-primary">Поставить</button>

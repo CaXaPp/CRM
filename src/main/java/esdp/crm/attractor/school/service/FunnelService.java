@@ -41,4 +41,8 @@ public class FunnelService {
             departmentRepository.save(department);
         });
     }
+
+    public List<Funnel> findById(Long id) {
+        return funnelRepository.findAllByFunnelsId(id);
+    }
 }

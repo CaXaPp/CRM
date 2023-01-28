@@ -21,15 +21,20 @@
                     <a class="nav-link" href="/admin">Администрирование</a>
                 </li>
             </ul>
-            <form class="d-flex" action="/logout" method="post">
-                <#if _csrf??>
-                    <input type="hidden" name="${(_csrf.parameterName)!'csrf'}"
-                           value="${(_csrf.token)!'not-token'}">
-                </#if>
-                <button class="btn btn-outline-success" type="submit" value="Logout">
-                    Выйти
-                </button>
-            </form>
+            <div>
+                <div>
+                    <p id="userNameLogging"></p>
+                </div>
+                <form class="d-flex" action="/logout" method="post">
+                    <#if _csrf??>
+                        <input type="hidden" name="${(_csrf.parameterName)!'csrf'}"
+                               value="${(_csrf.token)!'not-token'}">
+                    </#if>
+                    <button class="btn btn-outline-success" type="submit" value="Logout">
+                        Выйти
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 </nav>

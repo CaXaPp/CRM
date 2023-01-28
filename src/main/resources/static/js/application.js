@@ -1,16 +1,35 @@
 'use strict';
 const BASE_URL = "http://localhost:9000";
+let date = "232323";
 let employee_id = 0;
 let application_id;
+let department_id;
+let product_id;
+let funnel_id;
 
 document.addEventListener("DOMContentLoaded", function () {
     getAllApplication();
+    getMainRoleToUser();
 })
+
+function getMainRoleToUser() {
+    console.log("start function");
+    axios.get(BASE_URL + "/users/auth_user").then(function (response) {
+        if (response.data.role.name === 'Сотрудник') {
+            let btns = document.getElementById('tdsBlock').getElementsByTagName('button');
+            setTimeout(function () {
+                for (let i = 0; i < btns.length; i++) {
+                    btns[i].disabled = true;
+                }
+            }, 100); // временное решение
+        }
+    })
+}
 
 // Getter functions
 
-async function getAllApplication() {
-    await axios.get(BASE_URL + "/application/all").then(function (response) {
+function getAllApplication() {
+    axios.get(BASE_URL + "/application/all").then(function (response) {
         for (let i = 0; i < response.data.length; i++) {
             createTdElemOnBody(response.data[i]);
         }
@@ -37,10 +56,21 @@ function getUsers(id) {
     })
 }
 
+function getUserById(id) {
+    axios.get(BASE_URL + "/users/user/" + id).then(function (response) {
+        deleteItems_v_2();
+        // department_id = response.data.department.id;
+        getProducts(response.data.department.id);
+        getStatuses(response.data.department.id);
+        getFunnels(response.data.department.id);
+        // document.getElementById('departmentInApplication').value = response.data.department.name;
+    })
+}
+
 function getProducts(id) {
-    axios.get(BASE_URL + "/products/all").then(function (response) {
+    axios.get(BASE_URL + "/products/product/" + id).then(function (response) {
         for (let i = 0; i < response.data.length; i++) {
-            if (response.data[i].id !== id) {
+            if (response.data[i].id !== product_id) {
                 switchOptionProductSelect(response.data[i]);
             }
         }
@@ -48,7 +78,7 @@ function getProducts(id) {
 }
 
 function getStatuses(id) {
-    axios.get(BASE_URL + "/statuses/all").then(function (response) {
+    axios.get(BASE_URL + "/statuses/status/" + id).then(function (response) {
         for (let i = 0; i < response.data.length; i++) {
             if (response.data[i].id !== id) {
                 switchOptionStatusSelect(response.data[i]);
@@ -70,6 +100,14 @@ function getTaskType() {
     axios.get(BASE_URL + "/task-type/all").then(function (response) {
         for (let i = 0; i < response.data.length; i++) {
             createTaskTypeOption(response.data[i]);
+        }
+    })
+}
+
+function getFunnels(id) {
+    axios.get(BASE_URL + "/funnels/funnel/" + id).then(function (response) {
+        for (let i = 0; i < response.data.length; i++) {
+            switchOptionFunnelsSelect(response.data[i]);
         }
     })
 }
@@ -96,19 +134,25 @@ function getMessage() {
 document.getElementById('modal_edit_form').addEventListener('submit', updateEditedApplication);
 document.getElementById('updateAddedTask').addEventListener('submit', updateAddedTask);
 
-function applicationEditModalWindow(id) {
-    getLogsForApplication(id);
-    cleanTextareaValue();
-    axios
+async function applicationEditModalWindow(id) {
+    await axios
         .get(BASE_URL + '/application/edit/' + id).then(function (response) {
-        deleteItems();
-        fillFields(response);
-        getUsers(employee_id);
-        getProducts(response.data.product.id);
-        getStatuses(response.data.status.id);
-        getTaskType();
-        getTasks(id);
-    });
+            getLogsForApplication(id);
+            application_id = id;
+            cleanTextareaValue();
+
+            deleteItems();
+            fillFields(response);
+            getUsers(employee_id);
+            getFunnels(department_id);
+            getProducts(department_id);
+            getTaskType();
+            getTasks(id);
+            getStatuses(department_id); // Временное решение, должно быть id_funnel
+        }).catch(function (error) {
+            alert(error.code);
+            window.location.replace(BASE_URL + "/users/login");
+        });
 }
 
 function updateEditedApplication(e) {
@@ -149,6 +193,11 @@ function updateAddedTask(e) {
         })
 }
 
+function updateContentForApplication() {
+    getUserById(document.getElementById('employee').value);
+
+}
+
 // Creation functions
 
 function createTdElemOnBody(response) {
@@ -168,7 +217,7 @@ function createTdElemOnBody(response) {
     document.getElementById('tdsBlock').insertAdjacentHTML('beforeend',
         '<tr>' +
         '<td>' +
-        '<button type="button" class="' + createClassForBtn(response.status.name) + '" id="modalBtn"' +
+        '<button type="button" class="' + createClassForBtn(response.status.name) + '"' +
         '  onclick="applicationEditModalWindow(' + response.id + ')" data-bs-toggle="modal" data-bs-target="#exampleModal">' + response.id + '</button>' +
         '</td>' +
         '<td>' + response.company + '</td>' +
@@ -188,20 +237,14 @@ function createTdElemOnBody(response) {
 function createClassForBtn(status) {
     if (status === "Новое") {
         return "btn btn-warning";
-    } else if (status === "На обслуживании") {
-        return "btn btn-primary";
-    } else if (status === "Переговоры") {
-        return "btn btn-primary";
     } else if (status === "Отказ") {
         return "btn btn-danger";
     } else if (status === "Успешно") {
         return "btn btn-success";
-    } else if (status === "Принятие решения") {
-        return "btn btn-primary";
+    } else {
+        return "btn btn-primary"
     }
 }
-
-let date = "232323";
 
 function createLogsBlock(response) {
     if (date !== parseDateToLocalDate(response.date)) {
@@ -229,11 +272,10 @@ function createTasksInApplication(response) {
         '<p>' + parseDateByFormat(response.createdAt) + " для " + response.employee.firstName + " " + response.employee.surname + '</p> ' +
         ' <p><span class="alert alert-success">' + response.type.name + '</span>' + " - " + response.application.name + " дата: " + parseDateByFormat(response.deadline) + '</p>' +
         '</div>'
-        )
+    )
 }
 
 function fillFields(response) {
-    application_id = response.data.id;
     document.getElementById('modal_title_from_js').innerText = "Заявление # " + response.data.id;
     document.getElementById('id').value = response.data.id;
     document.getElementById('company').value = response.data.company;
@@ -250,6 +292,9 @@ function fillFields(response) {
     document.getElementById('createdAt').value = parseDateByFormat(response.data.created_at);
     document.getElementById('sourceId').value = response.data.source.id;
     document.getElementById('operationId').value = response.data.id;
+    document.getElementById('departmentInApplication').value = response.data.employee.department.name;
+    // document.getElementById('funnelInApplication').insertAdjacentHTML('beforeend',
+    //     '<option value="' + funnel_id + '" selected>' +  + '</option>')
 
     if (response.data.employee === null) {
         document.getElementById('employee').insertAdjacentHTML('beforeend',
@@ -266,6 +311,8 @@ function fillFields(response) {
             '<option selected value="' + response.data.employee.id + '">' + response.data.employee.firstName + " " + response.data.employee.surname + '</option>'
         );
         employee_id = response.data.employee.id;
+        department_id = response.data.employee.department.id;
+        product_id = response.data.product.id;
     }
 }
 
@@ -286,6 +333,11 @@ function switchOptionProductSelect(product) {
 function switchOptionStatusSelect(status) {
     document.getElementById('status').insertAdjacentHTML('beforeend',
         '<option value="' + status.id + '">' + status.name + '</option>')
+}
+
+function switchOptionFunnelsSelect(funnel) {
+    document.getElementById('funnelInApplication').insertAdjacentHTML('beforeend',
+        '<option value="' + funnel.id + '">' + funnel.name + '</option>')
 }
 
 function createTaskTypeOption(response) {
@@ -332,6 +384,13 @@ function deleteItems() {
     deleteElemInLoop(document.getElementById('taskTypeChoose').querySelectorAll('option'));
     deleteElemInLoop(document.getElementById('productId').querySelectorAll('option'));
     deleteElemInLoop(document.getElementById('status').querySelectorAll('option'));
+    deleteElemInLoop(document.getElementById('funnelInApplication').querySelectorAll('option'));
+}
+
+function deleteItems_v_2() {
+    deleteElemInLoop(document.getElementById('productId').querySelectorAll('option'));
+    deleteElemInLoop(document.getElementById('status').querySelectorAll('option'));
+    deleteElemInLoop(document.getElementById('funnelInApplication').querySelectorAll('option'));
 }
 
 function cleanTextareaValue() {
