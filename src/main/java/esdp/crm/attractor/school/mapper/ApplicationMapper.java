@@ -14,7 +14,7 @@ public abstract class ApplicationMapper {
     @Autowired
     protected ProductMapper productMapper;
     @Autowired
-    ApplicationRepository applicationRepository;
+    protected ApplicationRepository applicationRepository;
     @Autowired
     protected UserMapper userMapper;
     @Autowired

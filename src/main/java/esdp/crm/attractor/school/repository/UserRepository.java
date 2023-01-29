@@ -31,4 +31,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u.id, u.firstName, u.surname FROM User u WHERE u.role.value = 'ROLE_EMPLOYEE'")
     List<Object[]> findAllEmployeeByRole();
 
+    @Query("SELECT u.password FROM User u where u.id = :id")
+    String getPasswordById(Long id);
+
 }

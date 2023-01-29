@@ -17,7 +17,7 @@ public class UserDto {
     private String email;
     private String role;
     private boolean enabled;
-    private DepartmentDto department;
+    private String department;
     private String status;
 
     public String getFIO(){
