@@ -77,4 +77,8 @@ public class UserService {
     public List<Long> getAllUserId(Long id) {
         return userRepository.getAllIdByDepartmentId(id);
     }
+
+    public UserDto editUser(UserDto dto) { //TODO
+        return userMapper.toUserDto(userRepository.save(userMapper.toUserFromDto(dto)));
+    }
 }
