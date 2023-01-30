@@ -62,6 +62,9 @@ public class ApplicationService {
     public List<Application> getApplicationByEmployee(Long id) {
         return this.applicationRepository.findApplicationByEmployeeId(id);
     }
+    public Application findById(Long id) {
+        return applicationRepository.getApplicationById(id);
+    }
 
     public List<Application> getApplicationByStatus(Long id) {
         return this.applicationRepository.findApplicationByStatusId(id);

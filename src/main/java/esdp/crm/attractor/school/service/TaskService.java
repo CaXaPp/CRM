@@ -2,6 +2,7 @@ package esdp.crm.attractor.school.service;
 
 import esdp.crm.attractor.school.dto.ApplicationDto;
 import esdp.crm.attractor.school.dto.TaskDto;
+import esdp.crm.attractor.school.dto.TaskTypeDto;
 import esdp.crm.attractor.school.dto.request.ApplicationFormDto;
 import esdp.crm.attractor.school.dto.request.TaskFormDto;
 import esdp.crm.attractor.school.entity.Application;
@@ -29,6 +30,8 @@ public class TaskService {
     private final UserRepository userRepository;
     private final ApplicationRepository applicationRepository;
     private final TaskMapper taskMapper;
+    private final TaskTypeService taskTypeService;
+    private final ApplicationService applicationService;
 
     public List<TaskDto> findAll() {
         var tasks = taskRepository.findAll();
@@ -63,5 +66,14 @@ public class TaskService {
 
     public Task getTasksByApplicationId(Long id) {
         return taskRepository.findById(id).orElse(null);
+    }
+    public Task editTask(Task task, TaskDto taskDto){
+        task.setType(taskTypeService.findById(taskDto.getType().getId()));
+        task.setCreatedAt(taskDto.getCreatedAt());
+        task.setResult(taskDto.getResult());
+        task.setDescription(taskDto.getDescription());
+        task.setDeadline(taskDto.getDeadline());
+        task.setApplication(applicationService.findById(taskDto.getApplication().getId()));
+        return taskRepository.save(task);
     }
 }

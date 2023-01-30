@@ -59,8 +59,8 @@ public class TaskController {
         return ResponseEntity.ok().body(taskMapper.toDto(taskService.getTasksByApplicationId(id)));
     }
 
-//    @PutMapping("/task{id}")
-//    public ResponseEntity<List<Task>> editTask(@PathVariable Long taskId){
-//        return new ResponseEntity<>(taskService.getTasksByApplicationId(taskId), HttpStatus.OK);
-//    }
+    @PutMapping("/task/{id}")
+    public ResponseEntity<Task> editTask(@PathVariable(value = "id") Task task, TaskDto taskDto){
+        return new ResponseEntity<>(taskService.editTask(task,taskDto), HttpStatus.OK);
+    }
 }
