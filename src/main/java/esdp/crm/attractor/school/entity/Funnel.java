@@ -24,12 +24,6 @@ public class Funnel extends BaseEntity {
     @PropertyName("Название воронки")
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "funnels")
-    private Set<Department> departments = new HashSet<>();
-
-    @OneToMany(mappedBy = "funnel")
-    private List<ApplicationStatus> statuses;
-
     @Override
     public int hashCode() {
         return super.getId().hashCode();

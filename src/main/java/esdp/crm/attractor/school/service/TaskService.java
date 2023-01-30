@@ -1,6 +1,8 @@
 package esdp.crm.attractor.school.service;
 
+import esdp.crm.attractor.school.dto.ApplicationDto;
 import esdp.crm.attractor.school.dto.TaskDto;
+import esdp.crm.attractor.school.dto.request.ApplicationFormDto;
 import esdp.crm.attractor.school.dto.request.TaskFormDto;
 import esdp.crm.attractor.school.entity.Application;
 import esdp.crm.attractor.school.entity.Task;
@@ -14,6 +16,7 @@ import esdp.crm.attractor.school.repository.TaskTypeRepository;
 import esdp.crm.attractor.school.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,8 +61,7 @@ public class TaskService {
         return taskMapper.toDto(saved);
     }
 
-    public List<Task> getTasksByApplicationId(Long id) {
-        return taskRepository.findAllById(id);
+    public Task getTasksByApplicationId(Long id) {
+        return taskRepository.findById(id).orElse(null);
     }
-
 }

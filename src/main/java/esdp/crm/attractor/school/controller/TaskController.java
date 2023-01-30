@@ -4,9 +4,11 @@ import esdp.crm.attractor.school.dto.ApplicationDto;
 import esdp.crm.attractor.school.dto.TaskDto;
 import esdp.crm.attractor.school.dto.TaskTypeDto;
 import esdp.crm.attractor.school.dto.UserDto;
+import esdp.crm.attractor.school.dto.request.ApplicationFormDto;
 import esdp.crm.attractor.school.dto.request.TaskFormDto;
 import esdp.crm.attractor.school.entity.Task;
 import esdp.crm.attractor.school.entity.User;
+import esdp.crm.attractor.school.mapper.TaskMapper;
 import esdp.crm.attractor.school.service.OperationService;
 import esdp.crm.attractor.school.service.TaskService;
 import esdp.crm.attractor.school.service.TaskTypeService;
@@ -32,6 +34,8 @@ public class TaskController {
     private final TaskTypeService taskTypeService;
     private final UserService userService;
 
+    private final TaskMapper taskMapper;
+
     @GetMapping
     public ModelAndView getTasks(@AuthenticationPrincipal User principal) {
         List<TaskDto> tasks = taskService.findAll();
@@ -51,12 +55,12 @@ public class TaskController {
     }
 
     @GetMapping("/task/{id}")
-    public ResponseEntity<List<Task>> getApplicationForEdit(@PathVariable Long id) {
-        return new ResponseEntity<>(taskService.getTasksByApplicationId(id), HttpStatus.OK);
+    public ResponseEntity<TaskDto> getApplicationForEdit(@PathVariable Long id) {
+        return ResponseEntity.ok().body(taskMapper.toDto(taskService.getTasksByApplicationId(id)));
     }
 
-    @PutMapping("/task{id}")
-    public ResponseEntity<List<Task>> editTask(@PathVariable Long taskId){
-        return new ResponseEntity<>(taskService.getTasksByApplicationId(taskId), HttpStatus.OK);
-    }
+//    @PutMapping("/task{id}")
+//    public ResponseEntity<List<Task>> editTask(@PathVariable Long taskId){
+//        return new ResponseEntity<>(taskService.getTasksByApplicationId(taskId), HttpStatus.OK);
+//    }
 }
