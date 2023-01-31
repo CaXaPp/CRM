@@ -89,8 +89,8 @@ function edit(id) {
         url: window.location.origin + `/tasks/task/${id}`,
         data: JSON.stringify(formData),
         data_type: "json",
-        success: function (data) {
-            alert("123")
+        success: function () {
+            window.location.reload();
         },
         beforeSend: function (xhr) {
             let token = $("#task-edit-form input[name='_csrf']").val()

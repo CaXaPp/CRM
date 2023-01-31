@@ -60,7 +60,7 @@ public class TaskController {
     }
 
     @PutMapping(value = "/task/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Task> editTask(@PathVariable(value = "id") @ModelAttribute Task task, TaskFormDto taskDto) {
+    public ResponseEntity<Task> editTask(@PathVariable(value = "id") Task task, @RequestBody TaskFormDto taskDto) {
         return new ResponseEntity<>(taskService.editTask(task, taskDto), HttpStatus.OK);
     }
 }
