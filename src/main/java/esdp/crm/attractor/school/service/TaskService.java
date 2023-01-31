@@ -32,6 +32,7 @@ public class TaskService {
     private final TaskMapper taskMapper;
     private final TaskTypeService taskTypeService;
     private final ApplicationService applicationService;
+    private final UserService userService;
 
     public List<TaskDto> findAll() {
         var tasks = taskRepository.findAll();
@@ -67,13 +68,11 @@ public class TaskService {
     public Task getTasksByApplicationId(Long id) {
         return taskRepository.findById(id).orElse(null);
     }
-    public Task editTask(Task task, TaskDto taskDto){
-        task.setType(taskTypeService.findById(taskDto.getType().getId()));
-        task.setCreatedAt(taskDto.getCreatedAt());
-        task.setResult(taskDto.getResult());
-        task.setDescription(taskDto.getDescription());
+    public Task editTask(Task task, TaskFormDto taskDto){
+        task.setApplication(applicationService.findById(taskDto.getOperationId()));
         task.setDeadline(taskDto.getDeadline());
-        task.setApplication(applicationService.findById(taskDto.getApplication().getId()));
+        task.setType(taskTypeService.findById(taskDto.getTypeId()));
+        task.setDescription(taskDto.getDescription());
         return taskRepository.save(task);
     }
 }

@@ -85,10 +85,11 @@
                         <h5 class="modal-title" id="staticBackdropLabel">Редактирование задачи</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form class="modal-body" id="edit-task-form">
+                    <form class="modal-body" id="task-edit-form">
                         <#if _csrf??>
                             <input type="hidden"
                                    name="${_csrf.parameterName}" value="${_csrf.token}">
+                            <input type="hidden" name="_csrf_header" value="${_csrf.headerName}">
                         </#if>
                         <select name="operationId" id="operation" required>
                             <#list operations as operation>
@@ -96,14 +97,14 @@
                             </#list>
                         </select>
                         <div class="form-body">
-                            <input type="datetime-local" name="deadline" placeholder="Дата и время" required>
+                            <input type="datetime-local" name="deadline" id="deadline" placeholder="Дата и время" required>
                             <label for="employee">Для</label>
                             <select name="employeeId" id="employee" required>
                                 <#list employees as employee>
                                     <option value="${employee.id}">${employee.firstName}</option>
                                 </#list>
                             </select>
-                            <select name="typeId" required>
+                            <select name="typeId" id="typeId" required>
                                 <#list types as type>
                                     <#if type.id == 2><option selected value="${type.id}">${type.name}</option></#if>
                                     <option value="${type.id}">${type.name}</option>

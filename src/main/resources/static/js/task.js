@@ -15,7 +15,6 @@ form.addEventListener('submit', async (event) => {
 })
 
 async function createTask(data) {
-    alert(12321)
     let response = await fetch(BASE_URL + '/tasks', {
         method: 'POST',
         body: data
@@ -54,20 +53,7 @@ function getDate(date) {
     return new Date(date[0], date[1], date[2], date[3], date[4])
 }
 
-async function editTaskById(data, id) {
-    let response = await fetch(BASE_URL + `/tasks/task/${id}`, {
-        method: 'PUT',
-        body: data
-    })
-        .catch((error) => {
-            alert(error)
-        })
-    let object = await response.json()
-    return createTaskElement(object)
-}
-
 tasks.forEach(task => task.addEventListener("click",  () => editTask(task)))
-
 
 function editTask(task) {
     showTask($(task).data("id"))
@@ -76,31 +62,39 @@ function editTask(task) {
 
 function showTask(id) {
     $.get(window.location.origin + `/tasks/task/${id}`, function (data) {
-        $("select#operation").val(data.application.id).change()
+        $("select#operation").val(data.operation_id).change()
         $("input[name='deadline']").val(getDate(data.deadline).toISOString().slice(0, 19))
-        $("select#employee").val(data.employee.id).change()
-        $("select[name='typeId']").val(data.type.id).change()
+        $("select#employee").val(data.employee_id).change()
+        $("select[name='typeId']").val(data.type_id).change()
         $("textarea#description").val(data.description)
     })
 }
 
-$("#edit-task-form").on("submit", function (e) {
-    edit(getDataFromForm(e), taskId)
+$("#task-edit-form button[type='submit']").on("click", function (e) {
+    e.preventDefault()
+    edit(taskId)
 })
 
-function edit(data, id) {
+function edit(id) {
+    let formData = {
+        operation_id: $("#task-edit-form #operation").val(),
+        deadline: $("#task-edit-form #deadline").val(),
+        employee_id: $("#task-edit-form #employee").val(),
+        type_id: $("#task-edit-form #typeId").val(),
+        description: $("#task-edit-form #description").val()
+    };
     $.ajax({
-        url: window.location.origin + `/tasks/task/${id}`,
         type: "PUT",
         contentType: "application/json",
-        data: JSON.stringify(data),
+        url: window.location.origin + `/tasks/task/${id}`,
+        data: JSON.stringify(formData),
         data_type: "json",
         success: function (data) {
             alert("123")
         },
         beforeSend: function (xhr) {
-            let token = $("#edit-task-form input[name='_csrf']").val()
-            let header = "X-XSRF-TOKEN"
+            let token = $("#task-edit-form input[name='_csrf']").val()
+            let header = $("#task-edit-form input[name='_csrf_header']").val()
             xhr.setRequestHeader(header, token)
         }
     })

@@ -4,7 +4,6 @@ import esdp.crm.attractor.school.dto.ApplicationDto;
 import esdp.crm.attractor.school.dto.TaskDto;
 import esdp.crm.attractor.school.dto.TaskTypeDto;
 import esdp.crm.attractor.school.dto.UserDto;
-import esdp.crm.attractor.school.dto.request.ApplicationFormDto;
 import esdp.crm.attractor.school.dto.request.TaskFormDto;
 import esdp.crm.attractor.school.entity.Task;
 import esdp.crm.attractor.school.entity.User;
@@ -15,6 +14,7 @@ import esdp.crm.attractor.school.service.TaskTypeService;
 import esdp.crm.attractor.school.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -25,7 +25,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/tasks")
 public class TaskController {
@@ -55,12 +55,12 @@ public class TaskController {
     }
 
     @GetMapping("/task/{id}")
-    public ResponseEntity<TaskDto> getApplicationForEdit(@PathVariable Long id) {
-        return ResponseEntity.ok().body(taskMapper.toDto(taskService.getTasksByApplicationId(id)));
+    public ResponseEntity<TaskFormDto> getApplicationForEdit(@PathVariable Long id) {
+        return ResponseEntity.ok().body(taskMapper.toTaskFormDto(taskService.getTasksByApplicationId(id)));
     }
 
-    @PutMapping("/task/{id}")
-    public ResponseEntity<Task> editTask(@PathVariable(value = "id") Task task, TaskDto taskDto){
-        return new ResponseEntity<>(taskService.editTask(task,taskDto), HttpStatus.OK);
+    @PutMapping(value = "/task/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Task> editTask(@PathVariable(value = "id") @ModelAttribute Task task, TaskFormDto taskDto) {
+        return new ResponseEntity<>(taskService.editTask(task, taskDto), HttpStatus.OK);
     }
 }
