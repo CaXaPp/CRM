@@ -1,6 +1,9 @@
 package esdp.crm.attractor.school.service;
 
+import esdp.crm.attractor.school.dto.ApplicationDto;
 import esdp.crm.attractor.school.dto.TaskDto;
+import esdp.crm.attractor.school.dto.TaskTypeDto;
+import esdp.crm.attractor.school.dto.request.ApplicationFormDto;
 import esdp.crm.attractor.school.dto.request.TaskFormDto;
 import esdp.crm.attractor.school.entity.Application;
 import esdp.crm.attractor.school.entity.Task;
@@ -14,8 +17,8 @@ import esdp.crm.attractor.school.repository.TaskTypeRepository;
 import esdp.crm.attractor.school.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +30,9 @@ public class TaskService {
     private final UserRepository userRepository;
     private final ApplicationRepository applicationRepository;
     private final TaskMapper taskMapper;
+    private final TaskTypeService taskTypeService;
+    private final ApplicationService applicationService;
+    private final UserService userService;
 
     public List<TaskDto> findAll() {
         var tasks = taskRepository.findAll();
@@ -59,23 +65,14 @@ public class TaskService {
         return taskMapper.toDto(saved);
     }
 
-    public List<Task> getTasksByApplicationId(Long id) {
-        return taskRepository.findAllById(id);
+    public Task getTasksByApplicationId(Long id) {
+        return taskRepository.findById(id).orElse(null);
     }
-
-    public List<Object[]> getOverdueTask(LocalDateTime now) {
-        return taskRepository.findAllByDate(now);
-    }
-
-    public List<Object[]> getOverdueTaskByUserId(LocalDateTime now, Long userId) {
-        return taskRepository.findAllByDateAndByUserId(now, userId);
-    }
-
-    public List<Object[]> getAllActiveTask(LocalDateTime now) {
-        return taskRepository.findAllActiveTask(now);
-    }
-
-    public List<Object[]> getAllActiveTaskByUserId(LocalDateTime now, Long userId) {
-        return taskRepository.findAllActiveTaskByUserId(now, userId);
+    public Task editTask(Task task, TaskFormDto taskDto){
+        task.setApplication(applicationService.findById(taskDto.getOperationId()));
+        task.setDeadline(taskDto.getDeadline());
+        task.setType(taskTypeService.findById(taskDto.getTypeId()));
+        task.setDescription(taskDto.getDescription());
+        return taskRepository.save(task);
     }
 }

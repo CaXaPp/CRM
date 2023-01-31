@@ -12,7 +12,10 @@
             <select class="form-select" aria-label="Select employee" id="analytics_employee"
                     name="employee" onclick="selectedCategory('/analytics/employee/' + this.value)" required>По сотруднику</select>
 
-            <button class="btn btn-success" id="all_operation" onclick="selectedCategory('/analytics/application/all')">Все операции</button>
+            <select class="form-select" aria-label="Select status" id="analytics_status"
+                    name="status" onclick="selectedCategory('/analytics/status/' + this.value)" required>По статусу</select>
+
+            <button class="btn btn-success" id="all_operation" onclick="selectedCategory('/application/all')">Все операции</button>
         </div>
         <div class="information_block">
             <div class="card m-b-30 information_block_inner">

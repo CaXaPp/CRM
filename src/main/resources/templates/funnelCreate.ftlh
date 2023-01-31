@@ -1,7 +1,6 @@
 <#import "parts/general.ftlh" as g>
 
-<@g.general styles=["/css/login.css"] scripts=["/js/funnel.js"]>
-
+<@g.general styles=["/css/login.css"]>
     <div class="login-form">
         <form action="/admin/create/funnel" method="post" id="login-form">
             <#if _csrf??>
@@ -13,21 +12,17 @@
                 <div class="input-field">
                     <input type="text" name="name" placeholder="Название" autocomplete="nope" required>
                 </div>
-                <#list departments as d>
-                    <div class="form-check mt-3">
-                        <input class="form-check-input" name="departments" style="width: 17px; border: black solid 1px" type="checkbox" value="${d.id}" id="${d.name}checkbox">
-                        <label class="form-check-label" for="${d.name}checkbox">
-                            ${d.name}
-                        </label>
-                    </div>
-                </#list>
-                <div id="input_block">
-                    <input class="form-control my-3" type="text" id="statusInput1" placeholder="Введите статус" name="statuses" required>
+                <div class="py-3">
+                    <label  class="form-label">Отделы</label>
+                    <select name="departmentId" id="option" class="form-control">
+                        <#list departments as d>
+                            <option value="${d.id}">${d.name}</option>
+                        </#list>
+                    </select>
                 </div>
-                <button type="button" class="btn btn-warning mt-3" id="add_status_btn">Добавить статус</button>
             </div>
             <div class="action">
-                <button type="submit" >Добавить Воронку</button>
+                <button type="submit">Добавить</button>
             </div>
         </form>
     </div>

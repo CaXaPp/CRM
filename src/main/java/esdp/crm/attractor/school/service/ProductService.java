@@ -26,12 +26,9 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    public List<Object[]> getProductNameAndId() {
-        return productRepository.getProductNameAndId();
-    }
-
-    public List<Product> getProductByDepartmentId(Long id) {
-        return productRepository.findAllByDepartmentId(id);
+    public ProductDto getProductById(Long id) {
+        Optional<Product> product = productRepository.findById(id);
+        return productMapper.toProductDto(product.get());
     }
 
     public void save(ProductFormDto form) throws ProductExistsException {

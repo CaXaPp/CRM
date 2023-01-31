@@ -1,14 +1,12 @@
 package esdp.crm.attractor.school.controller;
 
 import esdp.crm.attractor.school.dto.ProductDto;
-import esdp.crm.attractor.school.entity.Product;
 import esdp.crm.attractor.school.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -22,15 +20,5 @@ public class ProductController {
     @GetMapping("/all")
     public ResponseEntity<List<ProductDto>> getAll() {
         return new ResponseEntity<>(productService.getAll(), HttpStatus.OK);
-    }
-
-    @GetMapping("/product-list")
-    public ResponseEntity<List<Object[]>> getProductNameAndId() {
-        return new ResponseEntity<>(productService.getProductNameAndId(), HttpStatus.OK);
-    }
-
-    @GetMapping("/product/{id}")
-    public ResponseEntity<List<Product>> getProductsByDepartmentId(@PathVariable Long id) {
-        return new ResponseEntity<>(productService.getProductByDepartmentId(id), HttpStatus.OK);
     }
 }

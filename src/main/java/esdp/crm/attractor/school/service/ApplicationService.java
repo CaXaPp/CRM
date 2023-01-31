@@ -10,8 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,97 +52,30 @@ public class ApplicationService {
         return applicationRepository.save(applicationMapper.toEntity(application));
     }
 
-    public List<Object[]> getSumAndCountOfApplication() {
-        return this.applicationRepository.findSumAndCountOfApplication();
+    public List<Application> getApplicationByProduct(Long id) {
+        return this.applicationRepository.findApplicationByProductId(id);
     }
 
-    public List<Object[]> getApplicationByProduct(Long productId) {
-        return this.applicationRepository.findApplicationByProductId(productId);
+    public List<Application> getApplicationBySource(Long id) {
+        return this.applicationRepository.findApplicationBySourceId(id);
     }
 
-    public List<Object[]> getApplicationBySource(Long sourceId) {
-        return this.applicationRepository.findApplicationBySourceId(sourceId);
-    }
-
-    public List<Object[]> getApplicationByEmployee(Long id) {
+    public List<Application> getApplicationByEmployee(Long id) {
         return this.applicationRepository.findApplicationByEmployeeId(id);
+    }
+    public Application findById(Long id) {
+        return applicationRepository.getApplicationById(id);
     }
 
     public List<Application> getApplicationByStatus(Long id) {
         return this.applicationRepository.findApplicationByStatusId(id);
     }
 
-    public Float getSumOfAllApplication(LocalDateTime start, LocalDateTime end, Long status) {
-        if (this.applicationRepository.getPriceByDateAndStatus(start,end,status) != null) {
-            return this.applicationRepository.getPriceByDateAndStatus(start, end, status);
-        } else {
-            return 0F;
-        }
+    public Float getApplicationByPriceAndStatus(LocalDateTime start, LocalDateTime end, Long status) {
+        return this.applicationRepository.getPriceByDateAndStatus(start, end, status);
     }
 
-    public List<Object[]> findObjectV2(LocalDateTime startDate, LocalDateTime endDate, Long statusId) {
-        return applicationRepository.findObjectV2(startDate, endDate, statusId);
-    }
-
-    public Integer getCountAllApplication(LocalDateTime start, LocalDateTime end, Long status) {
-        if (this.applicationRepository.getCountByDateAndStatus(start, end, status) != null) {
-            return this.applicationRepository.getCountByDateAndStatus(start, end, status);
-        } else {
-            return 0;
-        }
-    }
-
-    public Float getApplicationByPriceAndStatusAndEmployeeId(LocalDateTime start, LocalDateTime end, Long status, Long id) {
-        if (this.applicationRepository.getPriceByDateAndStatusAndEmployeeId(start, end, status, id) != null) {
-            return this.applicationRepository.getPriceByDateAndStatusAndEmployeeId(start, end, status, id);
-        }else {
-            return 0F;
-        }
-    }
-
-    public Integer getApplicationCountAndEmployeeId(LocalDateTime start, LocalDateTime end, Long status, Long id) {
-        if (this.applicationRepository.getCountByDateAndStatusAndEmployeeId(start, end, status, id) != null) {
-            return this.applicationRepository.getCountByDateAndStatusAndEmployeeId(start, end, status, id);
-        } else {
-            return 0;
-        }
-    }
-
-    public List<Object[]> findAllActiveApplicationForToday() {
-        LocalDateTime today = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS);
-        String status1 = "Отказ";
-        String status2 = "Успешно";
-        return applicationRepository.findAllActiveApplicationForToday(today, status1, status2);
-    }
-
-    public List<Object[]> findAllActiveApplicationForTodayByUserId(Long userId) {
-        LocalDateTime today = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS);
-        String status1 = "Отказ";
-        String status2 = "Успешно";
-        return applicationRepository.findAllActiveApplicationForTodayByUserId(today, status1, status2, userId);
-    }
-
-    public List<Object[]> findAllSourceOfApplication() {
-        return applicationRepository.findAllSourceOfApplication();
-    }
-
-    public List<Object[]> findAllSourceOfApplicationByUserId(Long userId) {
-        return applicationRepository.findAllSourceOfApplicationByUserId(userId);
-    }
-
-    public List<Object[]> findAllDealOfApplication() {
-        return applicationRepository.findAllDealOfApplication();
-    }
-
-    public List<Object[]> findAllDealOfApplicationByUserId(Long userId) {
-        return applicationRepository.findAllDealOfApplicationByUserId(userId);
-    }
-
-    public List<Object[]> findAllFailureApplication() {
-        return applicationRepository.findAllFailureApplication();
-    }
-
-    public List<Object[]> findAllFailureApplicationByUserId(Long userId) {
-        return applicationRepository.findAllFailureApplicationByUserId(userId);
+    public Float getApplicationCount(LocalDateTime start, LocalDateTime end, Long status) {
+        return this.applicationRepository.getCountByDateAndStatus(start, end, status);
     }
 }
