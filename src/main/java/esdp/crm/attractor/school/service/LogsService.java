@@ -31,6 +31,7 @@ public class LogsService {
         changes.groupByCommit().forEach(changesByCommit -> {
             logs.add(logsFromCommit(changesByCommit, applicationId));
         });
+        logs.forEach(logsDto -> logsDto.setApplicationId(applicationId));
         return logs;
     }
 
