@@ -1,13 +1,13 @@
 package esdp.crm.attractor.school.controller;
 
 import esdp.crm.attractor.school.dto.DepartmentDto;
+import esdp.crm.attractor.school.dto.ProductDto;
 import esdp.crm.attractor.school.dto.UserDto;
 import esdp.crm.attractor.school.dto.request.FunnelFormDto;
 import esdp.crm.attractor.school.dto.request.ProductFormDto;
 import esdp.crm.attractor.school.dto.request.RegisterFormDto;
 import esdp.crm.attractor.school.entity.User;
 import esdp.crm.attractor.school.exception.ProductExistsException;
-import esdp.crm.attractor.school.repository.StatusRepository;
 import esdp.crm.attractor.school.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,7 +27,6 @@ public class AdminController {
     private final RoleService roleService;
     private final DepartmentService departmentService;
     private final FunnelService funnelService;
-    private final StatusService statusService;
 
     @GetMapping
     public ModelAndView adminPage(@AuthenticationPrincipal User principal) {
@@ -68,18 +67,5 @@ public class AdminController {
     public String createFunnel(@Valid @ModelAttribute FunnelFormDto form) {
         funnelService.save(form);
         return "redirect:/admin";
-    }
-
-    @GetMapping("/edit/user/{id}")
-    public ModelAndView editUser(@PathVariable Long id) {
-        return new ModelAndView("editUser").addObject("user", userService.getUserById(id))
-                .addObject("roles", roleService.getAll())
-                .addObject("departments" , departmentService.getAll())
-                .addObject("statuses" , statusService.getAll());
-    }
-
-    @PostMapping("/edit/user/{id}")
-    public String editUser(@Valid @ModelAttribute UserDto dto) {
-        return "redirect:/admin/edit/user/{id}";
     }
 }

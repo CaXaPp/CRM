@@ -18,20 +18,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.role.value='ROLE_EMPLOYEE'")
     List<User> findAllEmployees();
-
-    @Query("SELECT u.id FROM User u WHERE u.email = :email")
-    Long getIdByEmail(String email);
-
-    @Query("SELECT u.department.id FROM User u WHERE u.email = :email")
-    Long getDepartmentIdByEmail(String email);
-
-    @Query("SELECT u.id FROM User u WHERE u.department.id = :id")
-    List<Long> getAllIdByDepartmentId(Long id);
-
-    @Query("SELECT u.id, u.firstName, u.surname FROM User u WHERE u.role.value = 'ROLE_EMPLOYEE'")
-    List<Object[]> findAllEmployeeByRole();
-
-    @Query("SELECT u.password FROM User u where u.id = :id")
-    String getPasswordById(Long id);
-
 }

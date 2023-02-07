@@ -23,20 +23,16 @@ public class AnalyticController {
         return "analytics";
     }
 
-    @GetMapping("/application/all")
-    public ResponseEntity<List<Object[]>> getAllApplication() {
-        return new ResponseEntity<>(applicationService.getSumAndCountOfApplication(), HttpStatus.OK);
-    }
     @GetMapping("/product/{id}")
-    public ResponseEntity<List<Object[]>> getApplicationByProduct(@PathVariable Long id) {
+    public ResponseEntity<List<Application>> getApplicationByProduct(@PathVariable Long id) {
         return new ResponseEntity<>(applicationService.getApplicationByProduct(id), HttpStatus.OK);
     }
     @GetMapping("/source/{id}")
-    public ResponseEntity<List<Object[]>> getApplicationBySource(@PathVariable Long id) {
+    public ResponseEntity<List<Application>> getApplicationBySource(@PathVariable Long id) {
         return new ResponseEntity<>(applicationService.getApplicationBySource(id), HttpStatus.OK);
     }
     @GetMapping("/employee/{id}")
-    public ResponseEntity<List<Object[]>> getApplicationByEmployee(@PathVariable Long id) {
+    public ResponseEntity<List<Application>> getApplicationByEmployee(@PathVariable Long id) {
         return new ResponseEntity<>(applicationService.getApplicationByEmployee(id), HttpStatus.OK);
     }
     @GetMapping("/status/{id}")

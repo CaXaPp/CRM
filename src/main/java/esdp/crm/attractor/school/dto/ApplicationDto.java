@@ -3,6 +3,7 @@ package esdp.crm.attractor.school.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import esdp.crm.attractor.school.entity.ApplicationStatus;
 import esdp.crm.attractor.school.entity.ClientSource;
+import esdp.crm.attractor.school.entity.Funnel;
 import esdp.crm.attractor.school.entity.User;
 import lombok.*;
 
@@ -50,4 +51,15 @@ public class ApplicationDto {
 
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
+
+    @Override
+    public int hashCode() {
+        return this.getId().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        ApplicationDto that = (ApplicationDto) obj;
+        return this.getId() != null && this.getId().equals(that.getId());
+    }
 }

@@ -18,4 +18,5 @@ public class LogsDto {
     private LocalDateTime date;
     private List<ChangesDto> changes;
     private String author;
+    private Long ApplicationId;
 }
