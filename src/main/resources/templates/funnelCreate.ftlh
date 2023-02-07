@@ -27,7 +27,7 @@
                 <button type="button" class="btn btn-warning mt-3" id="add_status_btn">Добавить статус</button>
             </div>
             <div class="action">
-                <button type="submit" >Добавить Воронку</button>
+                <button type="submit" >Создать Воронку</button>
             </div>
         </form>
     </div>
