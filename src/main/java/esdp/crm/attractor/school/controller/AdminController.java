@@ -6,6 +6,7 @@ import esdp.crm.attractor.school.dto.UserDto;
 import esdp.crm.attractor.school.dto.request.FunnelFormDto;
 import esdp.crm.attractor.school.dto.request.ProductFormDto;
 import esdp.crm.attractor.school.dto.request.RegisterFormDto;
+import esdp.crm.attractor.school.entity.Role;
 import esdp.crm.attractor.school.entity.User;
 import esdp.crm.attractor.school.exception.ProductExistsException;
 import esdp.crm.attractor.school.service.*;
@@ -36,9 +37,15 @@ public class AdminController {
     @GetMapping("/create/user")
     public ModelAndView createUser(@AuthenticationPrincipal User principal) {
         List<DepartmentDto> departments = departmentService.getAll();
+        List<Role> roles = roleService.getAll();
+        roles.removeIf(role -> role.getName().equals("Администратор"));
+        Role admin = roleService.getByName("Администратор");
         return new ModelAndView("register")
                 .addObject("roles", roleService.getAll())
-                .addObject("departments",departments);
+                .addObject("departments",departments)
+                .addObject("roles", roles)
+                .addObject("departments",departments)
+                .addObject("admin", admin);
     }
 
     @PostMapping(value = "/create/user")
@@ -68,4 +75,15 @@ public class AdminController {
         funnelService.save(form);
         return "redirect:/admin";
     }
+
+    @GetMapping("/create/department")
+    public ModelAndView createDepartment() {
+        return new ModelAndView("createDepartment");
+    }
+
+    @PostMapping("/create/department")
+    public String createDepartment(@Valid @ModelAttribute DepartmentDto dto) {
+        return "redirect:/admin";
+    }
+
 }

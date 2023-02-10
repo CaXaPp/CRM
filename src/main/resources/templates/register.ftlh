@@ -1,6 +1,6 @@
 <#import "parts/general.ftlh" as g>
 
-<@g.general styles=["/css/login.css"]>
+<@g.general styles=["/css/login.css"] scripts=["/js/registration.js"]>
     <div class="login-form">
         <form action="/admin/create/user" method="post" id="login-form">
             <#if _csrf??>
@@ -23,16 +23,19 @@
                 </div>
                 <div class="input-field">
                     <label class="form-label">Роли</label>
-                    <select name="roleId" id="option" class="form-control">
+                    <select name="roleId" id="option-role" class="form-control">
                         <#list roles as role>
-                            <option value="${role.id}">${role.name}</option>
+                            <if ${role.name} != ${admin.name}>
+                                <option value="${role.id}">${role.name}</option>
+                            </if>
                         </#list>
+                        <option value="${admin.id}">${admin.name}</option>
                     </select>
                 </div>
 
-                <div>
+                <div id="departments-block">
                     <label  class="form-label">Отделы</label>
-                    <select name="departmentId" id="option" class="form-control">
+                    <select name="departmentId" id="option-departments" class="form-control">
                         <#list departments as d>
                             <option value="${d.id}">${d.name}</option>
                         </#list>
