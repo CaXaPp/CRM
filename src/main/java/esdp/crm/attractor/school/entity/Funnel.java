@@ -21,7 +21,6 @@ import java.util.Set;
 @Table(name = "funnels")
 public class Funnel extends BaseEntity {
     @Column(name = "name", nullable = false)
-    @PropertyName("Название воронки")
     private String name;
 
     @Override

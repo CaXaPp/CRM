@@ -23,4 +23,8 @@ public class DepartmentService {
                 .map(departmentMapper::toDepartmentDto)
                 .collect(Collectors.toList());
     }
+
+    public DepartmentDto save(DepartmentDto dto) {
+        return departmentMapper.toDepartmentDto(departmentRepository.save(departmentMapper.toDepartment(dto)));
+    }
 }

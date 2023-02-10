@@ -50,4 +50,15 @@ public class ApplicationDto {
 
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
+
+    @Override
+    public int hashCode() {
+        return this.getId().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        ApplicationDto that = (ApplicationDto) obj;
+        return this.getId() != null && this.getId().equals(that.getId());
+    }
 }
