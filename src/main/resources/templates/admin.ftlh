@@ -11,7 +11,7 @@
             пользователя</a>
 
         <a href="/admin/create/department" class="btn btn-success">Добавить
-            пользователя</a>
+            департамент</a>
 
     </div>
 
