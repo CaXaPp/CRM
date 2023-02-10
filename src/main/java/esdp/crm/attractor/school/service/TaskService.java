@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,7 +66,7 @@ public class TaskService {
         return taskMapper.toDto(saved);
     }
 
-    public Task getTasksByApplicationId(Long id) {
+    public Task getTasksById(Long id) {
         return taskRepository.findById(id).orElse(null);
     }
     public Task editTask(Task task, TaskFormDto taskDto){
@@ -74,5 +75,25 @@ public class TaskService {
         task.setType(taskTypeService.findById(taskDto.getTypeId()));
         task.setDescription(taskDto.getDescription());
         return taskRepository.save(task);
+    }
+
+    public List<Task> getTasksByApplicationId(Long id) {
+        return taskRepository.findAllByApplication_Id(id);
+    }
+
+    public List<Object[]> getOverdueTask(LocalDateTime now) {
+        return taskRepository.findAllByDate(now);
+    }
+
+    public List<Object[]> getOverdueTaskByUserId(LocalDateTime now, Long userId) {
+        return taskRepository.findAllByDateAndByUserId(now, userId);
+    }
+
+    public List<Object[]> getAllActiveTask(LocalDateTime now) {
+        return taskRepository.findAllActiveTask(now);
+    }
+
+    public List<Object[]> getAllActiveTaskByUserId(LocalDateTime now, Long userId) {
+        return taskRepository.findAllActiveTaskByUserId(now, userId);
     }
 }

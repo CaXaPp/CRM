@@ -3,18 +3,11 @@
 }
 
 .dashboard_block {
-    padding-top: 50px;
+    padding-top: 25px;
 }
 .employee_info {
     display: flex;
     justify-content: space-between;
-}
-
-.operations {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 20px;
 }
 
 .button-group {
@@ -33,24 +26,34 @@
 }
 
 .application_list_class {
-    max-width: 95%;
     margin: 0 auto;
 }
 
 .log_block {
     width: 70%;
+    display: flex;
+    flex-direction: column;
 }
 
 .log_block .modal-header {
     padding: 23px 20px 23px 0;
 }
 
+.modal_edit_form input, .modal_edit_form select {
+    width: 300px;
+    margin-right: 30px;
+}
+
 .blockForLogsInApplication {
     padding: 15px 20px 20px 90px;
-    height: 500px;
     overflow: auto;
-
+    height: 100%;
     border-left: 1px solid gray;
+}
+
+.blockForLogsInApplication span {
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .blockForLogsInApplication_main_date {
@@ -104,7 +107,7 @@
 }
 
 .modal-dialog {
-    max-width: 80%;
+    max-width: 90%;
 }
 
 .modal-content {
@@ -163,35 +166,70 @@
     left: 95%;
 }
 
-.section_info {
-    display: flex;
-    justify-content: space-between;
+#btnradio_5_application {
+    top: 25px;
+    left: 85%;
 }
 
-.sections {
-    width: 30%;
+.modal-fullscreen {
+    float: right;
 }
 
-.information {
-    width: 70%;
-}
-
-.sections_inner {
+.info_block {
     display: flex;
     flex-direction: column;
-    align-items: baseline;
-    width: 100%;
 }
 
-.sections_inner label {
-    width: 100%;
-    text-align: left;
+.modal-footer {
+    justify-content: flex-start;
+    padding: 20px 20px 28px;
 }
 
-.information_inner {
-    padding: 0 20px;
+.btnToSortByProductName {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
-.addRequest{
-    text-decoration: none;
-    color: green;
+
+.application_sort_block {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0 15px 0;
+    border-bottom: 1px solid aliceblue;
+}
+
+.task_main_block {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.application_table_block {
+    max-width: 98%;
+    margin: 0 auto;
+}
+
+.application_table_block thead tr {
+    position: sticky;
+    top: 0;
+    background: white;
+    vertical-align: middle;
+}
+
+.section_info {
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+.information_block_inner_footer {
+    max-height: 550px;
+    overflow-y: scroll;
+}
+
+.information_block_inner_footer thead tr {
+    position: sticky;
+    top: 0;
+    background: white;
 }

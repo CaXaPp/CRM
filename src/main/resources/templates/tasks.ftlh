@@ -1,13 +1,11 @@
 <#import "parts/general.ftlh" as g>
 
-<@g.general scripts=["/js/task.js", "/js/jquery-3.6.2.min.js"] styles=["/css/tasks.css"]>
-    <div class="button">
-        <button class="addTask">Задачи</button>
-        <button class="addTask">Отчетность</button>
-        <button class="addTask" id="addTaskButton" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Добавить задачу</button>
+<@g.general scripts=["/js/task.js"] styles=["/css/tasks.css"]>
+    <div class="task_header_block">
+        <button type="button" class="btn btn-success" id="addTaskButton" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Добавить задачу</button>
     </div>
 
-    <div class="container position-relative">
+    <div class="task_main_block">
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -33,8 +31,8 @@
             </tbody>
         </table>
 
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal fade" id="staticBackdrop" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="staticBackdropLabel">Добавление задачи</h5>
@@ -45,41 +43,43 @@
                             <input type="hidden"
                                    name="${_csrf.parameterName}" value="${_csrf.token}">
                         </#if>
-                        <select name="operationId" id="operation" required>
-                            <#list operations as operation>
-                                <option value="${operation.id}">${operation.name}</option>
-                            </#list>
-                        </select>
                         <div class="form-body">
-                            <input type="datetime-local" name="deadline" placeholder="Дата и время" required>
-                            <label for="employee">Для</label>
-                            <select name="employeeId" id="employee" required>
-                                <#list employees as employee>
-                                    <option value="${employee.id}">${employee.firstName}</option>
-                                </#list>
-                            </select>
-                            <select name="typeId" required>
-                                <#list types as type>
-                                    <option value="${type.id}">${type.name}</option>
-                                </#list>
-                            </select>
-                        </div>
-                        <div class="form-additional">
-                            <label for="description">Примечания
-                                <textarea name="description" id="description" placeholder="Примечания к задаче"></textarea>
-                            </label>
+                            <div>
+                                <select class="form-select" name="operationId" id="operation" required>
+                                    <#list operations as operation>
+                                        <option value="${operation.id}">${operation.name}</option>
+                                    </#list>
+                                </select>
+                            </div>
+                            <div class="task_body_information">
+                                <input class="form-control" type="datetime-local" name="deadline" placeholder="Дата и время" required>
+                                <label for="employee">Для</label>
+                                <select class="form-select" name="employeeId" id="employee" required>
+                                    <#list employees as employee>
+                                        <option value="${employee.id}">${employee.firstName}</option>
+                                    </#list>
+                                </select>
+                                <select class="form-select" name="typeId" required>
+                                    <#list types as type>
+                                        <option value="${type.id}">${type.name}</option>
+                                    </#list>
+                                </select>
+                            </div>
+                            <div>
+                                <textarea class="form-control description" name="description" placeholder="Примечания к задаче"></textarea>
+                            </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-dark" data-bs-dismiss="modal">Поставить</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
+                            <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Поставить</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
-        <div class="modal fade" id="editTask" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal fade" id="editTask" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="staticBackdropLabel">Редактирование задачи</h5>
@@ -91,34 +91,36 @@
                                    name="${_csrf.parameterName}" value="${_csrf.token}">
                             <input type="hidden" name="_csrf_header" value="${_csrf.headerName}">
                         </#if>
-                        <select name="operationId" id="operation" required>
-                            <#list operations as operation>
-                                <option value="${operation.id}">${operation.name}</option>
-                            </#list>
-                        </select>
                         <div class="form-body">
-                            <input type="datetime-local" name="deadline" id="deadline" placeholder="Дата и время" required>
-                            <label for="employee">Для</label>
-                            <select name="employeeId" id="employee" required>
-                                <#list employees as employee>
-                                    <option value="${employee.id}">${employee.firstName}</option>
-                                </#list>
-                            </select>
-                            <select name="typeId" id="typeId" required>
-                                <#list types as type>
-                                    <#if type.id == 2><option selected value="${type.id}">${type.name}</option></#if>
-                                    <option value="${type.id}">${type.name}</option>
-                                </#list>
-                            </select>
-                        </div>
-                        <div class="form-additional">
-                            <label for="description">Примечания
-                                <textarea name="description" id="description" placeholder="Примечания к задаче"></textarea>
-                            </label>
+                            <div>
+                                <select class="form-select" name="operationId" id="operation" required>
+                                    <#list operations as operation>
+                                        <option value="${operation.id}">${operation.name}</option>
+                                    </#list>
+                                </select>
+                            </div>
+                            <div class="task_body_information">
+                                <input class="form-control" type="datetime-local" name="deadline" id="deadline" placeholder="Дата и время" required>
+                                <label for="employee">Для</label>
+                                <select class="form-select" name="employeeId" id="employee" required>
+                                    <#list employees as employee>
+                                        <option value="${employee.id}">${employee.firstName}</option>
+                                    </#list>
+                                </select>
+                                <select class="form-select" name="typeId" id="typeId" required>
+                                    <#list types as type>
+                                        <#if type.id == 2><option selected value="${type.id}">${type.name}</option></#if>
+                                        <option value="${type.id}">${type.name}</option>
+                                    </#list>
+                                </select>
+                            </div>
+                            <div class="form-additional">
+                                <textarea class="form-control description" name="description" placeholder="Примечания к задаче"></textarea>
+                            </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-dark" data-bs-dismiss="modal">Поставить</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
+                            <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Поставить</button>
                         </div>
                     </form>
                 </div>

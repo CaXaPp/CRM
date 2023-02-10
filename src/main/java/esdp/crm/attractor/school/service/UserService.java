@@ -25,6 +25,14 @@ public class  UserService {
         return userRepository.findAll();
     }
 
+    public List<Object[]> getAllEmployee() {
+        return userRepository.findAllEmployeeByRole();
+    }
+
+    public List<User> getAllNotInAdmin() {
+        return userRepository.findAllUsersNotInAdmin();
+    }
+
     public UserDto createUser(RegisterFormDto dto) {
         if (userRepository.existsByEmail(dto.getEmail()))
             throw new EmailExistsException("User with email " + dto.getEmail() + " exists!");
@@ -37,6 +45,9 @@ public class  UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User with id " + id + " not found!"));
         return userMapper.toUserDto(user);
+    }
+    public Optional<User> findUserById(Long id) {
+        return userRepository.findById(id);
     }
 
     public List<User> findAll(Role role){
@@ -61,4 +72,13 @@ public class  UserService {
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
+    public Long getUserIdByEmail(String email) {
+        return userRepository.getIdByEmail(email);
+    }
+
+    public List<Long> getAllUserId(Long id) {
+        return userRepository.getAllIdByDepartmentId(id);
+    }
+
 }

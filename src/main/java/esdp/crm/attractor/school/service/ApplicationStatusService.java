@@ -45,4 +45,12 @@ public class ApplicationStatusService {
                 .findAny()
                 .orElseThrow(() -> new NotFoundException("Department has no funnels!"));
     }
+
+    public List<ApplicationStatus> getStatusIdByName(String name) {
+        return applicationStatusRepository.findAllByName(name);
+    }
+
+    public List<ApplicationStatus> findAllByFunnel_Id(Long id) {
+        return applicationStatusRepository.findAllByFunnel_Id(id);
+    }
 }

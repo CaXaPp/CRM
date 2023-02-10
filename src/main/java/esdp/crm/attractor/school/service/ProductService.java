@@ -26,15 +26,18 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    public ProductDto getProductById(Long id) {
-        Optional<Product> product = productRepository.findById(id);
-        return productMapper.toProductDto(product.get());
-    }
-
     public void save(ProductFormDto form) throws ProductExistsException {
         if (productRepository.existsByName(form.getName())) {
             throw new ProductExistsException("Продукт с названием " + form.getName() + " уже существует");
         }
         productRepository.save(productMapper.formToEntity(form));
+    }
+
+    public List<Object[]> getProductNameAndId() {
+        return productRepository.getProductNameAndId();
+    }
+
+    public List<Product> getProductByDepartmentId(Long id) {
+        return productRepository.findAllByDepartmentId(id);
     }
 }
