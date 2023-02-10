@@ -51,4 +51,14 @@ public abstract class TaskMapper {
                 .type(type)
                 .build();
     }
+
+    public TaskFormDto toTaskFormDto(Task task) {
+        return TaskFormDto.builder()
+                .operationId(task.getApplication().getId())
+                .deadline(task.getDeadline())
+                .employeeId(task.getEmployee().getId())
+                .typeId(task.getType().getId())
+                .description(task.getDescription())
+                .build();
+    }
 }

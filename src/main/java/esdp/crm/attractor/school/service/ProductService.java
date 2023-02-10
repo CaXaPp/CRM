@@ -26,18 +26,18 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+    public void save(ProductFormDto form) throws ProductExistsException {
+        if (productRepository.existsByName(form.getName())) {
+            throw new ProductExistsException("Продукт с названием " + form.getName() + " уже существует");
+        }
+        productRepository.save(productMapper.formToEntity(form));
+    }
+
     public List<Object[]> getProductNameAndId() {
         return productRepository.getProductNameAndId();
     }
 
     public List<Product> getProductByDepartmentId(Long id) {
         return productRepository.findAllByDepartmentId(id);
-    }
-
-    public void save(ProductFormDto form) throws ProductExistsException {
-        if (productRepository.existsByName(form.getName())) {
-            throw new ProductExistsException("Продукт с названием " + form.getName() + " уже существует");
-        }
-        productRepository.save(productMapper.formToEntity(form));
     }
 }

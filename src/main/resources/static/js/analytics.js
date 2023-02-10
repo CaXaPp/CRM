@@ -1,5 +1,6 @@
 'use strict';
 const BASE_URL = "http://localhost:9000";
+const default_sum = 1000000;
 
 document.addEventListener("DOMContentLoaded", function () {
     getUsersForAnalytics();
@@ -14,30 +15,36 @@ function selectedCategory(e) {
 function getAllApplicationForAnalytics(path) {
     axios.get(BASE_URL + path).then(function (response) {
         deleteAllStatistics();
-        createTdElemOnBodyForAnalytics(response.data[0][0], response.data[0][1], response.data[0][2]);
+        createTdElemOnBodyForAnalytics(response.data[0][0], response.data[0][1], response.data[0][2], response.data[0][3]);
     })
 }
 
-function createTdElemOnBodyForAnalytics(count_operation, sum_operation, sumFailures) {
+function createTdElemOnBodyForAnalytics(count_operation, sum_operation, sumFailures, sumSuccess) {
     document.getElementById('operation_amount').innerText = count_operation.toString();
     document.getElementById('operation_sum_amount').innerText = sum_operation.toString();
-    document.getElementById('plan_amount').innerText = "20000";
+    document.getElementById('plan_amount').innerText = default_sum.toString();
     document.getElementById('failures_amount').innerText = sumFailures.toString();
+    document.getElementById('success_amount').innerText = sumSuccess.toString();
 
-        let x = (sumFailures / sum_operation) * 100;
+    let x = (sumFailures / sum_operation) * 100;
+    let y = (sumSuccess / default_sum) * 100;
 
-        if (sum_operation !== 0) {
-            document.getElementById('total_operation_sum').innerText = "100%";
-            document.getElementById('total_operation_sum_line').style.width = "100%";
-        }
+    if (sum_operation !== 0) {
+        document.getElementById('total_operation_sum').innerText = "100%";
+        document.getElementById('total_operation_sum_line').style.width = "100%";
+    }
 
-        document.getElementById('plan_operation_sum').innerText = "0";
-        document.getElementById('plan_operation_sum_line').style.width = "0";
+    document.getElementById('plan_operation_sum').innerText = "100%";
+    document.getElementById('plan_operation_sum_line').style.width = "100%";
 
-        if (sumFailures !== 0) {
-            document.getElementById('sum_failures_percent_span').innerText = x.toFixed(2).toString() + "%";
-            document.getElementById('sum_failures_percent_line').style.width = x.toString() + "%";
-        }
+    if (sumFailures !== 0) {
+        document.getElementById('sum_failures_percent_span').innerText = x.toFixed(2).toString() + "%";
+        document.getElementById('sum_failures_percent_line').style.width = x.toString() + "%";
+    }
+    if(sumSuccess !== 0) {
+        document.getElementById('sum_success_percent_span').innerText = y.toFixed(2).toString() + "%";
+        document.getElementById('sum_success_percent_line').style.width = y.toString() + "%";
+    }
 }
 
 function getUsersForAnalytics() {
@@ -85,6 +92,7 @@ function deleteAllStatistics() {
     document.getElementById('operation_sum_amount').innerText = "0";
     document.getElementById('plan_amount').innerText = "0";
     document.getElementById('failures_amount').innerText = "0";
+    document.getElementById('success_amount').innerText = "0";
 
     document.getElementById('total_operation_sum').innerText = "0";
     document.getElementById('total_operation_sum_line').style.width = "0";
@@ -92,4 +100,6 @@ function deleteAllStatistics() {
     document.getElementById('plan_operation_sum_line').style.width = "0";
     document.getElementById('sum_failures_percent_span').innerText = "0";
     document.getElementById('sum_failures_percent_line').style.width = "0";
+    document.getElementById('sum_success_percent_span').innerText = "0";
+    document.getElementById('sum_success_percent_line').style.width = "0";
 }

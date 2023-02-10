@@ -12,6 +12,7 @@ import esdp.crm.attractor.school.repository.FunnelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,14 +36,14 @@ public class FunnelService {
         form.getStatuses().forEach(s -> {
             applicationStatusRepository.save(ApplicationStatus.builder().funnel(funnel).name(s).build());
         });
-        form.getDepartments().forEach(d -> {
-            Department department = departmentRepository.getById(d);
-            department.getFunnels().add(funnel);
-            departmentRepository.save(department);
-        });
     }
 
     public List<Funnel> findById(Long id) {
-        return funnelRepository.findAllByFunnelsId(id);
+        List<Long> funnels_id = funnelRepository.findAllFunnelsIdByDepartmentId(id);
+        List<Funnel> funnels = new ArrayList<>();
+        for (Long aLong : funnels_id) {
+            funnels.add(funnelRepository.findAllByFunnelsById(aLong));
+        }
+        return funnels;
     }
 }

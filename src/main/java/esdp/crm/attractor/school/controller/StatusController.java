@@ -7,26 +7,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 @Controller
 @RequestMapping("/statuses")
 @RequiredArgsConstructor
-public class ApplicationStatusController {
+public class StatusController {
     private final ApplicationStatusService applicationStatusService;
 
-    @GetMapping
-    public ResponseEntity<List<ApplicationStatus>> findByUserId(@RequestParam(name = "employee", defaultValue = "0") Long userId) {
-        return ResponseEntity.ok(applicationStatusService.findByUserId(userId));
+    @GetMapping("/all")
+    public ResponseEntity<List<ApplicationStatus>> getAll() {
+        return new ResponseEntity<>(applicationStatusService.getAll(), HttpStatus.OK);
     }
-
-    @GetMapping("/status/{id}")
-    public ResponseEntity<List<ApplicationStatus>> getAll(@PathVariable Long id) {
-        return new ResponseEntity<>(applicationStatusService.findAllByFunnel_Id(id), HttpStatus.OK);
-    }
-
 }

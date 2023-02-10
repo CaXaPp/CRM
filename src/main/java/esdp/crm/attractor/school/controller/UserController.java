@@ -38,6 +38,11 @@ public class UserController {
         return new ResponseEntity<>(userService.getAllEmployee(), HttpStatus.OK);
     }
 
+    @GetMapping("/not-admin")
+    public ResponseEntity<List<User>> getAllNotInAdmin() {
+        return new ResponseEntity<>(userService.getAllNotInAdmin(), HttpStatus.OK);
+    }
+
     @GetMapping("/login")
     public ModelAndView getLoginPage() {
         return new ModelAndView("login");
@@ -50,8 +55,8 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
-        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
+    public ResponseEntity<Optional<User>> getUserById(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.findUserById(id), HttpStatus.OK);
     }
 
     @GetMapping("/auth_user")

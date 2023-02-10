@@ -1,139 +1,206 @@
 <#import "parts/general.ftlh" as g>
 
-<@g.general scripts=["/js/operation.js"] styles=["/css/main.css"]>
-    <div class="wrap mt-5">
-        <div class="button-group mb-5">
-            <div class="dropdown">
-                <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Добавить операцию
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/operations/add">Выбрать из всех заявок</a></li>
-                    <li><button class="addTask dropdown-item" id="addTaskButton" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Добавить новую операцию</button></li>
-                </ul>
+<@g.general scripts=["/js/operation.js"] styles=["/css/operation.css"]>
+    <div class="main_block_inner_in_operations">
+        <div class="operations_nav">
+            <div class="alert alert-success alert_success_msg_for_status" id="alert_status" hidden role="alert">
+                Статус успешно изменен!
             </div>
-            <#if user.role != 'Сотрудник'>
-                <div class="dropdown">
-                    <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Воронки
-                    </button>
-                    <ul class="dropdown-menu">
-                        <#list funnels as funnel>
-                            <li><a class="dropdown-item" href="/operations?funnel=${funnel.id}">${funnel.name}</a></li>
-                        </#list>
-                    </ul>
-                </div>
-            </#if>
-        </div>
-        <div class="operations">
-            <#list operation_statuses as status>
-                <div class="card">
-                    <div class="card-header text-center">
-                        ${status.name}
+            <button class="form-select" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                Добавить операцию
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/operations/add">Выбрать из всех заявок</a></li>
+                <li><a class="dropdown-item" href="/operations/add/new">Добавить новую</a></li>
+            </ul>
+
+<#--            <select class="form-select" aria-label="Select category">-->
+<#--                <option><a class="dropdown-item" href="/operations/add">Выбрать из всех заявок</a></option>-->
+<#--                <option><a class="dropdown-item" href="/operations/add/new">Добавить новую</a></option>-->
+<#--            </select>-->
+            <select class="form-select" aria-label="Select status" id="funnels" onchange="changeFunnel(this.value)"
+                    required></select>
+<#--            <button class="btn btn-success" onclick="changeApplication()">All</button>-->
+<#--            <button class="btn btn-success" onclick="changeApplication2()">Not active</button>-->
+            <div class="checkboxes_block">
+                <div class="pretty p-switch p-slim">
+                    <input type="radio" name="switch1" onclick="changeApplicationAll()" checked/>
+                    <div class="state p-success">
+                        <label>Активные</label>
                     </div>
-                    <ul class="list-group list-group-flush">
-                        <#list operations as operation>
-                            <#if status.id == operation.status.id>
-                                <li class="list-group-item text-center" style="cursor: pointer" onclick="getOperationById(${operation.id})">Операция №${operation.id}</li>
-                            </#if>
-                        </#list>
-                    </ul>
                 </div>
-            </#list>
-        </div>
-    </div>
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="info_block">
-
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="modal_title_from_js"></h1>
+                <div class="pretty p-switch p-slim">
+                    <input type="radio" name="switch1" onclick="changeApplication2()"/>
+                    <div class="state p-success">
+                        <label>Не активные</label>
                     </div>
-                    <div class="modal-body" id="modal_body_form">
-                        <table>
+                </div>
+                <div class="pretty p-switch p-slim">
+                    <input type="radio" name="switch1" onclick="changeApplication()"/>
+                    <div class="state p-success">
+                        <label>Все</label>
+                    </div>
+                </div>
+            </div>
 
-                            <form id="modal_edit_form" class="modal_edit_form">
-                                <input type="hidden" name="id" value="" id="id">
-                                <#if _csrf??>
-                                    <input type="hidden"
-                                           name="${_csrf.parameterName}" value="${_csrf.token}">
-                                </#if>
-                                <tr>
-                                    <td><label for="modal_company">Клиент</label></td>
-                                    <td><input type="text" class="form-control" name="company" id="company" value="">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><label for="modal_deal_sum">Бюджет</label></td>
-                                    <td><input type="number" class="form-control" step="any" min="0" name="price" id="price"
-                                               value=""></td>
-                                </tr>
-                                <tr>
-                                    <td>Товар/услуга</td>
-                                    <td><select class="form-select" aria-label="Select product" id="productId"
-                                                name="productId" required> </select></td>
-                                </tr>
-                                <tr>
-                                    <td><label for="modal_name">Контактное лицо</label></td>
-                                    <td><input type="text" class="form-control" name="name" id="name" value=""></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <hr>
-                                        Компания:
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><label for="modal_phone">Раб. тел</label></td>
-                                    <td><input type="text" class="form-control" name="phone" id="phone" value=""></td>
-                                </tr>
-                                <tr>
-                                    <td><label for="modal_email">Email</label></td>
-                                    <td><input type="email" class="form-control" name="email" id="email" value="">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><label for="modal_address">Адрес</label></td>
-                                    <td><input type="text" class="form-control" name="address" id="address" value="">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Отв-ный</td>
-                                    <td><select class="form-select" aria-label="Select employee" id="employee"
-                                                name="employeeId" required></select></td>
-                                </tr>
-                                <tr>
-                                    <td>Статус</td>
-                                    <td><select class="form-select" aria-label="Select status" id="status"
-                                                name="statusId" required></select></td>
-                                </tr>
-                                <tr>
-                                    <td><label for="createdAt">Создано</label></td>
-                                    <td>
-                                        <input type="datetime-local" class="form-control" disabled value="" name="createdAt"
-                                               id="createdAt">
-                                    </td>
-                                </tr>
+        </div>
 
-                                <input type="hidden" value="" id="hiddenApplicationId">
-                                <input type="hidden" value="" name="sourceId" id="sourceId">
+        <div class="operations" id="operations_block"></div>
 
+        <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="alert alert-success alert_success_msg" id="alert_msg" hidden role="alert">
+                Изменения сохранены!
+            </div>
+            <div class="modal-dialog modal-fullscreen">
+                <div class="modal-content">
+
+                    <div class="info_block">
+
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="modal_title_from_js"></h1>
+                        </div>
+                        <div class="modal-body modal_edit_form" id="modal_body_form">
+                            <table>
+
+                                <form id="modal_edit_form">
+                                    <input type="hidden" name="id" value="" id="id">
+                                    <#if _csrf??>
+                                        <input type="hidden"
+                                               name="${_csrf.parameterName}" value="${_csrf.token}">
+                                    </#if>
+                                    <tr>
+                                        <td>
+                                            Компания:
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="company">Клиент</label></td>
+                                        <td><input type="text" class="form-control" name="company" id="company"
+                                                   value="">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="price">Бюджет</label></td>
+                                        <td><input type="number" class="form-control" step="any" min="0" name="price"
+                                                   id="price"
+                                                   value=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="name">Контактное лицо</label></td>
+                                        <td><input type="text" class="form-control" name="name" id="name" value=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="phone">Раб. тел</label></td>
+                                        <td><input type="text" class="form-control" name="phone" id="phone" value="">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="email">Email</label></td>
+                                        <td><input type="email" class="form-control" name="email" id="email" value="">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="address">Адрес</label></td>
+                                        <td><input type="text" class="form-control" name="address" id="address"
+                                                   value="">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <hr>
+                                            Дополнительная информация:
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Отв-ный</td>
+                                        <td id="employee_td"><select class="form-select" aria-label="Select employee"
+                                                                     id="employee"
+                                                                     name="employeeId"
+                                                                     onchange="updateContentForApplication()"
+                                                                     required></select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Воронка</td>
+                                        <td><select class="form-select" aria-label="Select funnel"
+                                                    id="funnelInApplication"></select></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Товар/услуга</td>
+                                        <td><select class="form-select" aria-label="Select product" id="productId"
+                                                    name="productId" required></select></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Статус</td>
+                                        <td><select class="form-select" aria-label="Select status" id="status"
+                                                    name="statusId" required></select></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="departmentInApplication">Департамент</label></td>
+                                        <td><input type="text" class="form-control" id="departmentInApplication"
+                                                   disabled>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="createdAt">Создано</label></td>
+                                        <td>
+                                            <input type="datetime-local" class="form-control" disabled value=""
+                                                   name="createdAt"
+                                                   id="createdAt">
+                                        </td>
+                                    </tr>
+
+                                    <input type="hidden" value="" id="hiddenApplicationId">
+                                    <input type="hidden" value="" name="sourceId" id="sourceId">
+
+                                </form>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
+                            <button type="submit" class="btn btn-primary" id="submitBtnForSave" form="modal_edit_form"
+                                    onclick="getMessage()">
+                                Сохранить
+                            </button>
+                        </div>
+                    </div>
+                    <div class="log_block">
+                        <div class="modal-header">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="blockForLogsInApplication">
+                            <div id="blockForLogsInApplication"></div>
+                        </div>
+                        <div class="log_block_footer" id="log_block_footer">
+                            <form class="log_block_footer_inner" id="updateAddedTask">
+                                <div>
+                                    <input id="operationId" name="operationId" value="" type="hidden">
+                                    <#if _csrf??>
+                                        <input type="hidden"
+                                               name="${_csrf.parameterName}" value="${_csrf.token}">
+                                    </#if>
+                                    <a>Задача на </a>
+                                    <input type="datetime-local" class="form-control w-25 d-inline-block"
+                                           id="deadline_for_task_in_application" name="deadline" required>
+                                    <select name="typeId" id="taskTypeChoose" class="form-select d-inline-block"
+                                            required></select>
+                                    <label for="taskForEmployee" id="label_for_employee_task"> Для </label>
+                                    <select class="form-select d-inline-block" name="employeeId" id="taskForEmployee"
+                                            required></select>
+                                </div>
+
+                                <textarea class="form-control" name="description" id="textareaValue"
+                                          placeholder="Примечания к задаче"></textarea>
+
+                                <div>
+                                    <button type="submit" class="btn btn-primary">Поставить</button>
+                                    <button type="button" class="btn btn-secondary">Отменить</button>
+                                </div>
                             </form>
-                        </table>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
-                        <button type="submit" class="btn btn-primary" form="modal_edit_form" onclick="getMessage()">
-                            Сохранить
-                        </button>
-                    </div>
-                </div>
-                <div class="log_block">
-                    <div class="modal-header">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div>Блок для задач и логов</div>
                 </div>
             </div>
         </div>

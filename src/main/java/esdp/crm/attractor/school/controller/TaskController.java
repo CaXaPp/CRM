@@ -7,9 +7,14 @@ import esdp.crm.attractor.school.dto.UserDto;
 import esdp.crm.attractor.school.dto.request.TaskFormDto;
 import esdp.crm.attractor.school.entity.Task;
 import esdp.crm.attractor.school.entity.User;
-import esdp.crm.attractor.school.service.*;
+import esdp.crm.attractor.school.mapper.TaskMapper;
+import esdp.crm.attractor.school.service.OperationService;
+import esdp.crm.attractor.school.service.TaskService;
+import esdp.crm.attractor.school.service.TaskTypeService;
+import esdp.crm.attractor.school.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -24,7 +29,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @CrossOrigin
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/tasks")
 public class TaskController {
@@ -32,7 +37,8 @@ public class TaskController {
     private final OperationService operationService;
     private final TaskTypeService taskTypeService;
     private final UserService userService;
-    private final ApplicationService applicationService;
+
+    private final TaskMapper taskMapper;
 
     @GetMapping
     public ModelAndView getTasks(@AuthenticationPrincipal User principal) {
@@ -53,8 +59,13 @@ public class TaskController {
     }
 
     @GetMapping("/task/{id}")
-    public ResponseEntity<List<Task>> getApplicationForEdit(@PathVariable Long id) {
-        return new ResponseEntity<>(taskService.getTasksByApplicationId(id), HttpStatus.OK);
+    public ResponseEntity<TaskFormDto> getApplicationForEdit(@PathVariable Long id) {
+        return ResponseEntity.ok().body(taskMapper.toTaskFormDto(taskService.getTasksById(id)));
+    }
+
+    @PutMapping(value = "/task/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Task> editTask(@PathVariable(value = "id") Task task, @RequestBody TaskFormDto taskDto) {
+        return new ResponseEntity<>(taskService.editTask(task, taskDto), HttpStatus.OK);
     }
 
     @GetMapping("/task/over")
@@ -78,5 +89,10 @@ public class TaskController {
         } else {
             return new ResponseEntity<>(taskService.getAllActiveTaskByUserId(localDateTime, user.get().getId()), HttpStatus.OK);
         }
+    }
+
+    @GetMapping("/tasks-by-id/{id}")
+    public ResponseEntity<List<Task>> getTasksByApplicationId(@PathVariable Long id) {
+        return new ResponseEntity<>(taskService.getTasksByApplicationId(id), HttpStatus.OK);
     }
 }

@@ -1,6 +1,7 @@
 package esdp.crm.attractor.school.service;
 
 import esdp.crm.attractor.school.dto.TaskTypeDto;
+import esdp.crm.attractor.school.entity.TaskType;
 import esdp.crm.attractor.school.mapper.TaskTypeMapper;
 import esdp.crm.attractor.school.repository.TaskTypeRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,5 +21,8 @@ public class TaskTypeService {
         return tasks.stream()
                 .map(taskTypeMapper::toTaskTypeDto)
                 .collect(Collectors.toList());
+    }
+    public TaskType findById(Long id){
+       return taskTypeRepository.findById(id).orElse(null);
     }
 }

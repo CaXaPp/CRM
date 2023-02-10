@@ -1,3 +1,5 @@
+'use strict';
+
 const BASE_URL = "http://localhost:9000";
 let start = new Date();
 let main_role;
@@ -9,9 +11,13 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('btnradio5_text').innerText = start.getDate() + "." + start.getMonth() + 1 + "." + start.getFullYear() + "-" + start.getDate() + "." + start.getMonth() + 1 + "." + start.getFullYear();
     // dataForToday("today");
     getRoleFromUser();
+    setTimeout(function () {
+        dataForToday();
+    }, 300)
     // setTimeout(function () {
     //     getUsernameForNavbar(username);
     // },100)
+    getActiveDealForToday();
 })
 
 function getRoleFromUser() {
@@ -57,6 +63,7 @@ function createCategoryInDashboard(role) {
     }
 }
 
+// фукнции используются внутри JS (НЕ УДАЛЯТЬ!)
 function getValueFromInputForAll() {
     dataForToday();
     document.getElementById('selectDepartment').querySelectorAll('option').item(0).selected = true;
@@ -75,14 +82,19 @@ function getAllSumAndCount(date_start, date_end, value) {
             parameter: value
         }
     }).then(function (response) {
-        console.log(response.data);
         clear();
-        for (let i = 0; i < response.data.length; i++) {
-            createNewStatements(response.data[0][1], response.data[0][2]);
-            createNegotiation(response.data[1][1], response.data[1][2]);
-            createMakingDecisions(response.data[2][1], response.data[2][2]);
-            createUnderMaintenance(response.data[3][1], response.data[3][2]);
-            createSuccessfull(response.data[4][1], response.data[4][2]);
+        for (const key in response.data) {
+            if (key === "Новое") {
+                createNewStatements(response.data[key][1], response.data[key][0]);
+            } else if (key === "Переговоры") {
+                createNegotiation(response.data[key][1], response.data[key][0]);
+            } else if (key === "Принятие решения") {
+                createMakingDecisions(response.data[key][1], response.data[key][0]);
+            } else if (key === "На обслуживании") {
+                createUnderMaintenance(response.data[key][1], response.data[key][0]);
+            } else if (key === "Успешно") {
+                createSuccessfull(response.data[key][1], response.data[key][0]);
+            }
         }
     })
 }
@@ -261,7 +273,24 @@ function getActiveDealForToday() {
     $("#nav-tabContent td").remove();
     axios.get(BASE_URL + "/application/activeApplication").then(function (response) {
             for (let i = 0; i < response.data.length; i++) {
-                document.getElementById('list_active').getElementsByTagName('tbody')[0].insertAdjacentHTML('beforebegin',
+                document.getElementById('list_active_body').insertAdjacentHTML('beforeend',
+                    '<tr>' +
+                    '<td>' + response.data[i][0].firstName + " " + response.data[i][0].surname + '</td>' +
+                    '<td>' + response.data[i][1] + '</td>' +
+                    '<td>' + response.data[i][2] + '</td>' +
+                    '<td>' + response.data[i][3] + '</td>' +
+                    '</tr>'
+                )
+            }
+        }
+    )
+}
+
+function getCompletedDealOnToday() {
+    $("#nav-tabContent td").remove();
+    axios.get(BASE_URL + "/application/completedDeal").then(function (response) {
+            for (let i = 0; i < response.data.length; i++) {
+                document.getElementById('list_active_body').insertAdjacentHTML('beforeend',
                     '<tr>' +
                     '<td>' + response.data[i][0].firstName + " " + response.data[i][0].surname + '</td>' +
                     '<td>' + response.data[i][1] + '</td>' +
@@ -278,7 +307,7 @@ function getSourceDeal() {
     $("#nav-tabContent td").remove();
     axios.get(BASE_URL + "/application/sourceApplication").then(function (response) {
         for (let i = 0; i < response.data.length; i++) {
-            document.getElementById('list_sources').getElementsByTagName('tbody')[0].insertAdjacentHTML('beforebegin',
+            document.getElementById('list_sources_body').insertAdjacentHTML('beforeend',
                 '<tr>' +
                 '<td>' + response.data[i][0].firstName + " " + response.data[i][0].surname + '</td>' +
                 '<td>' + response.data[i][1] + '</td>' +
@@ -295,7 +324,7 @@ function getOverdueTasks() {
     $("#nav-tabContent td").remove();
     axios.get(BASE_URL + "/tasks/task/over").then(function (response) {
         for (let i = 0; i < response.data.length; i++) {
-            document.getElementById('list_overdue').getElementsByTagName('tbody')[0].insertAdjacentHTML('beforebegin',
+            document.getElementById('list_overdue_body').insertAdjacentHTML('beforeend',
                 '<tr>' +
                 '<td>' + response.data[i][0].firstName + " " + response.data[i][0].surname + '</td>' +
                 '<td>' + response.data[i][1] + '</td>' +
@@ -314,7 +343,7 @@ function getAllActiveTask() {
     $("#nav-tabContent td").remove();
     axios.get(BASE_URL + "/tasks/task/active").then(function (response) {
         for (let i = 0; i < response.data.length; i++) {
-            document.getElementById('list_tasks').getElementsByTagName('tbody')[0].insertAdjacentHTML('beforebegin',
+            document.getElementById('list_tasks_body').insertAdjacentHTML('beforeend',
                 '<tr>' +
                 '<td>' + response.data[i][0].firstName + " " + response.data[i][0].surname + '</td>' +
                 '<td>' + response.data[i][1] + '</td>' +
@@ -332,7 +361,7 @@ function getAllDealByEmployee() {
     $("#nav-tabContent td").remove();
     axios.get(BASE_URL + "/application/deal-by-employee").then(function (response) {
         for (let i = 0; i < response.data.length; i++) {
-            document.getElementById('list_active').getElementsByTagName('tbody')[0].insertAdjacentHTML('beforebegin',
+            document.getElementById('list_active_body').insertAdjacentHTML('beforeend',
                 '<tr>' +
                 '<td>' + response.data[i][0].firstName + " " + response.data[i][0].surname + '</td>' +
                 '<td>' + response.data[i][1] + '</td>' +
@@ -348,7 +377,7 @@ function getAllFailuresApplication() {
     $("#nav-tabContent td").remove();
     axios.get(BASE_URL + "/application/failureApplication").then(function (response) {
         for (let i = 0; i < response.data.length; i++) {
-            document.getElementById('list_failures').getElementsByTagName('tbody')[0].insertAdjacentHTML('beforebegin',
+            document.getElementById('list_failures_body').insertAdjacentHTML('beforeend',
                 '<tr>' +
                 '<td>' + response.data[i][0].firstName + " " + response.data[i][0].surname + '</td>' +
                 '<td>' + response.data[i][1] + '</td>' +

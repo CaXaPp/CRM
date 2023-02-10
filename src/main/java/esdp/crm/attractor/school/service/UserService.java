@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class  UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
@@ -27,6 +27,10 @@ public class UserService {
 
     public List<Object[]> getAllEmployee() {
         return userRepository.findAllEmployeeByRole();
+    }
+
+    public List<User> getAllNotInAdmin() {
+        return userRepository.findAllUsersNotInAdmin();
     }
 
     public UserDto createUser(RegisterFormDto dto) {
@@ -41,6 +45,9 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User with id " + id + " not found!"));
         return userMapper.toUserDto(user);
+    }
+    public Optional<User> findUserById(Long id) {
+        return userRepository.findById(id);
     }
 
     public List<User> findAll(Role role){
@@ -70,15 +77,8 @@ public class UserService {
         return userRepository.getIdByEmail(email);
     }
 
-    public Long getDepartmentId(String email) {
-        return userRepository.getDepartmentIdByEmail(email);
-    }
-
     public List<Long> getAllUserId(Long id) {
         return userRepository.getAllIdByDepartmentId(id);
     }
 
-    public UserDto editUser(UserDto dto) { //TODO
-        return userMapper.toUserDto(userRepository.save(userMapper.toUserFromDto(dto)));
-    }
 }

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +23,8 @@ public class ApplicationStatusService {
         return applicationStatusRepository.findAll();
     }
 
-    public List<ApplicationStatus> findAllByFunnel_Id(Long id) {
-        return applicationStatusRepository.findAllByFunnel_Id(id);
+    public Optional<ApplicationStatus> getStatusById(Long id) {
+        return applicationStatusRepository.findById(id);
     }
 
     public List<ApplicationStatus> findByUserId(Long id) throws NotFoundException {
@@ -47,5 +48,9 @@ public class ApplicationStatusService {
 
     public List<ApplicationStatus> getStatusIdByName(String name) {
         return applicationStatusRepository.findAllByName(name);
+    }
+
+    public List<ApplicationStatus> findAllByFunnel_Id(Long id) {
+        return applicationStatusRepository.findAllByFunnel_Id(id);
     }
 }

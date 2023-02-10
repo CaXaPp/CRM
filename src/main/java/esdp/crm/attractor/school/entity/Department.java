@@ -1,7 +1,5 @@
 package esdp.crm.attractor.school.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +27,5 @@ public class Department extends BaseEntity {
             joinColumns = {@JoinColumn(name = "funnels_id")},
             inverseJoinColumns = {@JoinColumn(name = "department_id")}
     )
-    @JsonIgnore
     private Set<Funnel> funnels = new HashSet<>();
 }

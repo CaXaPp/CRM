@@ -3,13 +3,17 @@ package esdp.crm.attractor.school.repository;
 import esdp.crm.attractor.school.entity.Funnel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public interface FunnelRepository extends JpaRepository<Funnel, Long> {
+    @Query(nativeQuery = true, value = "SELECT d.funnels_id FROM departments_funnels d WHERE d.department_id = :id")
+    List<Long> findAllFunnelsIdByDepartmentId(@Param("id") Long id);
 
-    @Query(nativeQuery = true, value = "select * from funnels f where f.id = :id")
-    List<Funnel> findAllByFunnelsId(Long id); // Выборка производится путем сравнения id_department и id_funnels, нет сравнения в промежуточной таблице
+    @Query("SELECT f FROM Funnel f WHERE f.id = :id")
+    Funnel findAllByFunnelsById(@Param("id") Long id);
+
 }

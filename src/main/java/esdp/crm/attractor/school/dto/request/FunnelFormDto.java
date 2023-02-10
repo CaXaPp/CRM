@@ -22,8 +22,4 @@ public class FunnelFormDto {
     @JsonProperty("statuses")
     @NotEmpty
     private List<String> statuses;
-
-    @JsonProperty("departments")
-    @NotEmpty
-    private List<Long> departments;
 }

@@ -1,5 +1,6 @@
 package esdp.crm.attractor.school.controller;
 
+import esdp.crm.attractor.school.dto.FunnelDto;
 import esdp.crm.attractor.school.entity.Funnel;
 import esdp.crm.attractor.school.service.FunnelService;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,13 @@ import java.util.List;
 public class FunnelController {
     private final FunnelService funnelService;
 
+    @GetMapping("/all")
+    public ResponseEntity<List<FunnelDto>> getAllFunnels() {
+        return new ResponseEntity<>(funnelService.findAll(), HttpStatus.OK);
+    }
+
     @GetMapping("/funnel/{id}")
     public ResponseEntity<List<Funnel>> getAll(@PathVariable Long id) {
-        return new ResponseEntity<>(funnelService.findById(id), HttpStatus.OK); // Временное решение, изменить репозиторий выборки данных
+        return new ResponseEntity<>(funnelService.findById(id), HttpStatus.OK);
     }
 }

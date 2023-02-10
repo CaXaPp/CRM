@@ -53,170 +53,67 @@ public class ApplicationController {
     }
 
     @GetMapping("/edit/{id}")
-    public ResponseEntity<ApplicationDto> getApplicationForEdit(@PathVariable Long id, Principal principal) {
-        Optional<User> user = userService.findByEmail(principal.getName());
-        if (!Objects.equals(user.get().getRole().getName(), "Сотрудник")) {
-            return new ResponseEntity<>(applicationService.getApplicationById(id), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+    public ResponseEntity<ApplicationDto> getApplicationForEdit(@PathVariable Long id) {
+        return new ResponseEntity<>(applicationService.getApplicationById(id), HttpStatus.OK);
     }
 
     @ResponseBody
     @PutMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public HttpStatus updateApplication(@Valid ApplicationFormDto application) {
+    public void updateApplication(@Valid ApplicationFormDto application) {
         applicationService.updateApplication(application);
-        return HttpStatus.OK;
+//        return HttpStatus.OK;
+    }
+
+    @GetMapping("/set-status")
+    public ResponseEntity<HttpStatus> setStatus(@RequestParam(value = "application", required = false) String applicationId,
+                                @RequestParam(value = "status", required = false) String status) {
+        Optional<ApplicationStatus> applicationStatus = applicationStatusService.getStatusById(Long.parseLong(status));
+        Application application = applicationService.findById(Long.parseLong(applicationId));
+        applicationService.updateStatus(applicationStatus.get(), application);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/all/date")
-    public ResponseEntity<ArrayList<ArrayList<String>>> applicationsCountToday(
+    public ResponseEntity<Map<String, List<Float>>> applicationsCountToday(
             @RequestParam(value = "startDate", required = false) String date1,
             @RequestParam(value = "endDate", required = false) String date2,
             @RequestParam(value = "parameter", required = false) String parameter,
             Principal principal) {
 
-        LocalDateTime start = LocalDateTime.parse(date1);
-        LocalDateTime end = LocalDateTime.parse(date2);
         String[] statuses = {"Новое", "Переговоры", "Принятие решения", "На обслуживании", "Успешно"};
-        Long user_id;
-        Long departmentId;
 
-        ArrayList<ArrayList<String>> sumOfPrice = new ArrayList<>();
-        ArrayList<String> newStatus = new ArrayList<>();
-        ArrayList<String> negotiations = new ArrayList<>();
-        ArrayList<String> decisionMaking = new ArrayList<>();
-        ArrayList<String> onMaintenance = new ArrayList<>();
-        ArrayList<String> success = new ArrayList<>();
-        newStatus.add("Новое");
-        negotiations.add("Переговоры");
-        decisionMaking.add("Принятие решения");
-        onMaintenance.add("На обслуживании");
-        success.add("Успешно");
-        ArrayList<Map<String, List<String>>> maps = new ArrayList<>();
-        Map<String, List<String>> newSt = new HashMap<>();
+        List<Long> usersId = (parameter.equals("all")) ? null :
+                (parameter.equals("my")) ? Arrays.asList(userService.getUserIdByEmail(principal.getName())) :
+                        userService.getAllUserId(Long.parseLong(parameter));
+
+        Map<String, List<Float>> data = new HashMap<>();
 
         for (String status : statuses) {
-            List<ApplicationStatus> statusId = applicationStatusService.getStatusIdByName(status);
-            for (ApplicationStatus applicationStatus : statusId) {
-
-                if (Objects.equals(applicationStatus.getName(), status)) {
-                    switch (status) {
-                        case "Новое":
-                            if (Objects.equals(parameter, "all")) {
-//                                List<Object[]> resultList = applicationService.findObjectV2(start, end, applicationStatus.getId());
-//                                for (Object[] obj : resultList) {
-//                                    newSt.put("Новое", Arrays.asList(obj[0].toString(), obj[1].toString()));
-//                                }
-//                                System.out.println(newSt);
-//                                maps.add(newSt);
-
-                                newStatus.add(applicationService.getSumOfAllApplication(start, end, applicationStatus.getId()).toString());
-                                newStatus.add(applicationService.getCountAllApplication(start, end, applicationStatus.getId()).toString());
-                                break;
-                            } else if (Objects.equals(parameter, "my")) {
-                                user_id = userService.getUserIdByEmail(principal.getName());
-                                newStatus.add(applicationService.getApplicationByPriceAndStatusAndEmployeeId(start, end, applicationStatus.getId(), user_id).toString());
-                                newStatus.add(applicationService.getApplicationCountAndEmployeeId(start, end, applicationStatus.getId(), user_id).toString());
-                                break;
-                            } else {
-                                departmentId = Long.parseLong(parameter);
-                                List<Long> users_id = userService.getAllUserId(departmentId);
-                                for (Long aLong : users_id) {
-                                    newStatus.add(applicationService.getApplicationByPriceAndStatusAndEmployeeId(start, end, applicationStatus.getId(), aLong).toString());
-                                    newStatus.add(applicationService.getApplicationCountAndEmployeeId(start, end, applicationStatus.getId(), aLong).toString());
-                                }
-                                break;
-                            }
-                        case "Переговоры":
-                            if (Objects.equals(parameter, "all")) {
-                                negotiations.add(applicationService.getSumOfAllApplication(start, end, applicationStatus.getId()).toString());
-                                negotiations.add(applicationService.getCountAllApplication(start, end, applicationStatus.getId()).toString());
-                                break;
-                            } else if (Objects.equals(parameter, "my")) {
-                                user_id = userService.getUserIdByEmail(principal.getName());
-                                negotiations.add(applicationService.getApplicationByPriceAndStatusAndEmployeeId(start, end, applicationStatus.getId(), user_id).toString());
-                                negotiations.add(applicationService.getApplicationCountAndEmployeeId(start, end, applicationStatus.getId(), user_id).toString());
-                                break;
-                            } else {
-                                departmentId = Long.parseLong(parameter);
-                                List<Long> users_id = userService.getAllUserId(departmentId);
-                                for (Long aLong : users_id) {
-                                    negotiations.add(applicationService.getApplicationByPriceAndStatusAndEmployeeId(start, end, applicationStatus.getId(), aLong).toString());
-                                    negotiations.add(applicationService.getApplicationCountAndEmployeeId(start, end, applicationStatus.getId(), aLong).toString());
-                                }
-                                break;
-                            }
-                        case "Принятие решения":
-                            if (Objects.equals(parameter, "all")) {
-                                decisionMaking.add(applicationService.getSumOfAllApplication(start, end, applicationStatus.getId()).toString());
-                                decisionMaking.add(applicationService.getCountAllApplication(start, end, applicationStatus.getId()).toString());
-                                break;
-                            } else if (Objects.equals(parameter, "my")) {
-                                user_id = userService.getUserIdByEmail(principal.getName());
-                                decisionMaking.add(applicationService.getApplicationByPriceAndStatusAndEmployeeId(start, end, applicationStatus.getId(), user_id).toString());
-                                decisionMaking.add(applicationService.getApplicationCountAndEmployeeId(start, end, applicationStatus.getId(), user_id).toString());
-                                break;
-                            } else {
-                                departmentId = Long.parseLong(parameter);
-                                List<Long> users_id = userService.getAllUserId(departmentId);
-                                for (Long aLong : users_id) {
-                                    decisionMaking.add(applicationService.getApplicationByPriceAndStatusAndEmployeeId(start, end, applicationStatus.getId(), aLong).toString());
-                                    decisionMaking.add(applicationService.getApplicationCountAndEmployeeId(start, end, applicationStatus.getId(), aLong).toString());
-                                }
-                                break;
-                            }
-                        case "На обслуживании":
-                            if (Objects.equals(parameter, "all")) {
-                                onMaintenance.add(applicationService.getSumOfAllApplication(start, end, applicationStatus.getId()).toString());
-                                onMaintenance.add(applicationService.getCountAllApplication(start, end, applicationStatus.getId()).toString());
-                                break;
-                            } else if (Objects.equals(parameter, "my")) {
-                                user_id = userService.getUserIdByEmail(principal.getName());
-                                onMaintenance.add(applicationService.getApplicationByPriceAndStatusAndEmployeeId(start, end, applicationStatus.getId(), user_id).toString());
-                                onMaintenance.add(applicationService.getApplicationCountAndEmployeeId(start, end, applicationStatus.getId(), user_id).toString());
-                                break;
-                            } else {
-                                departmentId = Long.parseLong(parameter);
-                                List<Long> users_id = userService.getAllUserId(departmentId);
-                                for (Long aLong : users_id) {
-                                    onMaintenance.add(applicationService.getApplicationByPriceAndStatusAndEmployeeId(start, end, applicationStatus.getId(), aLong).toString());
-                                    onMaintenance.add(applicationService.getApplicationCountAndEmployeeId(start, end, applicationStatus.getId(), aLong).toString());
-                                }
-                                break;
-                            }
-                        case "Успешно":
-                            if (Objects.equals(parameter, "all")) {
-                                success.add(applicationService.getSumOfAllApplication(start, end, applicationStatus.getId()).toString());
-                                success.add(applicationService.getCountAllApplication(start, end, applicationStatus.getId()).toString());
-                                break;
-                            } else if (Objects.equals(parameter, "my")) {
-                                user_id = userService.getUserIdByEmail(principal.getName());
-                                success.add(applicationService.getApplicationByPriceAndStatusAndEmployeeId(start, end, applicationStatus.getId(), user_id).toString());
-                                success.add(applicationService.getApplicationCountAndEmployeeId(start, end, applicationStatus.getId(), user_id).toString());
-                                break;
-                            } else {
-                                departmentId = Long.parseLong(parameter);
-                                List<Long> users_id = userService.getAllUserId(departmentId);
-                                for (Long aLong : users_id) {
-                                    success.add(applicationService.getApplicationByPriceAndStatusAndEmployeeId(start, end, applicationStatus.getId(), aLong).toString());
-                                    success.add(applicationService.getApplicationCountAndEmployeeId(start, end, applicationStatus.getId(), aLong).toString());
-                                }
-                                break;
-                            }
+            List<ApplicationStatus> statusIds = applicationStatusService.getStatusIdByName(status);
+            Float fl1 = 0F;
+            Float fl2 = 0F;
+            for (ApplicationStatus applicationStatus : statusIds) {
+                List<Object[]> resultList;
+                if (usersId == null) {
+                    resultList = applicationService.findAllSumAndCountByApplication(LocalDateTime.parse(date1), LocalDateTime.parse(date2), applicationStatus.getId());
+                    for (Object[] obj : resultList) {
+                        fl1 += (obj[0] != null) ? Float.parseFloat(obj[0].toString()) : 0F;
+                        fl2 += (obj[1] != null) ? Float.parseFloat(obj[1].toString()) : 0F;
+                    }
+                    if (!resultList.isEmpty()) data.put(status, List.of(fl1, fl2));
+                } else {
+                    for (Long id : usersId) {
+                        resultList = applicationService.findAllSumAndCountByApplicationByEmployeeId(LocalDateTime.parse(date1), LocalDateTime.parse(date2), applicationStatus.getId(), id);
+                        for (Object[] obj : resultList) {
+                            fl1 += (obj[0] != null) ? Float.parseFloat(obj[0].toString()) : 0F;
+                            fl2 += (obj[1] != null) ? Float.parseFloat(obj[1].toString()) : 0F;
+                        }
+                        if (!resultList.isEmpty()) data.put(status, List.of(fl1, fl2));
                     }
                 }
             }
         }
-
-        sumOfPrice.add(newStatus);
-        sumOfPrice.add(negotiations);
-        sumOfPrice.add(decisionMaking);
-        sumOfPrice.add(onMaintenance);
-        sumOfPrice.add(success);
-        System.out.println(sumOfPrice);
-
-        return new ResponseEntity<>(sumOfPrice, HttpStatus.OK);
+        return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
     @GetMapping("/activeApplication")
@@ -226,6 +123,16 @@ public class ApplicationController {
             return new ResponseEntity<>(applicationService.findAllActiveApplicationForToday(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(applicationService.findAllActiveApplicationForTodayByUserId(user.get().getId()), HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/completedDeal")
+    public ResponseEntity<List<Object[]>> findAllCompletedDealForToday(Principal principal) {
+        Optional<User> user = userService.findByEmail(principal.getName());
+        if (!Objects.equals(user.get().getRole().getName(), "Сотрудник")) {
+            return new ResponseEntity<>(applicationService.findAllComplatedDealsOnToday(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(applicationService.findAllComplatedDealsOnTodayByUserId(user.get().getId()), HttpStatus.OK);
         }
     }
 
@@ -257,5 +164,48 @@ public class ApplicationController {
         } else {
             return new ResponseEntity<>(applicationService.findAllFailureApplicationByUserId(user.get().getId()), HttpStatus.OK);
         }
+    }
+
+    @GetMapping("/sort/by-date")
+    public ResponseEntity<List<Application>> getAllApplicationByDateSort(@RequestParam(value = "startDate", required = false) String date1,
+                                                                         @RequestParam(value = "endDate", required = false) String date2) {
+        return new ResponseEntity<>(applicationService.getAllApplicationByDate(LocalDateTime.parse(date1), LocalDateTime.parse(date2)), HttpStatus.OK);
+    }
+
+    @GetMapping("/sort/by-company")
+    public ResponseEntity<List<Application>> sortByCompanyName(@RequestParam(value = "start", required = false) String date1,
+                                                               @RequestParam(value = "end", required = false) String date2) {
+        return new ResponseEntity<>(applicationService.sortByCompanyName(LocalDateTime.parse(date1), LocalDateTime.parse(date2)), HttpStatus.OK);
+    }
+
+    @GetMapping("/sort/by-price")
+    public ResponseEntity<List<Application>> sortByPrice(@RequestParam(value = "start", required = false) String date1,
+                                                         @RequestParam(value = "end", required = false) String date2) {
+        return new ResponseEntity<>(applicationService.sortByPrice(LocalDateTime.parse(date1), LocalDateTime.parse(date2)), HttpStatus.OK);
+    }
+
+    @GetMapping("/sort/by-product")
+    public ResponseEntity<List<Application>> sortByProduct(@RequestParam(value = "start", required = false) String date1,
+                                                           @RequestParam(value = "end", required = false) String date2) {
+        return new ResponseEntity<>(applicationService.sortByProduct(LocalDateTime.parse(date1), LocalDateTime.parse(date2)), HttpStatus.OK);
+    }
+
+    @GetMapping("/sort/by-status")
+    public ResponseEntity<List<Application>> sortByStatus(@RequestParam(value = "start", required = false) String date1,
+                                                          @RequestParam(value = "end", required = false) String date2) {
+        return new ResponseEntity<>(applicationService.sortByStatus(LocalDateTime.parse(date1), LocalDateTime.parse(date2)), HttpStatus.OK);
+    }
+
+    @GetMapping("/sort/by-employee")
+    public ResponseEntity<List<Application>> sortByEmployee(@RequestParam(value = "start", required = false) String date1,
+                                                            @RequestParam(value = "end", required = false) String date2) {
+        return new ResponseEntity<>(applicationService.sortByEmployee(LocalDateTime.parse(date1), LocalDateTime.parse(date2)), HttpStatus.OK);
+    }
+
+    @GetMapping("/sort/find-by-company")
+    public ResponseEntity<List<Application>> sortAndFindByCompany(@RequestParam(value = "start", required = false) String date1,
+                                                                  @RequestParam(value = "end", required = false) String date2,
+                                                                  @RequestParam(value = "text", required = false) String text) {
+        return new ResponseEntity<>(applicationService.findAllByCreatedAtBetweenAndCompanyStartingWith(LocalDateTime.parse(date1), LocalDateTime.parse(date2), text), HttpStatus.OK);
     }
 }

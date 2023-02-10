@@ -42,14 +42,8 @@ public abstract class UserMapper {
         return userRepository.findById(dto.getId());
     }
 
-    @Mapping(target = "status", expression = "java(statusRepository.getByName(dto.getStatus()))")
-    @Mapping(target = "department", expression = "java(departmentRepository.getByName(dto.getDepartment()))")
-    @Mapping(target = "role", expression = "java(roleRepository.getByName(dto.getRole()))")
-    @Mapping(target = "password", expression = "java(userRepository.getPasswordById(dto.getId()))")
-    public abstract User toUserFromDto(UserDto dto);
-
     @Mapping(target = "role", expression = "java(user.getRole().getName())")
     @Mapping(target = "status", expression = "java(user.getStatus().getName())")
-    @Mapping(target = "department", expression = "java(user.getDepartment().getName())")
+    @Mapping(target = "department", expression = "java(departmentMapper.toDepartmentDto(user.getDepartment()))")
     public abstract UserDto toUserDto(User user);
 }

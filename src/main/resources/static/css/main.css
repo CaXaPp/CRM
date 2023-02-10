@@ -3,18 +3,11 @@
 }
 
 .dashboard_block {
-    padding-top: 50px;
+    padding-top: 25px;
 }
 .employee_info {
     display: flex;
     justify-content: space-between;
-}
-
-.operations {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 20px;
 }
 
 .button-group {
@@ -33,7 +26,6 @@
 }
 
 .application_list_class {
-    max-width: 95%;
     margin: 0 auto;
 }
 
@@ -57,6 +49,11 @@
     overflow: auto;
     height: 100%;
     border-left: 1px solid gray;
+}
+
+.blockForLogsInApplication span {
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .blockForLogsInApplication_main_date {
@@ -169,6 +166,11 @@
     left: 95%;
 }
 
+#btnradio_5_application {
+    top: 25px;
+    left: 85%;
+}
+
 .modal-fullscreen {
     float: right;
 }
@@ -181,4 +183,53 @@
 .modal-footer {
     justify-content: flex-start;
     padding: 20px 20px 28px;
+}
+
+.btnToSortByProductName {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.application_sort_block {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0 15px 0;
+    border-bottom: 1px solid aliceblue;
+}
+
+.task_main_block {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.application_table_block {
+    max-width: 98%;
+    margin: 0 auto;
+}
+
+.application_table_block thead tr {
+    position: sticky;
+    top: 0;
+    background: white;
+    vertical-align: middle;
+}
+
+.section_info {
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+.information_block_inner_footer {
+    max-height: 550px;
+    overflow-y: scroll;
+}
+
+.information_block_inner_footer thead tr {
+    position: sticky;
+    top: 0;
+    background: white;
 }
