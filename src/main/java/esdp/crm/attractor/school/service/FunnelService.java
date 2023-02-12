@@ -36,6 +36,11 @@ public class FunnelService {
         form.getStatuses().forEach(s -> {
             applicationStatusRepository.save(ApplicationStatus.builder().funnel(funnel).name(s).build());
         });
+        form.getDepartments().forEach(d -> {
+            Department department = departmentRepository.getById(d);
+            department.getFunnels().add(funnel);
+            departmentRepository.save(department);
+        });
     }
 
     public List<Funnel> findById(Long id) {
