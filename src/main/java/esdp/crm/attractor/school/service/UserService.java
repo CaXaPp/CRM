@@ -33,10 +33,10 @@ public class  UserService {
         return userRepository.findAllUsersNotInAdmin();
     }
 
-    public UserDto createUser(RegisterFormDto dto) {
+    public UserDto save(RegisterFormDto dto) {
         if (userRepository.existsByEmail(dto.getEmail()))
             throw new EmailExistsException("User with email " + dto.getEmail() + " exists!");
-        var user = userMapper.toUser(dto);
+        var user = userMapper.toNewUser(dto);
         var savedUser = userRepository.save(user);
         return userMapper.toUserDto(savedUser);
     }
@@ -63,6 +63,18 @@ public class  UserService {
         return users.stream()
                 .map(userMapper::toUserDto)
                 .collect(Collectors.toList());
+    }
+
+    public RegisterFormDto editUser(RegisterFormDto dto) {
+        return userMapper.toForm(userRepository.save(userMapper.toOldUser(dto)));
+    }
+
+    public RegisterFormDto getUserForm(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()) {
+            throw new NotFoundException("User not found!");
+        }
+        return userMapper.toForm(user.get());
     }
 
     public UserDto mapToDto(User user) {

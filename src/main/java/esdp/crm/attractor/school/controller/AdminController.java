@@ -2,6 +2,7 @@ package esdp.crm.attractor.school.controller;
 
 import esdp.crm.attractor.school.dto.DepartmentDto;
 import esdp.crm.attractor.school.dto.ProductDto;
+import esdp.crm.attractor.school.dto.RoleDto;
 import esdp.crm.attractor.school.dto.UserDto;
 import esdp.crm.attractor.school.dto.request.FunnelFormDto;
 import esdp.crm.attractor.school.dto.request.ProductFormDto;
@@ -28,6 +29,7 @@ public class AdminController {
     private final RoleService roleService;
     private final DepartmentService departmentService;
     private final FunnelService funnelService;
+    private final StatusService statusService;
 
     @GetMapping
     public ModelAndView adminPage(@AuthenticationPrincipal User principal) {
@@ -36,21 +38,15 @@ public class AdminController {
 
     @GetMapping("/create/user")
     public ModelAndView createUser(@AuthenticationPrincipal User principal) {
-        List<DepartmentDto> departments = departmentService.getAll();
-        List<Role> roles = roleService.getAll();
-        roles.removeIf(role -> role.getName().equals("Администратор"));
-        Role admin = roleService.getByName("Администратор");
         return new ModelAndView("register")
                 .addObject("roles", roleService.getAll())
-                .addObject("departments",departments)
-                .addObject("roles", roles)
-                .addObject("departments",departments)
-                .addObject("admin", admin);
+                .addObject("departments",departmentService.getAll())
+                .addObject("action", "creation");
     }
 
     @PostMapping(value = "/create/user")
     public String createUser(@Valid @ModelAttribute RegisterFormDto registerFormDto) {
-        UserDto user = userService.createUser(registerFormDto);
+        UserDto user = userService.save(registerFormDto);
         return "redirect:/admin";
     }
 
@@ -84,6 +80,20 @@ public class AdminController {
     @PostMapping("/create/department")
     public String createDepartment(@Valid @ModelAttribute DepartmentDto dto) {
         return "redirect:/admin";
+    }
+
+    @GetMapping("/edit/user/{id}")
+    public ModelAndView editUser(@PathVariable Long id) {
+        return new ModelAndView("editUser").addObject("form", userService.getUserForm(id))
+                .addObject("roles", roleService.getAll())
+                .addObject("departments" , departmentService.getAll())
+                .addObject("statuses" , statusService.getAll());
+    }
+
+    @PostMapping("/edit/user/{id}")
+    public String editUser(@Valid @ModelAttribute RegisterFormDto dto) {
+        userService.editUser(dto);
+        return "redirect:/admin/edit/user/{id}";
     }
 
 }

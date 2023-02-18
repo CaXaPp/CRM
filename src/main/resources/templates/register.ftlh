@@ -21,15 +21,14 @@
                 <div class="input-field">
                     <input type="email" name="email" placeholder="Почта" autocomplete="nope" required>
                 </div>
+                <input type="hidden"
+                       name="status" value="Active">
                 <div class="input-field">
                     <label class="form-label">Роли</label>
                     <select name="roleId" id="option-role" class="form-control">
                         <#list roles as role>
-                            <if ${role.name} != ${admin.name}>
-                                <option value="${role.id}">${role.name}</option>
-                            </if>
+                            <option value="${role.id}">${role.name}</option>
                         </#list>
-                        <option value="${admin.id}">${admin.name}</option>
                     </select>
                 </div>
 
