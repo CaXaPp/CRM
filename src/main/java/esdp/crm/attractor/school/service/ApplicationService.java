@@ -72,8 +72,6 @@ public class ApplicationService {
         var application = applicationRepository.findById(id);
         if (application.isEmpty())
             throw new NotFoundException("Application with id: " + id + " not found!");
-        System.out.println(application.get().getProduct().getId());
-        System.out.println(productRepository.findById(application.get().getProduct().getId()).get().getDepartment());
         return applicationMapper.toDto(application.get());
     }
 

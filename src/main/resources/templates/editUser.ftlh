@@ -69,7 +69,7 @@
         </div>
       </div>
       <div class="action">
-        <button type="submit">Добавить</button>
+        <button type="submit">Изменить</button>
       </div>
     </form>
   </div>

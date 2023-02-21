@@ -65,8 +65,8 @@ public class  UserService {
                 .collect(Collectors.toList());
     }
 
-    public RegisterFormDto editUser(RegisterFormDto dto) {
-        return userMapper.toForm(userRepository.save(userMapper.toOldUser(dto)));
+    public void editUser(RegisterFormDto dto) {
+        userMapper.toForm(userRepository.save(userMapper.toOldUser(dto)));
     }
 
     public RegisterFormDto getUserForm(Long id) {
@@ -75,6 +75,12 @@ public class  UserService {
             throw new NotFoundException("User not found!");
         }
         return userMapper.toForm(user.get());
+    }
+
+    public List<UserDto> findAll() {
+        return userRepository.findAll().stream()
+                .map(userMapper::toUserDto)
+                .collect(Collectors.toList());
     }
 
     public UserDto mapToDto(User user) {

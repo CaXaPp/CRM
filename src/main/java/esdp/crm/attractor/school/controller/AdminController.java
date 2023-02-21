@@ -82,6 +82,12 @@ public class AdminController {
         return "redirect:/admin";
     }
 
+    @GetMapping("/find/user")
+    public ModelAndView findUser() {
+        return new ModelAndView("findUser")
+                .addObject("users", userService.findAll());
+    }
+
     @GetMapping("/edit/user/{id}")
     public ModelAndView editUser(@PathVariable Long id) {
         return new ModelAndView("editUser").addObject("form", userService.getUserForm(id))
