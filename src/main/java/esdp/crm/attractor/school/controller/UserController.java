@@ -61,6 +61,7 @@ public class UserController {
 
     @GetMapping("/auth_user")
     public ResponseEntity<Optional<User>> getUserRole(Principal principal) {
+        if (principal == null) return null;
         return new ResponseEntity<>(userService.findByEmail(principal.getName()), HttpStatus.OK);
     }
 

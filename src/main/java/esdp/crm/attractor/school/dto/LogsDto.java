@@ -17,6 +17,6 @@ import java.util.List;
 public class LogsDto {
     private LocalDateTime date;
     private List<ChangesDto> changes;
-    private String author;
+    private UserDto author;
     private Long ApplicationId;
 }

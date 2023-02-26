@@ -8,6 +8,7 @@ import esdp.crm.attractor.school.entity.User;
 import esdp.crm.attractor.school.exception.NotFoundException;
 import esdp.crm.attractor.school.mapper.ApplicationMapper;
 import esdp.crm.attractor.school.repository.ApplicationRepository;
+import esdp.crm.attractor.school.repository.ProductRepository;
 import esdp.crm.attractor.school.repository.StatusRepository;
 import lombok.RequiredArgsConstructor;
 import org.javers.core.Changes;
@@ -35,6 +36,7 @@ public class ApplicationService {
     private final LogsService logsService;
     private final Javers javers;
     private final StatusRepository statusRepository;
+    private final ProductRepository productRepository;
 
     public ApplicationDto save(ApplicationFormDto form) {
         var application = applicationRepository.save(applicationMapper.toEntity(form));

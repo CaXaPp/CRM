@@ -1,14 +1,11 @@
 package esdp.crm.attractor.school.controller;
 
 import esdp.crm.attractor.school.dto.DepartmentDto;
-import esdp.crm.attractor.school.dto.ProductDto;
 import esdp.crm.attractor.school.dto.UserDto;
 import esdp.crm.attractor.school.dto.request.FunnelFormDto;
 import esdp.crm.attractor.school.dto.request.ProductFormDto;
 import esdp.crm.attractor.school.dto.request.RegisterFormDto;
-import esdp.crm.attractor.school.entity.Role;
 import esdp.crm.attractor.school.entity.User;
-import esdp.crm.attractor.school.exception.ProductExistsException;
 import esdp.crm.attractor.school.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,8 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.persistence.EntityExistsException;
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -28,6 +25,7 @@ public class AdminController {
     private final RoleService roleService;
     private final DepartmentService departmentService;
     private final FunnelService funnelService;
+    private final StatusService statusService;
 
     @GetMapping
     public ModelAndView adminPage(@AuthenticationPrincipal User principal) {
@@ -36,31 +34,25 @@ public class AdminController {
 
     @GetMapping("/create/user")
     public ModelAndView createUser(@AuthenticationPrincipal User principal) {
-        List<DepartmentDto> departments = departmentService.getAll();
-        List<Role> roles = roleService.getAll();
-        roles.removeIf(role -> role.getName().equals("Администратор"));
-        Role admin = roleService.getByName("Администратор");
         return new ModelAndView("register")
                 .addObject("roles", roleService.getAll())
-                .addObject("departments",departments)
-                .addObject("roles", roles)
-                .addObject("departments",departments)
-                .addObject("admin", admin);
+                .addObject("departments",departmentService.getAll())
+                .addObject("action", "creation");
     }
 
     @PostMapping(value = "/create/user")
-    public String createUser(@Valid @ModelAttribute RegisterFormDto registerFormDto) {
-        UserDto user = userService.createUser(registerFormDto);
+    public String createUser(@Valid @ModelAttribute RegisterFormDto registerFormDto) throws EntityExistsException{
+        userService.save(registerFormDto);
         return "redirect:/admin";
     }
 
     @GetMapping("/create/product")
-    public ModelAndView createProduct() {
+    public ModelAndView createProduct() throws EntityExistsException{
         return new ModelAndView("createProduct").addObject("departments", departmentService.getAll());
     }
 
     @PostMapping("/create/product")
-    public String createProduct(@Valid @ModelAttribute ProductFormDto form) throws ProductExistsException {
+    public String createProduct(@Valid @ModelAttribute ProductFormDto form) throws EntityExistsException {
         productService.save(form);
         return "redirect:/admin";
     }
@@ -71,7 +63,7 @@ public class AdminController {
     }
 
     @PostMapping("/create/funnel")
-    public String createFunnel(@Valid @ModelAttribute FunnelFormDto form) {
+    public String createFunnel(@Valid @ModelAttribute FunnelFormDto form) throws EntityExistsException{
         funnelService.save(form);
         return "redirect:/admin";
     }
@@ -82,8 +74,29 @@ public class AdminController {
     }
 
     @PostMapping("/create/department")
-    public String createDepartment(@Valid @ModelAttribute DepartmentDto dto) {
+    public String createDepartment(@Valid @ModelAttribute DepartmentDto dto) throws EntityExistsException{
+        departmentService.save(dto);
         return "redirect:/admin";
+    }
+
+    @GetMapping("/find/user")
+    public ModelAndView findUser() {
+        return new ModelAndView("findUser")
+                .addObject("users", userService.findAll());
+    }
+
+    @GetMapping("/edit/user/{id}")
+    public ModelAndView editUser(@PathVariable Long id) {
+        return new ModelAndView("editUser").addObject("form", userService.getUserForm(id))
+                .addObject("roles", roleService.getAll())
+                .addObject("departments" , departmentService.getAll())
+                .addObject("statuses" , statusService.getAll());
+    }
+
+    @PostMapping("/edit/user/{id}")
+    public String editUser(@Valid @ModelAttribute RegisterFormDto dto) {
+        userService.editUser(dto);
+        return "redirect:/admin/edit/user/{id}";
     }
 
 }

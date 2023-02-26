@@ -32,11 +32,22 @@ public abstract class UserMapper {
     @Autowired
     UserRepository userRepository;
 
-    @Mapping(target = "status", expression = "java(statusRepository.getByName(\"Active\"))")
+    @Mapping(target = "status", expression = "java(statusRepository.getByName(dto.getStatus()))")
     @Mapping(target = "password", expression = "java(passwordEncoder.encode(dto.getPassword()))")
     @Mapping(target = "department", expression = "java(departmentRepository.getById(dto.getDepartmentId()))")
     @Mapping(target = "role", expression = "java(roleRepository.getById(dto.getRoleId()))")
-    public abstract User toUser(RegisterFormDto dto);
+    public abstract User toNewUser(RegisterFormDto dto);
+
+    @Mapping(target = "status", expression = "java(statusRepository.getByName(dto.getStatus()))")
+    @Mapping(target = "password", expression = "java(dto.getPassword() == userRepository.getById(dto.getId()).getPassword() ? dto.getPassword() : passwordEncoder.encode(dto.getPassword()))")
+    @Mapping(target = "department", expression = "java(departmentRepository.getById(dto.getDepartmentId()))")
+    @Mapping(target = "role", expression = "java(roleRepository.getById(dto.getRoleId()))")
+    public abstract User toOldUser(RegisterFormDto dto);
+
+    @Mapping(target = "status", expression = "java(user.getStatus().getName())")
+    @Mapping(target = "departmentId", expression = "java(user.getDepartment().getId())")
+    @Mapping(target = "roleId", expression = "java(user.getRole().getId())")
+    public abstract RegisterFormDto toForm(User user);
 
     public Optional<User> toUser(UserDto dto) {
         return userRepository.findById(dto.getId());

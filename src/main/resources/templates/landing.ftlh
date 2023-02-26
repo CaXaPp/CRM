@@ -41,13 +41,7 @@
                 <div class="form-group mt-4">
                     <input type="text" class="form-control landing-input" name="address" id="address" placeholder="Address" required>
                 </div>
-                <div class="form-group mt-4">
-                    <select class="form-select landing-input" aria-label="Select source" name="sourceId" id="source" required>
-                        <#list sources as source>
-                            <option value="${source.id}">${source.name}</option>
-                        </#list>
-                    </select>
-                </div>
+                <input type="number" hidden="hidden" name="sourceId" id="source" value="8">
                 <button type="submit" class="btn btn-primary mt-4 w-25 landing-btn">Оставить заявку</button>
             </form>
         </div>
