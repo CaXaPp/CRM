@@ -10,6 +10,8 @@ import java.util.List;
 
 @Repository
 public interface FunnelRepository extends JpaRepository<Funnel, Long> {
+    boolean existsByName(String name);
+
     @Query(nativeQuery = true, value = "SELECT d.funnels_id FROM departments_funnels d WHERE d.department_id = :id")
     List<Long> findAllFunnelsIdByDepartmentId(@Param("id") Long id);
 

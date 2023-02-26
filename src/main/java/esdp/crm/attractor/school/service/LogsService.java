@@ -2,7 +2,9 @@ package esdp.crm.attractor.school.service;
 
 import esdp.crm.attractor.school.dto.ChangesDto;
 import esdp.crm.attractor.school.dto.LogsDto;
+import esdp.crm.attractor.school.dto.UserDto;
 import esdp.crm.attractor.school.entity.Application;
+import esdp.crm.attractor.school.mapper.UserMapper;
 import esdp.crm.attractor.school.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.javers.core.Changes;
@@ -25,6 +27,7 @@ public class LogsService {
     private final ProductRepository productRepository;
     private final ClientSourceRepository clientSourceRepository;
     private final Javers javers;
+    private final UserMapper userMapper;
 
     public List<LogsDto> getApplicationChanges(Long applicationId) {
         Changes changes = javers.findChanges(QueryBuilder.byInstanceId(applicationId, Application.class).build());
@@ -39,7 +42,11 @@ public class LogsService {
     public LogsDto logsFromCommit(ChangesByCommit changesByCommit, Long applicationId) {
         LogsDto logsDto = new LogsDto();
         CommitMetadata commit = changesByCommit.getCommit();
-        logsDto.setAuthor(commit.getAuthor());
+        try {
+            logsDto.setAuthor(userMapper.toUserDto(userRepository.findByEmail(commit.getAuthor()).get()));
+        } catch (Exception e) {
+            logsDto.setAuthor(UserDto.builder().firstName("Неизвестный автор").build());
+        }
         logsDto.setDate(commit.getCommitDate());
         Changes changes = javers.findChanges(QueryBuilder.byInstanceId(applicationId, Application.class)
                 .withCommitId(commit.getId()).build());

@@ -4,12 +4,15 @@ import esdp.crm.attractor.school.exception.EmailExistsException;
 import esdp.crm.attractor.school.exception.NotFoundException;
 import esdp.crm.attractor.school.exception.NotPermittedException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
+
+import javax.persistence.EntityExistsException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -30,13 +33,12 @@ public class GlobalExceptionHandler {
                 .addObject("description", "Страница, которую вы ищете, не существует");
     }
 
-    @ExceptionHandler(SecurityException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    protected ModelAndView handle403Error() {
+    @ExceptionHandler(EntityExistsException.class)
+    protected ModelAndView handleEntityExistsException(EntityExistsException e) {
         return new ModelAndView("exceptionPage")
-                .addObject("type", "403")
-                .addObject("header", "Доступ закрыт")
-                .addObject("description", "У вас нет доступа к данной странице");
+                .addObject("type", "500")
+                .addObject("header", "Создание не удалось!")
+                .addObject("description", e.getMessage());
     }
 
     @ExceptionHandler(BindException.class)

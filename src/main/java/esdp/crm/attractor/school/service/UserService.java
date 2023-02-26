@@ -11,6 +11,7 @@ import esdp.crm.attractor.school.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,9 +34,8 @@ public class  UserService {
         return userRepository.findAllUsersNotInAdmin();
     }
 
-    public UserDto save(RegisterFormDto dto) {
-        if (userRepository.existsByEmail(dto.getEmail()))
-            throw new EmailExistsException("User with email " + dto.getEmail() + " exists!");
+    public UserDto save(RegisterFormDto dto) throws EntityExistsException {
+        if (userRepository.existsByEmail(dto.getEmail())) throw new EntityExistsException("Пользователь с такой почтой существует!");
         var user = userMapper.toNewUser(dto);
         var savedUser = userRepository.save(user);
         return userMapper.toUserDto(savedUser);

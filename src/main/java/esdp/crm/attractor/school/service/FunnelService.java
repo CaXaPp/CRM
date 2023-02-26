@@ -12,6 +12,7 @@ import esdp.crm.attractor.school.repository.FunnelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +32,8 @@ public class FunnelService {
                 .collect(Collectors.toList());
     }
 
-    public void save(FunnelFormDto form) {
+    public void save(FunnelFormDto form) throws EntityExistsException {
+        if (funnelRepository.existsByName(form.getName())) throw new EntityExistsException("Воронка продаж с такми именем существует!");
         Funnel funnel = funnelRepository.save(Funnel.builder().name(form.getName()).build());
         form.getStatuses().forEach(s -> {
             applicationStatusRepository.save(ApplicationStatus.builder().funnel(funnel).name(s).build());

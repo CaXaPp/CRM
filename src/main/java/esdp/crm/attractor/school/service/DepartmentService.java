@@ -7,6 +7,7 @@ import esdp.crm.attractor.school.repository.DepartmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,7 +25,8 @@ public class DepartmentService {
                 .collect(Collectors.toList());
     }
 
-    public DepartmentDto save(DepartmentDto dto) {
+    public DepartmentDto save(DepartmentDto dto) throws EntityExistsException {
+        if (departmentRepository.existsByName(dto.getName())) throw new EntityExistsException("Отдел с таким именем существует!");
         return departmentMapper.toDepartmentDto(departmentRepository.save(departmentMapper.toDepartment(dto)));
     }
 }
