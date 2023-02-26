@@ -1,0 +1,235 @@
+.main_block {
+    margin: 0 auto;
+}
+
+.dashboard_block {
+    padding-top: 25px;
+}
+.employee_info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.alert_success_msg {
+    max-width: 300px;
+    z-index: 10000;
+    position: absolute;
+    top: 12px;
+    left: 50%;
+}
+
+.application_list_class {
+    margin: 0 auto;
+}
+
+.log_block {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+}
+
+.log_block .modal-header {
+    padding: 23px 20px 23px 0;
+}
+
+.modal_edit_form input, .modal_edit_form select {
+    width: 300px;
+    margin-right: 30px;
+}
+
+.blockForLogsInApplication {
+    padding: 15px 20px 20px 90px;
+    overflow: auto;
+    height: 100%;
+    border-left: 1px solid gray;
+}
+
+.blockForLogsInApplication span {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.blockForLogsInApplication_main_date {
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #000;
+    line-height: 0.1em;
+    margin: 10px 0 20px;
+}
+
+.blockForLogsInApplication_main_date span {
+    background:#fff;
+    padding:0 10px;
+}
+
+.log_block_footer {
+    border-left: 1px solid gray;
+    padding: 20px 0;
+}
+
+.log_block_footer_inner {
+    margin: 0 20px;
+    border: 1px solid green;
+    border-radius: 3px;
+    padding: 15px;
+}
+
+.log_block_footer_inner select {
+    width: 20%;
+}
+
+.log_block_footer_inner textarea {
+    margin: 10px 0;
+}
+
+.taskBlockInApplication {
+    margin: 0 20px 8px;
+    padding: 5px 15px;
+
+    border: 1px solid green;
+    border-radius: 3px;
+}
+
+.taskBlockInApplication p {
+    display: inline-block;
+    margin: 0;
+}
+
+.taskBlockInApplication span {
+    padding: 2px 10px;
+}
+
+.modal-dialog {
+    max-width: 90%;
+}
+
+.modal-content {
+    flex-direction: row;
+}
+
+.dashboard_statistic {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: end;
+
+    margin: 30px auto;
+
+    text-align: center;
+}
+
+.dashboard_statistic_left {
+    width: 20%;
+}
+.dashboard_statistic_center {
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.dashboard_statistic_inner {
+    width: 20%;
+}
+.dashboard_statistic_right {
+    width: 20%;
+}
+
+.dashboard_block_inner {
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.dashboard_info_sort_block {
+    display: flex;
+    justify-content: center;
+}
+
+.title_stat_block {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.btn_group_right {
+    margin-left: 30px;
+}
+
+#btnradio5 {
+    top: 25px;
+    left: 95%;
+}
+
+#btnradio_5_application {
+    top: 25px;
+    left: 85%;
+}
+
+.modal-fullscreen {
+    float: right;
+}
+
+.info_block {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-footer {
+    justify-content: flex-start;
+    padding: 20px 20px 28px;
+}
+
+.btnToSortByProductName {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.application_sort_block {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0 15px 0;
+    border-bottom: 1px solid aliceblue;
+}
+
+.task_main_block {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.application_table_block {
+    max-width: 98%;
+    margin: 0 auto;
+}
+
+.application_table_block thead tr {
+    position: sticky;
+    top: 0;
+    background: white;
+    vertical-align: middle;
+}
+
+.section_info {
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+.information_block_inner_footer {
+    max-height: 550px;
+    overflow-y: scroll;
+}
+
+.information_block_inner_footer thead tr {
+    position: sticky;
+    top: 0;
+    background: white;
+}

@@ -1,0 +1,25 @@
+.card-header {
+    border-bottom: 1px solid transparent;
+    background-color: transparent;
+}
+
+.sort_selection_block {
+    max-width: 1200px;
+    margin: 30px auto 100px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.sort_selection_block select {
+    width: 20%;
+}
+
+.information_block {
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+.information_block_inner {
+    background: ghostwhite;
+    border: ghostwhite;
+}

@@ -1,15 +1,29 @@
 # CRM 
+
 - При разрабобтке используется
-- - Java version "11"
-- - Javac 11 
-- - Sring Boot 2.7.6.
-- - MySQL PostgresSql 
-- - Apache Maven 4.0.0
-- - Инструкция по разворчиванию окружения 
-- - git clone https://github.com/CaXaPp/CRM.git
-- - Открыть с помощью IntelliJ IDEA 
-- - При поддержке: 
-- - Кайрат Тобокелов - github blaqueee 
-- - Дастан Алиев - github DEMONIC-Bear
-- - Казатов Ильяс - github trashmaggot 
-- - Рустамов Санжар - github CaXaPp
+-
+    - Java version "11"
+-
+    - Javac 11
+-
+    - Sring Boot 2.7.6.
+-
+    - MySQL PostgresSql
+-
+    - Apache Maven 4.0.0
+-
+    - Инструкция по разворчиванию окружения
+-
+    - git clone https://github.com/CaXaPp/CRM.git
+-
+    - Открыть с помощью IntelliJ IDEA
+-
+    - При поддержке:
+-
+    - Кайрат Тобокелов - github blaqueee
+-
+    - Дастан Алиев - github DEMONIC-Bear
+-
+    - Казатов Ильяс - github trashmaggot
+-
+    - Рустамов Санжар - github CaXaPp

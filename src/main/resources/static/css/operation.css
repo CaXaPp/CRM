@@ -1,0 +1,316 @@
+body {
+    background-color: rgba(238, 238, 238);
+    overflow: hidden;
+}
+
+.wrapper {
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: row;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.left-bar {
+    margin: 0;
+    padding: 0;
+    background-color: cornflowerblue;
+    width: 30%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.right-bar {
+    margin: 0;
+    padding: 30px;
+    width: 70%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.left-bar-header {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 30px 20px;
+    height: 10%;
+    background-color: rgb(66, 66, 66);
+}
+
+.left-bar-header a {
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+.left-bar-header-title p {
+    color: white;
+    font-size: 18px;
+    margin: 0;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.left-bar-body {
+    padding: 30px 20px;
+}
+
+.left-bar-body form {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.left-bar-body form input {
+    font-size: 14px;
+    border-radius: 5px;
+    border: 0;
+    padding: 8px 12px;
+}
+
+.left-bar-body form select {
+    font-size: 14px;
+    border-radius: 5px;
+    border: 0;
+    padding: 8px 12px;
+}
+
+.left-bar-body form label {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+    color: black;
+}
+
+.left-bar-body form button {
+    cursor: pointer!important;
+}
+
+.right-bar-body {
+    width: 100%;
+    height: 100%;
+}
+
+.right-bar-form {
+    padding: 20px;
+    background-color: rgb(207, 207, 207);
+    width: 100%;
+    min-height: 200px;
+    height: 200px;
+    border-radius: 5px;
+    flex-grow: 1;
+}
+
+.right-bar-form form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.right-bar-form form textarea {
+    width: 100%;
+    max-width: 100%;
+    height: 120px;
+    max-height: 120px;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.right-bar-body {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.right-bar-body text {
+    padding: 10px;
+}
+
+.right-bar-body p {
+    line-height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.left-bar-body form .label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 13px;
+}
+
+.left-bar-body form .label p{
+    text-align: left;
+    padding-left: 5px;
+    margin: 0;
+}
+
+.operations {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    overflow: scroll;
+    height: 86%;
+}
+.block_list_to_drag {
+    width: 20%;
+    min-height: 200px;
+}
+.block_list_to_drag_inner_status {
+    font-size: 20px;
+    border-bottom: 1px solid;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.column-list-to-drag {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 10px 100px 10px;
+    min-width: 200px;
+    border-radius: 5px;
+    height: 100%;
+}
+
+.item-list-to-drag {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: baseline;
+
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid gray;
+    height: 120px;
+    box-shadow: 0 2px 10px #515757;
+}
+
+.item-list-to-drag p {
+    margin: 0;
+    max-width: 90%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.item-list-to-drag input {
+    max-width: 90%;
+    border: none;
+    pointer-events: none;
+}
+
+.dragging {
+    opacity: 0.5;
+}
+
+.modal-content {
+    flex-direction: row;
+}
+
+.modal-dialog {
+    max-width: 90%;
+}
+
+.info_block {
+    display: flex;
+    flex-direction: column;
+}
+
+.blockForLogsInApplication {
+    padding: 15px 20px 20px 90px;
+    overflow: auto;
+    height: 100%;
+    border-left: 1px solid gray;
+}
+
+.log_block {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+}
+
+.log_block_footer {
+    border-left: 1px solid gray;
+    padding: 20px 0;
+}
+
+.log_block_footer_inner {
+    margin: 0 20px;
+    border: 1px solid green;
+    border-radius: 3px;
+    padding: 15px;
+}
+
+.log_block_footer_inner select {
+    width: 20%;
+}
+
+.log_block_footer_inner textarea {
+    margin: 10px 0;
+}
+
+.alert_success_msg_for_status {
+    max-width: 300px;
+    z-index: 10000;
+    position: absolute;
+    top: 60px;
+    left: 45%;
+}
+
+.alert_success_msg {
+    max-width: 300px;
+    z-index: 10000;
+    position: absolute;
+    top: 12px;
+    left: 50%;
+}
+
+.operations_nav {
+    display: flex;
+    max-width: 50%;
+    margin: 0 auto;
+    padding: 20px 0;
+    gap: 10px;
+}
+
+.checkboxes_block {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.main_block_inner_in_operations {
+    height: 100vh;
+}
+
+.statistic_inner_status_block {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 5px;
+}
+
+.statistic_inner_status_block div {
+    display: flex;
+    gap: 5px;
+}
+
+.statistic_inner_status_block p {
+    font-size: 16px;
+}
