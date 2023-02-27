@@ -25,3 +25,8 @@
     min-height: 150px;
     max-height: 200px;
 }
+
+.task_main_block {
+    max-width: 1400px;
+    margin: 0 auto;
+}

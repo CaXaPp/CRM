@@ -40,12 +40,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/operations/**").fullyAuthenticated()
                 .antMatchers("/tasks/**").fullyAuthenticated()
                 .antMatchers("/application/**").fullyAuthenticated()
+                .antMatchers("/analytics/**").fullyAuthenticated()
+                .antMatchers("/admin/**").fullyAuthenticated()
                 .antMatchers("/").fullyAuthenticated()
                 .anyRequest().permitAll();
-
         http.formLogin()
                 .loginProcessingUrl("/login")
-                .loginPage("/users/login")
+                .loginPage("/login")
                 .defaultSuccessUrl("/");
         http.logout()
                 .logoutUrl("/logout")

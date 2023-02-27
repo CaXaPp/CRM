@@ -1,11 +1,11 @@
 'use strict';
-const BASE_URL = "http://localhost:9000";
 const default_sum = 1000000;
 
 document.addEventListener("DOMContentLoaded", function () {
     getUsersForAnalytics();
     getProductsForAnalytics();
     getSourceForAnalytics();
+    selectedCategory('/analytics/application/all');
 })
 
 function selectedCategory(e) {
@@ -15,21 +15,21 @@ function selectedCategory(e) {
 function getAllApplicationForAnalytics(path) {
     axios.get(BASE_URL + path).then(function (response) {
         deleteAllStatistics();
-        createTdElemOnBodyForAnalytics(response.data[0][0], response.data[0][1], response.data[0][2], response.data[0][3]);
+        createTdElemOnBodyForAnalytics(response.data);
     })
 }
 
-function createTdElemOnBodyForAnalytics(count_operation, sum_operation, sumFailures, sumSuccess) {
-    document.getElementById('operation_amount').innerText = count_operation.toString();
-    document.getElementById('operation_sum_amount').innerText = sum_operation.toString();
+function createTdElemOnBodyForAnalytics(response) {
+    document.getElementById('operation_amount').innerText = response.totalCount.toString();
+    document.getElementById('operation_sum_amount').innerText = response.totalSum.toFixed(2).toString();
     document.getElementById('plan_amount').innerText = default_sum.toString();
-    document.getElementById('failures_amount').innerText = sumFailures.toString();
-    document.getElementById('success_amount').innerText = sumSuccess.toString();
+    document.getElementById('failures_amount').innerText = response.failSum.toFixed(2).toString();
+    document.getElementById('success_amount').innerText = response.successSum.toFixed(2).toString();
 
-    let x = (sumFailures / sum_operation) * 100;
-    let y = (sumSuccess / default_sum) * 100;
+    let fail = (response.failSum / response.totalSum) * 100;
+    let success = (response.successSum / default_sum) * 100;
 
-    if (sum_operation !== 0) {
+    if (response.totalSum !== 0) {
         document.getElementById('total_operation_sum').innerText = "100%";
         document.getElementById('total_operation_sum_line').style.width = "100%";
     }
@@ -37,13 +37,13 @@ function createTdElemOnBodyForAnalytics(count_operation, sum_operation, sumFailu
     document.getElementById('plan_operation_sum').innerText = "100%";
     document.getElementById('plan_operation_sum_line').style.width = "100%";
 
-    if (sumFailures !== 0) {
-        document.getElementById('sum_failures_percent_span').innerText = x.toFixed(2).toString() + "%";
-        document.getElementById('sum_failures_percent_line').style.width = x.toString() + "%";
+    if (response.failSum !== 0) {
+        document.getElementById('sum_failures_percent_span').innerText = fail.toFixed(2).toString() + "%";
+        document.getElementById('sum_failures_percent_line').style.width = fail.toString() + "%";
     }
-    if(sumSuccess !== 0) {
-        document.getElementById('sum_success_percent_span').innerText = y.toFixed(2).toString() + "%";
-        document.getElementById('sum_success_percent_line').style.width = y.toString() + "%";
+    if(response.successSum !== 0) {
+        document.getElementById('sum_success_percent_span').innerText = success.toFixed(2).toString() + "%";
+        document.getElementById('sum_success_percent_line').style.width = success.toString() + "%";
     }
 }
 
@@ -57,7 +57,7 @@ function getUsersForAnalytics() {
 
 function switchOptionEmployeeSelectForAnalytics(employee) {
     document.getElementById('analytics_employee').insertAdjacentHTML('beforeend',
-        '<option value="' + employee[0] + '">' + employee[1] + " " + employee[2] + '</option>'
+        '<option value="' + employee.id + '">' + employee.firstName + " " + employee.surname + '</option>'
     );
 }
 
@@ -71,7 +71,7 @@ function getProductsForAnalytics() {
 
 function switchOptionProductSelectForAnalytics(product) {
     document.getElementById('analytics_product').insertAdjacentHTML('beforeend',
-        '<option value="' + product[0] + '">' + product[1] + '</option>')
+        '<option value="' + product.id + '">' + product.name + '</option>')
 }
 
 function getSourceForAnalytics() {
@@ -103,3 +103,24 @@ function deleteAllStatistics() {
     document.getElementById('sum_success_percent_span').innerText = "0";
     document.getElementById('sum_success_percent_line').style.width = "0";
 }
+
+function defaultValueForSourceAndEmployee() {
+    document.getElementById('analytics_source').querySelectorAll('option').item(0).selected = true;
+    document.getElementById('analytics_employee').querySelectorAll('option').item(0).selected = true;
+}
+
+function defaultValueForProductAndEmployee() {
+    document.getElementById('analytics_product').querySelectorAll('option').item(0).selected = true;
+    document.getElementById('analytics_employee').querySelectorAll('option').item(0).selected = true;
+}
+
+function defaultValueForProductAndSource() {
+    document.getElementById('analytics_product').querySelectorAll('option').item(0).selected = true;
+    document.getElementById('analytics_source').querySelectorAll('option').item(0).selected = true;
+}
+
+$('all_operation').click(function () {
+    document.getElementById('analytics_product').querySelectorAll('option').item(0).selected = true;
+    document.getElementById('analytics_source').querySelectorAll('option').item(0).selected = true;
+    document.getElementById('analytics_employee').querySelectorAll('option').item(0).selected = true;
+})

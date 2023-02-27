@@ -1,32 +1,32 @@
 <#import "parts/general.ftlh" as g>
 
-<@g.general scripts=["/js/main.js"] styles=["/css/analytics.css"]>
+<@g.general scripts=["/js/main.js"] styles=["/css/main.css"]>
 
     <div class="dashboard_block">
 
         <div class="dashboard_block_inner">
             <div class="dashboard_info">
                 <div class="dashboard_info_sort_block" id="dashboard_info_sort_block">
-                    <div class="btn-group" role="group" id="input_group_1" aria-label="Basic radio toggle button group">
+                    <div class="btn-group" role="group" id="input_group_1" aria-label="Basic radio toggle button group" onchange="dataForToday()">
                         <input type="radio" class="btn-check" value="today" name="btnradio" id="btnradio1"
                                autocomplete="off">
                         <label class="btn btn-outline-primary" for="btnradio1"
-                               onclick="dataForToday()">Сегодня</label>
+                               >Сегодня</label>
 
                         <input type="radio" class="btn-check" value="yesterday" name="btnradio" id="btnradio2"
                                autocomplete="off">
                         <label class="btn btn-outline-primary" for="btnradio2"
-                               onclick="dataForToday()">Вчера</label>
+                               >Вчера</label>
 
                         <input type="radio" class="btn-check" value="week" name="btnradio" id="btnradio3"
                                autocomplete="off">
                         <label class="btn btn-outline-primary" for="btnradio3"
-                               onclick="dataForToday()">Неделя</label>
+                               >Неделя</label>
 
                         <input type="radio" class="btn-check" value="month" name="btnradio" id="btnradio4"
                                autocomplete="off" checked>
                         <label class="btn btn-outline-primary" for="btnradio4"
-                               onclick="dataForToday()">Месяц</label>
+                               >Месяц</label>
 
                         <input type="radio" class="btn-check" name="btnradio" id="btnradio5" autocomplete="off"/>
                         <label class="btn btn-outline-primary" id="btnradio5_text" for="btnradio5"></label>
@@ -140,6 +140,11 @@
                     </div>
                 </div>
                 <div class="col-8 information_block_inner_footer">
+                    <div class="d-flex justify-content-center" id="spinner_in_main">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="list_active" role="tabpanel"
                              aria-labelledby="list_active_list">
@@ -150,15 +155,13 @@
                                     <th scope="col">Наименование клиента</th>
                                     <th scope="col">Статус обращения</th>
                                     <th scope="col">Сумма</th>
+                                    <th scope="col">Дата обращения</th>
                                 </tr>
                                 </thead>
                                 <tbody id="list_active_body">
                                 </tbody>
                             </table>
                         </div>
-                        <#--                                <div class="tab-pane fade" id="list_done" role="tabpanel"-->
-                        <#--                                     aria-labelledby="list_done_list">...-->
-                        <#--                                </div>-->
                         <div class="tab-pane fade" id="list_overdue" role="tabpanel"
                              aria-labelledby="list_overdue_list">
                             <table class="table">
@@ -193,10 +196,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        <#--                                <div class="tab-pane fade" id="list_employee" role="tabpanel"-->
-                        <#--                                     aria-labelledby="list_employee_list">-->
-                        <#--                                    -->
-                        <#--                                </div>-->
                         <div class="tab-pane fade" id="list_tasks" role="tabpanel"
                              aria-labelledby="list_tasks_list">
                             <table class="table">

@@ -1,7 +1,6 @@
 package esdp.crm.attractor.school.controller;
 
 import esdp.crm.attractor.school.dto.ProductDto;
-import esdp.crm.attractor.school.entity.Product;
 import esdp.crm.attractor.school.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,12 +24,12 @@ public class ProductController {
     }
 
     @GetMapping("/product-list")
-    public ResponseEntity<List<Object[]>> getProductNameAndId() {
+    public ResponseEntity<List<ProductDto>> getProductNameAndId() {
         return new ResponseEntity<>(productService.getProductNameAndId(), HttpStatus.OK);
     }
 
     @GetMapping("/product/{id}")
-    public ResponseEntity<List<Product>> getProductsByDepartmentId(@PathVariable Long id) {
+    public ResponseEntity<List<ProductDto>> getProductsByDepartmentId(@PathVariable Long id) {
         return new ResponseEntity<>(productService.getProductByDepartmentId(id), HttpStatus.OK);
     }
 }

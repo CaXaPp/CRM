@@ -5,3 +5,12 @@
 #navbarSupportedContent {
     justify-content: space-between;
 }
+
+.dropdown_menu_inner {
+    padding: 15px!important;
+    white-space: nowrap;
+}
+
+.dropdown_menu_inner form {
+    float: right;
+}

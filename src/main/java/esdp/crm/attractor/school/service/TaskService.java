@@ -77,23 +77,23 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
-    public List<Task> getTasksByApplicationId(Long id) {
-        return taskRepository.findAllByApplication_Id(id);
+    public List<TaskDto> getTasksByApplicationId(Long id) {
+        return taskRepository.findAllByApplication_Id(id).stream().map(taskMapper::toDto).collect(Collectors.toList());
     }
 
-    public List<Object[]> getOverdueTask(LocalDateTime now) {
-        return taskRepository.findAllByDate(now);
+    public List<TaskDto> getOverdueTask(LocalDateTime now) {
+        return taskRepository.findAllByDeadlineBefore(now).stream().map(taskMapper::toDto).collect(Collectors.toList());
     }
 
-    public List<Object[]> getOverdueTaskByUserId(LocalDateTime now, Long userId) {
-        return taskRepository.findAllByDateAndByUserId(now, userId);
+    public List<TaskDto> getOverdueTaskByUserId(LocalDateTime now, Long userId) {
+        return taskRepository.findAllByDeadlineBeforeAndEmployee_Id(now, userId).stream().map(taskMapper::toDto).collect(Collectors.toList());
     }
 
-    public List<Object[]> getAllActiveTask(LocalDateTime now) {
-        return taskRepository.findAllActiveTask(now);
+    public List<TaskDto> getAllActiveTask(LocalDateTime now) {
+        return taskRepository.findAllByDeadlineAfter(now).stream().map(taskMapper::toDto).collect(Collectors.toList());
     }
 
-    public List<Object[]> getAllActiveTaskByUserId(LocalDateTime now, Long userId) {
-        return taskRepository.findAllActiveTaskByUserId(now, userId);
+    public List<TaskDto> getAllActiveTaskByUserId(LocalDateTime now, Long userId) {
+        return taskRepository.findAllByDeadlineAfterAndEmployee_Id(now, userId).stream().map(taskMapper::toDto).collect(Collectors.toList());
     }
 }

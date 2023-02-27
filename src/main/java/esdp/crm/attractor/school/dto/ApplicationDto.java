@@ -27,6 +27,9 @@ public class ApplicationDto {
     @JsonProperty("product")
     private ProductDto product;
 
+    @JsonProperty("description")
+    private String description;
+
     @JsonProperty("phone")
     private String phone;
 

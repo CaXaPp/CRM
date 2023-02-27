@@ -9,7 +9,6 @@
 
         <a href="/admin/create/user" class="btn btn-success">Добавить
             пользователя</a>
-
     </div>
 
 </@g.general>

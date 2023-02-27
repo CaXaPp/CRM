@@ -32,6 +32,10 @@ public class ApplicationFormDto {
     @NotNull
     private Long productId;
 
+    @JsonProperty("description")
+    @NotBlank
+    private String description;
+
     @JsonProperty("phone")
     @NotNull
     private String phone;
