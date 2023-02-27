@@ -11,6 +11,7 @@ import esdp.crm.attractor.school.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,10 +34,9 @@ public class  UserService {
         return userRepository.findAllUsersNotInAdmin().stream().map(userMapper::toUserDto).collect(Collectors.toList());
     }
 
-    public UserDto createUser(RegisterFormDto dto) {
-        if (userRepository.existsByEmail(dto.getEmail()))
-            throw new EmailExistsException("User with email " + dto.getEmail() + " exists!");
-        var user = userMapper.toUser(dto);
+    public UserDto save(RegisterFormDto dto) throws EntityExistsException {
+        if (userRepository.existsByEmail(dto.getEmail())) throw new EntityExistsException("Пользователь с такой почтой существует!");
+        var user = userMapper.toNewUser(dto);
         var savedUser = userRepository.save(user);
         return userMapper.toUserDto(savedUser);
     }
@@ -58,6 +58,24 @@ public class  UserService {
         else
             users = userRepository.findAllByRole_Value("ROLE_EMPLOYEE");
         return users.stream()
+                .map(userMapper::toUserDto)
+                .collect(Collectors.toList());
+    }
+
+    public void editUser(RegisterFormDto dto) {
+        userMapper.toForm(userRepository.save(userMapper.toOldUser(dto)));
+    }
+
+    public RegisterFormDto getUserForm(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()) {
+            throw new NotFoundException("User not found!");
+        }
+        return userMapper.toForm(user.get());
+    }
+
+    public List<UserDto> findAll() {
+        return userRepository.findAll().stream()
                 .map(userMapper::toUserDto)
                 .collect(Collectors.toList());
     }

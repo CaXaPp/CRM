@@ -74,6 +74,7 @@ public class TaskService {
         task.setDeadline(taskDto.getDeadline());
         task.setType(taskTypeService.findById(taskDto.getTypeId()));
         task.setDescription(taskDto.getDescription());
+        task.setResult(taskDto.getResult());
         return taskRepository.save(task);
     }
 

@@ -10,7 +10,12 @@ import esdp.crm.attractor.school.entity.User;
 import esdp.crm.attractor.school.exception.NotFoundException;
 import esdp.crm.attractor.school.mapper.ApplicationMapper;
 import esdp.crm.attractor.school.repository.ApplicationRepository;
+import esdp.crm.attractor.school.repository.ProductRepository;
+import esdp.crm.attractor.school.repository.StatusRepository;
 import lombok.RequiredArgsConstructor;
+import org.javers.core.Changes;
+import org.javers.core.Javers;
+import org.javers.repository.jql.QueryBuilder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -33,6 +38,10 @@ public class ApplicationService {
     private final ProductService productService;
     private final UserService userService;
     private final ApplicationStatusService statusService;
+    private final LogsService logsService;
+    private final Javers javers;
+    private final StatusRepository statusRepository;
+    private final ProductRepository productRepository;
 
     public ApplicationDto save(ApplicationFormDto form) {
         var application = applicationRepository.save(applicationMapper.toEntity(form));
@@ -291,5 +300,31 @@ public class ApplicationService {
     public List<ApplicationDto> findAllByCreatedAtBetweenAndCompanyStartingWith(LocalDateTime date1, LocalDateTime date2, String text) {
         List<Application> applications = applicationRepository.findAllByCreatedAtBetweenAndCompanyStartingWithIgnoreCase(date1, date2, text);
         return applications.stream().map(applicationMapper::toDto).collect(Collectors.toList());
+    }
+
+    public List<ApplicationDto> getAllSuccessfulAppsByToday() {
+        LocalDate today = LocalDate.now();
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+        Changes changes = javers.findChanges(QueryBuilder.byClass(Application.class)
+                .withChangedProperty("Статус").to(tomorrow).from(today).build());
+
+        List<ApplicationDto> dtos = new ArrayList<>();
+        changes.getPropertyChanges("Статус").forEach(propertyChange -> {
+            if (statusRepository.findById
+                            (logsService.getIdFromPropertyStr
+                                    (propertyChange.getRight().toString()))
+                    .get().getName().equals("Успешно")) {
+                dtos.add(applicationMapper.toDto
+                        (applicationRepository.getApplicationById
+                                (Long.valueOf(propertyChange.getAffectedLocalId().toString()))));
+            }
+        });
+        return dtos.stream().distinct().collect(Collectors.toList());
+    }
+
+    public List<ApplicationDto> getSuccessfulAppByEmployeeToday(User user) {
+        return getAllSuccessfulAppsByToday().stream()
+                .filter(app -> app.getEmployee().getId().equals(user.getId()))
+                .collect(Collectors.toList());
     }
 }

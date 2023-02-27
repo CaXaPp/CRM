@@ -32,4 +32,7 @@ public class TaskFormDto {
 
     @JsonProperty("description")
     private String description;
+
+    @JsonProperty("result")
+    private String result;
 }

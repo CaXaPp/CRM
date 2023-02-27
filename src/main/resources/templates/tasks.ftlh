@@ -117,6 +117,9 @@
                             <div class="form-additional">
                                 <textarea class="form-control description" name="description" placeholder="Примечания к задаче"></textarea>
                             </div>
+                            <div class="form-additional">
+                                    <textarea name="result" id="result" placeholder="Результат задачи"></textarea>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>

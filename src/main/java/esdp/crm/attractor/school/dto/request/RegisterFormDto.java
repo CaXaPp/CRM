@@ -8,6 +8,7 @@ import javax.validation.constraints.Size;
 
 @Data
 public class RegisterFormDto {
+    private Long id;
     @Size(max = 25)
     @NotBlank
     private String firstName;
@@ -31,4 +32,11 @@ public class RegisterFormDto {
 
     private Long roleId;
     private boolean enabled = true;
+    @NotBlank
+    private String status;
+
+    public String getFIO(){
+        return String.format("%s %s %s", surname, firstName, middleName);
+    }
+
 }

@@ -79,7 +79,8 @@ function edit(id) {
         deadline: $("#task-edit-form #deadline").val(),
         employee_id: $("#task-edit-form #employee").val(),
         type_id: $("#task-edit-form #typeId").val(),
-        description: $("#task-edit-form #description").val()
+        description: $("#task-edit-form #description").val(),
+        result: $("#task-edit-form #result").val()
     };
     $.ajax({
         type: "PUT",

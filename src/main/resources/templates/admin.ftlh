@@ -9,6 +9,13 @@
 
         <a href="/admin/create/user" class="btn btn-success">Добавить
             пользователя</a>
+
+        <a href="/admin/find/user" class="btn btn-success">Изменить
+            пользователя</a>
+
+        <a href="/admin/create/department" class="btn btn-success">Добавить
+            департамент</a>
+
     </div>
 
 </@g.general>
