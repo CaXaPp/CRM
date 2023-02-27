@@ -1,6 +1,6 @@
 <#import "parts/general.ftlh" as g>
 
-<@g.general scripts=["/js/application.js"] styles=["/css/main.css"]>
+<@g.general scripts=["/js/application.js"] styles=["/css/application.css"]>
 
     <div class="application_list_class">
         <div>
@@ -42,16 +42,25 @@
                     <label class="btn btn-outline-primary" for="btnradio_6_application"
                            onclick="dataForTodayInApplication()">Все</label>
                 </div>
-                <a href="/application/save">Добавить заявку</a>
-<#--                <button type="button" class="btn btn-primary" data-bs-toggle="modal"-->
-<#--                        data-bs-target="#addNewApplication">-->
-<#--                    Добавить заявку-->
-<#--                </button>-->
+                <div class="alert alert-success alert_success_msg_for_add" id="alert_new_msg" hidden role="alert">
+                    Добавлено новое заявление!
+                </div>
+                <div class="alert alert-success alert_success_msg_for_add" id="alert_delete_msg" hidden role="alert">
+                    Заявление успешно удалено!
+                </div>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#addNewApplication" onclick="fillNewApplication()">
+                    Добавить заявку
+                </button>
             </div>
             <table class="table table-striped application_table_block">
                 <thead>
                 <tr>
-                    <th scope="col">#</th>
+                    <th scope="col">
+                        <button class="btnToSortByProductName" onclick="sortFunctionByApplicationId()"
+                                style="cursor: pointer" type="button">№ <i class="fa-solid fa-sort"></i>
+                        </button>
+                    </th>
                     <th scope="col">
                         <button class="btnToSortByProductName" onclick="sortFunctionByApplicationCompany()"
                                 style="cursor: pointer" type="button">Наименование <i class="fa-solid fa-sort"></i>
@@ -85,6 +94,13 @@
                 <tbody id="tdsBlock">
                 </tbody>
             </table>
+            <div class="d-flex spinner_in_application_pulls" id="spinner_in_application_pulls">
+                <strong class="text-primary">Загрузка данных...</strong>
+                <div class="spinner-border ms-auto text-primary" role="status" aria-hidden="true"></div>
+            </div>
+            <div id="emptyMsg" class="emptyMsg" style="display: none">
+                <span>Заявления отсутствуют</span>
+            </div>
         </div>
     </div>
 
@@ -92,110 +108,111 @@
         <div class="alert alert-success alert_success_msg" id="alert_msg" hidden role="alert">
             Изменения сохранены!
         </div>
-        <div class="modal-dialog modal-fullscreen">
-            <div class="modal-content">
+        <div class="modal-dialog modal-fullscreen modal-dialog-edit">
+            <div class="modal-content modal-content-edit">
 
                 <div class="info_block">
 
-                    <div class="modal-header">
+                    <div class="modal-header modal-header-edit">
                         <h1 class="modal-title fs-5" id="modal_title_from_js"></h1>
                     </div>
                     <div class="modal-body modal_edit_form" id="modal_body_form">
-                        <table>
-                            <form id="modal_edit_form">
-                                <input type="hidden" name="id" value="" id="id">
-                                <#if _csrf??>
-                                    <input type="hidden"
-                                           name="${_csrf.parameterName}" value="${_csrf.token}">
-                                </#if>
-                                <tr>
-                                    <td>
-                                        Компания:
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><label for="company">Клиент</label></td>
-                                    <td><input type="text" class="form-control" name="company" id="company" value="">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><label for="price">Бюджет</label></td>
-                                    <td><input type="number" class="form-control" step="any" min="0" name="price"
-                                               id="price"
-                                               value=""></td>
-                                </tr>
-                                <tr>
-                                    <td><label for="name">Контактное лицо</label></td>
-                                    <td><input type="text" class="form-control" name="name" id="name" value=""></td>
-                                </tr>
-                                <tr>
-                                    <td><label for="phone">Раб. тел</label></td>
-                                    <td><input type="text" class="form-control" name="phone" id="phone" value=""></td>
-                                </tr>
-                                <tr>
-                                    <td><label for="email">Email</label></td>
-                                    <td><input type="email" class="form-control" name="email" id="email" value="">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><label for="address">Адрес</label></td>
-                                    <td><input type="text" class="form-control" name="address" id="address" value="">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <hr>
-                                        Дополнительная информация:
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Отв-ный</td>
-                                    <td><select class="form-select" aria-label="Select employee" id="employee"
-                                                name="employeeId" onchange="updateContentForApplication()"
-                                                required></select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Воронка</td>
-                                    <td><select class="form-select" aria-label="Select funnel"
-                                                id="funnelInApplication"></select></td>
-                                </tr>
-                                <tr>
-                                    <td>Товар/услуга</td>
-                                    <td><select class="form-select" aria-label="Select product" id="productId"
-                                                name="productId" required></select></td>
-                                </tr>
+                        <form id="modal_edit_form" class="add_new_application_inner">
+                            <input type="hidden" name="id" value="" id="id">
+                            <#if _csrf??>
+                                <input type="hidden"
+                                       name="${_csrf.parameterName}" value="${_csrf.token}">
+                            </#if>
 
-                                <tr>
-                                    <td>Статус</td>
-                                    <td><select class="form-select" aria-label="Select status" id="status"
-                                                name="statusId" required></select></td>
-                                </tr>
-                                <tr>
-                                    <td><label for="departmentInApplication">Департамент</label></td>
-                                    <td><input type="text" class="form-control" id="departmentInApplication" disabled>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><label for="createdAt">Создано</label></td>
-                                    <td>
-                                        <input type="datetime-local" class="form-control" disabled value=""
-                                               name="createdAt"
-                                               id="createdAt">
-                                    </td>
-                                </tr>
+                            <div class="information_field">
+                                <label for="company">Клиент</label>
+                                <input type="text" class="form-control" name="company" id="company" value="">
+                            </div>
 
-                                <input type="hidden" value="" id="hiddenApplicationId">
-                                <input type="hidden" value="" name="sourceId" id="sourceId">
+                            <div class="information_field">
+                                <label for="price">Бюджет</label>
+                                <input type="number" class="form-control" step="any" min="0" name="price"
+                                       id="price"
+                                       value="">
+                            </div>
 
-                            </form>
-                        </table>
+                            <div class="information_field">
+                                <label for="name">Контактное лицо</label>
+                                <input type="text" class="form-control" name="name" id="name" value="">
+                            </div>
+
+                            <div class="information_field">
+                                <label for="phone">Раб. тел</label>
+                                <input type="text" class="form-control" name="phone" id="phone" value="">
+                            </div>
+
+                            <div class="information_field">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" name="email" id="email" value="">
+                            </div>
+
+                            <div class="information_field">
+                                <label for="address">Адрес</label>
+                                <input type="text" class="form-control" name="address" id="address" value="">
+                            </div>
+
+                            <hr>
+
+                            <div class="information_field">
+                                <label for="employee">Отв-ный</label>
+                                <select class="form-select" aria-label="Select employee" id="employee"
+                                        name="employeeId" onchange="getUserById(this.value)"
+                                        required></select>
+                            </div>
+
+                            <div class="information_field">
+                                <label for="funnelInApplication">Воронка</label>
+                                <select class="form-select" aria-label="Select funnel"
+                                        id="funnelInApplication" onchange="uploadFunnel(this.value)"></select>
+                            </div>
+
+                            <div class="information_field">
+                                <label for="productId">Товар/услуга</label>
+                                <select class="form-select" aria-label="Select product" id="productId"
+                                        name="productId" required></select>
+                            </div>
+
+                            <div class="information_field">
+                                <label for="status">Статус</label>
+                                <select class="form-select" aria-label="Select status" id="status"
+                                        name="statusId" required></select>
+                            </div>
+
+                            <div class="information_field">
+                                <label for="departmentInApplication">Департамент</label>
+                                <input type="text" class="form-control" id="departmentInApplication" disabled>
+                            </div>
+                            <div class="information_field">
+                                <label for="createdAt">Создано</label>
+                                <input type="datetime-local" class="form-control" disabled value=""
+                                       name="createdAt"
+                                       id="createdAt">
+                            </div>
+
+                            <div class="information_field">
+                                <textarea class="form-control" name="description" id="applicationTextarea"
+                                          placeholder="Примечания к заявлению"></textarea>
+                            </div>
+
+                            <input type="hidden" value="" id="hiddenApplicationId">
+                            <input type="hidden" value="" name="sourceId" id="sourceId">
+
+                        </form>
+                        <button type="button" class="btn btn-danger deleteBtn" value="" id="deleteBtn"
+                                data-bs-toggle="modal" data-bs-target="#deleteApplicationModal"
+                                onclick="getValueForRemoveApplication(this.value)">
+                        </button>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
-                        <button type="submit" class="btn btn-primary" form="modal_edit_form" onclick="getMessage()">
+                    <div class="modal-footer modal-footer-edit">
+                        <button type="submit" class="btn btn-primary" form="modal_edit_form">
                             Сохранить
                         </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
                     </div>
                 </div>
                 <div class="log_block">
@@ -203,7 +220,12 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="blockForLogsInApplication">
-                        <div id="blockForLogsInApplication"></div>
+                        <div id="blockForLogsInApplication">
+                            <div class="d-flex align-items-center" id="spinner_in_application">
+                                <strong class="text-primary">Загрузка данных...</strong>
+                                <div class="spinner-border ms-auto text-primary" role="status" aria-hidden="true"></div>
+                            </div>
+                        </div>
                     </div>
                     <div class="log_block_footer" id="log_block_footer">
                         <form class="log_block_footer_inner" id="updateAddedTask">
@@ -225,7 +247,7 @@
 
                             <textarea class="form-control" name="description" id="textareaValue"
                                       placeholder="Примечания к задаче"></textarea>
-                            <div>
+                            <div class="task_footer_add">
                                 <button type="submit" class="btn btn-primary">Поставить</button>
                                 <button type="button" class="btn btn-secondary">Отменить</button>
                             </div>
@@ -236,123 +258,97 @@
         </div>
     </div>
 
-<#--    <div class="modal fade" id="addNewApplication" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
-<#--        <div class="modal-dialog modal-dialog-centered">-->
-<#--            <div class="modal-content">-->
-<#--                <div class="modal-header">-->
-<#--                    <h5 class="modal-title" id="exampleModalLabel">Новое заявление</h5>-->
-<#--                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<#--                </div>-->
-<#--                <div class="modal-body">-->
-<#--                    <div>-->
-<#--                        <table>-->
+    <div class="modal fade" id="addNewApplication" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content modal-new-app-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Новое заявление</h1>
+                    <button type="button" id="close_btn_new_app" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modal_body_form">
+                    <form id="add_new_application" class="add_new_application_inner">
+                        <#if _csrf??>
+                            <input type="hidden"
+                                   name="${_csrf.parameterName}" value="${_csrf.token}">
+                        </#if>
+                        <div class="information_field">
+                            <label for="new_company">Клиент</label>
+                            <input type="text" class="form-control" name="company" id="new_company" value=""
+                                   placeholder="Название компании" required>
+                        </div>
+                        <div class="information_field">
+                            <label for="new_price">Бюджет</label>
+                            <input type="number" class="form-control" step="any" min="0" name="price"
+                                   id="new_price"
+                                   value="" placeholder="Введите бюджет">
+                        </div>
+                        <div class="information_field">
+                            <label for="new_name">Контактное лицо</label>
+                            <input type="text" class="form-control" name="name" id="new_name" value=""
+                                   placeholder="Введите имя">
+                        </div>
+                        <div class="information_field">
+                            <label for="new_phone">Раб. тел</label>
+                            <input type="tel" class="form-control" name="phone" id="new_phone" value=""
+                                   placeholder="Введите номер">
+                        </div>
+                        <div class="information_field">
+                            <label for="new_email">Email</label>
+                            <input type="email" class="form-control" name="email" id="new_email" value=""
+                                   placeholder="Введите почту">
+                        </div>
+                        <div class="information_field">
+                            <label for="new_address">Адрес</label>
+                            <input type="text" class="form-control" name="address" id="new_address" value=""
+                                   placeholder="Введите адрес">
+                        </div>
+                        <div class="information_field">
+                            <label for="new_product">Товар/услуга</label>
+                            <select class="form-select" aria-label="Select product" id="new_product"
+                                    name="productId" required>
+                            </select>
+                        </div>
+                        <input type="hidden" value="10" name="sourceId">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
+                    <button type="submit" class="btn btn-primary" form="add_new_application" id="btnForSaveInApplication">
+                        Сохранить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<#--                            <form id="modal_edit_form">-->
-<#--                                <input type="hidden" name="id" value="" id="id">-->
-<#--                                <#if _csrf??>-->
-<#--                                    <input type="hidden"-->
-<#--                                           name="${_csrf.parameterName}" value="${_csrf.token}">-->
-<#--                                </#if>-->
-<#--                                <tr>-->
-<#--                                    <td><label for="add_company">Название компании</label></td>-->
-<#--                                    <td><input type="text" class="form-control" name="company" id="add_company"-->
-<#--                                               value="">-->
-<#--                                    </td>-->
-<#--                                </tr>-->
-<#--                                <tr>-->
-<#--                                    <td><label for="add_price">Бюджет</label></td>-->
-<#--                                    <td><input type="number" class="form-control" step="any" min="0" name="price"-->
-<#--                                               id="add_price"-->
-<#--                                               value=""></td>-->
-<#--                                </tr>-->
-<#--                                <tr>-->
-<#--                                    <td><label for="add_name">Контактное лицо</label></td>-->
-<#--                                    <td><input type="text" class="form-control" name="name" id="add_name" value=""></td>-->
-<#--                                </tr>-->
-<#--                                <tr>-->
-<#--                                    <td><label for="add_phone">Раб. тел</label></td>-->
-<#--                                    <td><input type="text" class="form-control" name="phone" id="add_phone" value="">-->
-<#--                                    </td>-->
-<#--                                </tr>-->
-<#--                                <tr>-->
-<#--                                    <td><label for="add_email">Email</label></td>-->
-<#--                                    <td><input type="email" class="form-control" name="email" id="add_email" value="">-->
-<#--                                    </td>-->
-<#--                                </tr>-->
-<#--                                <tr>-->
-<#--                                    <td><label for="add_address">Адрес</label></td>-->
-<#--                                    <td><input type="text" class="form-control" name="address" id="add_address"-->
-<#--                                               value="">-->
-<#--                                    </td>-->
-<#--                                </tr>-->
-<#--                                <tr>-->
-<#--                                    <td>Отв-ный</td>-->
-<#--                                    <td><select class="form-select" aria-label="Select employee" id="add_employee"-->
-<#--                                                name="employeeId" onchange="updateContentForApplication()"-->
-<#--                                                required></select>-->
-<#--                                    </td>-->
-<#--                                </tr>-->
-<#--                                <tr>-->
-<#--                                    <td>Воронка</td>-->
-<#--                                    <td><select class="form-select" aria-label="Select funnel"-->
-<#--                                                id="add_funnelInApplication"></select></td>-->
-<#--                                </tr>-->
-<#--                                <tr>-->
-<#--                                    <td>Товар/услуга</td>-->
-<#--                                    <td><select class="form-select" aria-label="Select product" id="add_product"-->
-<#--                                                name="productId" required></select></td>-->
-<#--                                </tr>-->
-
-<#--                                <tr>-->
-<#--                                    <td>Статус</td>-->
-<#--                                    <td><select class="form-select" aria-label="Select status" id="add_status"-->
-<#--                                                name="statusId" required></select></td>-->
-<#--                                </tr>-->
-<#--                                <input type="hidden" value="" name="sourceId" id="add_source">-->
-<#--                            </form>-->
-<#--                        </table>-->
-<#--                        <div class="modal-footer">-->
-<#--                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>-->
-<#--                            <button type="button" class="btn btn-primary">Сохранить</button>-->
-<#--                        </div>-->
-<#--                    </div>-->
-<#--                    <div class="log_block">-->
-<#--                        <div class="modal-header">-->
-<#--                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<#--                        </div>-->
-<#--                        <div class="blockForLogsInApplication">-->
-<#--                            <div id="blockForLogsInApplication"></div>-->
-<#--                        </div>-->
-<#--                        <div class="log_block_footer" id="log_block_footer">-->
-<#--                            <form class="log_block_footer_inner" id="updateAddedTask">-->
-<#--                                <div>-->
-<#--                                    <input id="operationId" name="operationId" value="" type="hidden">-->
-<#--                                    <#if _csrf??>-->
-<#--                                        <input type="hidden"-->
-<#--                                               name="${_csrf.parameterName}" value="${_csrf.token}">-->
-<#--                                    </#if>-->
-<#--                                    <a>Задача на </a>-->
-<#--                                    <input type="datetime-local" class="form-control w-25 d-inline-block"-->
-<#--                                           id="deadline_for_task_in_application" name="deadline" required>-->
-<#--                                    <select name="typeId" id="taskTypeChoose" class="form-select d-inline-block"-->
-<#--                                            required></select>-->
-<#--                                    <label for="taskForEmployee"> Для </label>-->
-<#--                                    <select class="form-select d-inline-block" name="employeeId" id="taskForEmployee"-->
-<#--                                            required></select>-->
-<#--                                </div>-->
-
-<#--                                <textarea class="form-control" name="description" id="textareaValue"-->
-<#--                                          placeholder="Примечания к задаче"></textarea>-->
-<#--                                <div>-->
-<#--                                    <button type="submit" class="btn btn-primary">Поставить</button>-->
-<#--                                    <button type="button" class="btn btn-secondary">Отменить</button>-->
-<#--                                </div>-->
-<#--                            </form>-->
-<#--                        </div>-->
-<#--                    </div>-->
-<#--                </div>-->
-<#--            </div>-->
-<#--        </div>-->
-<#--    </div>-->
+    <div class="modal fade" id="deleteApplicationModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Удаление заявления</h1>
+                    <button type="button" class="btn-close" id="close_btn_delete" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger" role="alert" id="deleteApplicationDiv">
+                    </div>
+                    <div>
+                        <#if _csrf??>
+                            <input type="hidden"
+                                   name="${_csrf.parameterName}" value="${_csrf.token}" id="x-csrf-token">
+                        </#if>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="removeApplicationBtnValue" value=""
+                            onclick="deleteApplication(this.value)">Удалить
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </@g.general>

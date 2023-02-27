@@ -4,16 +4,19 @@
     <div>
         <div class="sort_selection_block">
             <select class="form-select" aria-label="Select product" id="analytics_product"
-                    name="product" onclick="selectedCategory('/analytics/product/' + this.value)" required>По
-                продуктам</select>
+                    name="product" onclick="selectedCategory('/analytics/product/' + this.value)" onchange="defaultValueForSourceAndEmployee()">
+                <option selected disabled>Выбрать продукт</option>
+            </select>
 
             <select class="form-select" aria-label="Select source" id="analytics_source"
-                    name="status" onclick="selectedCategory('/analytics/source/' + this.value)" required>Источник
-                обращения</select>
+                    name="status" onclick="selectedCategory('/analytics/source/' + this.value)" onchange="defaultValueForProductAndEmployee()">
+                <option selected disabled>Выбрать источник</option>
+            </select>
 
             <select class="form-select" aria-label="Select employee" id="analytics_employee"
-                    name="employee" onclick="selectedCategory('/analytics/employee/' + this.value)" required>По
-                сотруднику</select>
+                    name="employee" onclick="selectedCategory('/analytics/employee/' + this.value)" onchange="defaultValueForProductAndSource()">
+                <option selected disabled>Выбрать сотрудника</option>
+            </select>
 
             <button class="btn btn-success" id="all_operation" onclick="selectedCategory('/analytics/application/all')">
                 Все операции

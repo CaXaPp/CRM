@@ -17,16 +17,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -69,30 +66,26 @@ public class TaskController {
     }
 
     @GetMapping("/task/over")
-    public ResponseEntity<List<Object[]>> getOverdueTask(Principal principal) {
+    public ResponseEntity<List<TaskDto>> getOverdueTask(@AuthenticationPrincipal User user) {
         LocalDateTime localDateTime = LocalDateTime.now();
-        Optional<User> user = userService.findByEmail(principal.getName());
-
-        if (!Objects.equals(user.get().getRole().getName(), "Сотрудник")) {
+        if (!Objects.equals(user.getRole().getValue(), "ROLE_EMPLOYEE")) {
             return new ResponseEntity<>(taskService.getOverdueTask(localDateTime), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(taskService.getOverdueTaskByUserId(localDateTime, user.get().getId()), HttpStatus.OK);
+            return new ResponseEntity<>(taskService.getOverdueTaskByUserId(localDateTime, user.getId()), HttpStatus.OK);
         }
     }
     @GetMapping("/task/active")
-    public ResponseEntity<List<Object[]>> getAllActiveTask(Principal principal) {
+    public ResponseEntity<List<TaskDto>> getAllActiveTask(@AuthenticationPrincipal User user) {
         LocalDateTime localDateTime = LocalDateTime.now();
-        Optional<User> user = userService.findByEmail(principal.getName());
-
-        if (!Objects.equals(user.get().getRole().getName(), "Сотрудник")) {
+        if (!Objects.equals(user.getRole().getValue(), "ROLE_EMPLOYEE")) {
             return new ResponseEntity<>(taskService.getAllActiveTask(localDateTime), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(taskService.getAllActiveTaskByUserId(localDateTime, user.get().getId()), HttpStatus.OK);
+            return new ResponseEntity<>(taskService.getAllActiveTaskByUserId(localDateTime, user.getId()), HttpStatus.OK);
         }
     }
 
     @GetMapping("/tasks-by-id/{id}")
-    public ResponseEntity<List<Task>> getTasksByApplicationId(@PathVariable Long id) {
+    public ResponseEntity<List<TaskDto>> getTasksByApplicationId(@PathVariable Long id) {
         return new ResponseEntity<>(taskService.getTasksByApplicationId(id), HttpStatus.OK);
     }
 }

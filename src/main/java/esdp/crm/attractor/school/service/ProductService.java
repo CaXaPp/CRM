@@ -30,11 +30,11 @@ public class ProductService {
         productRepository.save(productMapper.formToEntity(form));
     }
 
-    public List<Object[]> getProductNameAndId() {
-        return productRepository.getProductNameAndId();
+    public List<ProductDto> getProductNameAndId() {
+        return productRepository.findAll().stream().map(productMapper::toProductDto).collect(Collectors.toList());
     }
 
-    public List<Product> getProductByDepartmentId(Long id) {
-        return productRepository.findAllByDepartmentId(id);
+    public List<ProductDto> getProductByDepartmentId(Long id) {
+        return productRepository.findAllByDepartment_id(id).stream().map(productMapper::toProductDto).collect(Collectors.toList());
     }
 }

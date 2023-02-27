@@ -25,7 +25,7 @@ public class FunnelController {
     }
 
     @GetMapping("/funnel/{id}")
-    public ResponseEntity<List<Funnel>> getAll(@PathVariable Long id) {
+    public ResponseEntity<List<FunnelDto>> getAll(@PathVariable Long id) {
         return new ResponseEntity<>(funnelService.findById(id), HttpStatus.OK);
     }
 }

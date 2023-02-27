@@ -1,7 +1,5 @@
 'use strict';
 
-const BASE_URL = 'http://localhost:9000'
-
 const tableBody = document.getElementById('tbody')
 const tasks = document.querySelectorAll(".task")
 let taskId;

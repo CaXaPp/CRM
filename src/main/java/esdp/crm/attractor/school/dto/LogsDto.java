@@ -1,7 +1,5 @@
 package esdp.crm.attractor.school.dto;
 
-import esdp.crm.attractor.school.entity.ApplicationStatus;
-import esdp.crm.attractor.school.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

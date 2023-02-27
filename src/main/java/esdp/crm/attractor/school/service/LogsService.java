@@ -4,6 +4,7 @@ import esdp.crm.attractor.school.dto.ChangesDto;
 import esdp.crm.attractor.school.dto.LogsDto;
 import esdp.crm.attractor.school.dto.UserDto;
 import esdp.crm.attractor.school.entity.Application;
+import esdp.crm.attractor.school.entity.User;
 import esdp.crm.attractor.school.mapper.UserMapper;
 import esdp.crm.attractor.school.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -43,9 +44,9 @@ public class LogsService {
         LogsDto logsDto = new LogsDto();
         CommitMetadata commit = changesByCommit.getCommit();
         try {
-            logsDto.setAuthor(userMapper.toUserDto(userRepository.findByEmail(commit.getAuthor()).get()));
+            logsDto.setAuthor(userMapper.toUserDto(userRepository.findByEmail(commit.getAuthor())));
         } catch (Exception e) {
-            logsDto.setAuthor(UserDto.builder().firstName("Неизвестный автор").build());
+            logsDto.setAuthor(UserDto.builder().firstName("Unknown author").build());
         }
         logsDto.setDate(commit.getCommitDate());
         Changes changes = javers.findChanges(QueryBuilder.byInstanceId(applicationId, Application.class)
@@ -88,10 +89,8 @@ public class LogsService {
             case "Сотрудник":
                 return ChangesDto.builder()
                         .property(propertyChange.getPropertyName())
-                        .oldRecord(propertyChange.getLeft() != null ? userRepository.getById(getIdFromPropertyStr(
-                                propertyChange.getLeft().toString())).getUsername() : UNDEFINED)
-                        .newRecord(propertyChange.getRight() != null ? userRepository.getById(getIdFromPropertyStr(
-                                propertyChange.getRight().toString())).getUsername() : UNDEFINED)
+                        .oldRecord(propertyChange.getLeft() != null ? getUserFullName(userRepository.getById(getIdFromPropertyStr(propertyChange.getLeft().toString()))) : UNDEFINED)
+                        .newRecord(propertyChange.getRight() != null ? getUserFullName(userRepository.getById(getIdFromPropertyStr(propertyChange.getRight().toString()))) : UNDEFINED)
                         .build();
             default:
                 return ChangesDto.builder()
@@ -104,5 +103,9 @@ public class LogsService {
 
     public Long getIdFromPropertyStr(String propertyStr) {
         return Long.parseLong(propertyStr.substring(propertyStr.lastIndexOf('/') + 1));
+    }
+
+    private String getUserFullName(User user) {
+        return user.getFirstName() + " " + user.getSurname();
     }
 }

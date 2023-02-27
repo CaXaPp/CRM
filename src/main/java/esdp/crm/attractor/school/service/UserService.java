@@ -22,16 +22,16 @@ public class  UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    public List<User> getAll() {
-        return userRepository.findAll();
+    public List<UserDto> getAll() {
+        return userRepository.findAll().stream().map(userMapper::toUserDto).collect(Collectors.toList());
     }
 
-    public List<Object[]> getAllEmployee() {
-        return userRepository.findAllEmployeeByRole();
+    public List<UserDto> getAllEmployee() {
+        return userRepository.findAllByRole_Value("ROLE_EMPLOYEE").stream().map(userMapper::toUserDto).collect(Collectors.toList());
     }
 
-    public List<User> getAllNotInAdmin() {
-        return userRepository.findAllUsersNotInAdmin();
+    public List<UserDto> getAllNotInAdmin() {
+        return userRepository.findAllUsersNotInAdmin().stream().map(userMapper::toUserDto).collect(Collectors.toList());
     }
 
     public UserDto save(RegisterFormDto dto) throws EntityExistsException {
@@ -46,9 +46,6 @@ public class  UserService {
                 .orElseThrow(() -> new NotFoundException("User with id " + id + " not found!"));
         return userMapper.toUserDto(user);
     }
-    public Optional<User> findUserById(Long id) {
-        return userRepository.findById(id);
-    }
 
     public List<User> findAll(Role role){
         return userRepository.findAllByRole(role);
@@ -59,7 +56,7 @@ public class  UserService {
         if ("Сотрудник".equals(user.getRole().getName()))
             users = List.of(user);
         else
-            users = userRepository.findAllEmployees();
+            users = userRepository.findAllByRole_Value("ROLE_EMPLOYEE");
         return users.stream()
                 .map(userMapper::toUserDto)
                 .collect(Collectors.toList());
@@ -87,16 +84,8 @@ public class  UserService {
         return userMapper.toUserDto(user);
     }
 
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
-
-    public Long getUserIdByEmail(String email) {
-        return userRepository.getIdByEmail(email);
-    }
-
-    public List<Long> getAllUserId(Long id) {
-        return userRepository.getAllIdByDepartmentId(id);
+    public UserDto findByEmail(String email) {
+        return userMapper.toUserDto(userRepository.findByEmail(email));
     }
 
 }

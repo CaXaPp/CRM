@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.*;
 
 @Configuration
 @EnableWebMvc
-public class CustomConfig {
+public class SpringWebMvcConfigurer {
     @Bean
     public WebMvcConfigurer corsConfigurer() {
 
