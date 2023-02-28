@@ -65,6 +65,7 @@ function showTask(id) {
         $("select#employee").val(data.employee_id).change()
         $("select[name='typeId']").val(data.type_id).change()
         $("textarea#description").val(data.description)
+        $("textarea#result").val(data.result)
     })
 }
 

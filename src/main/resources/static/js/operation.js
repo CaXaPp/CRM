@@ -390,7 +390,7 @@ function changeInformationAboutDeals(id, price) {
     let elem2 = document.getElementById('sum_application_in_column' + id).textContent;
 
     document.getElementById('count_application_in_column' + id).innerText = (parseInt(elem1) + 1).toString();
-    document.getElementById('sum_application_in_column' + id).innerText = (parseInt(elem2) + price).toFixed(2).toString();
+    document.getElementById('sum_application_in_column' + id).innerText = (parseFloat(elem2) + price).toFixed(2);
 
     createDealNames(id);
 }
@@ -400,7 +400,7 @@ function changeInformationTextAboutDeal(id, price) {
     let elem2 = document.getElementById('sum_application_in_column' + id).textContent;
 
     document.getElementById('count_application_in_column' + id).innerText = (parseInt(elem1) - 1).toString();
-    document.getElementById('sum_application_in_column' + id).innerText = (parseInt(elem2) - price).toFixed(2).toString();
+    document.getElementById('sum_application_in_column' + id).innerText = parseFloat((parseFloat(elem2) - price).toFixed(2));
 
     createDealNames(id);
 }
@@ -674,8 +674,8 @@ function setNewStatus(applicationId, newStatusId, price) {
         }
     }).then(function () {
         getMessageForChangeStatus();
-        changeInformationAboutDeals(status_id, parseInt(price));
-        changeInformationTextAboutDeal(output_status_id, parseInt(price));
+        changeInformationAboutDeals(status_id, parseFloat(price));
+        changeInformationTextAboutDeal(output_status_id, parseFloat(price));
     }).catch(function (error) {
         console.log(error);
     })

@@ -21,13 +21,12 @@
     align-items: center;
 }
 
-.description {
-    min-height: 150px;
-    max-height: 200px;
+.task_main_block {
+    max-width: 90%;
+    margin: 0 auto;
 }
 
-.task_main_block {
-    max-width: 1400px;
-    margin: 0 auto;
+.form-additional label {
+    width: 100%;
 }
 

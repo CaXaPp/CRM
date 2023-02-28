@@ -2,36 +2,43 @@
 
 <@g.general scripts=["/js/task.js"] styles=["/css/tasks.css"]>
     <div class="task_header_block">
-        <button type="button" class="btn btn-success" id="addTaskButton" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Добавить задачу</button>
+        <button type="button" class="btn btn-success" id="addTaskButton" data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop">Добавить задачу
+        </button>
     </div>
 
     <div class="task_main_block">
         <table class="table table-hover">
             <thead>
-                <tr>
-                    <th scope="col">Дата исполнения</th>
-                    <th scope="col">Ответственный</th>
-                    <th scope="col">Объект</th>
-                    <th scope="col">Тип задачи</th>
-                    <th scope="col">Описание</th>
-                    <th scope="col">Результат</th>
-                </tr>
+            <tr>
+                <th scope="col">№ операции</th>
+                <th scope="col">Ответственный</th>
+                <th scope="col">Компания</th>
+                <th scope="col">Представитель</th>
+                <th scope="col">Задача</th>
+                <th scope="col">Описание</th>
+                <th scope="col">Результат</th>
+                <th scope="col">Дата исполнения</th>
+            </tr>
             </thead>
             <tbody id="tbody">
-                <#list tasks as task>
-                    <tr data-id="${task.id}" class="task" data-bs-toggle="modal" data-bs-target="#editTask">
-                        <td>${(task.deadline)!''}</td>
-                        <td>${(task.employee.getFIO())!''}</td>
-                        <td>${(task.application.name)!''}</td>
-                        <td>${(task.type.name)!''}</td>
-                        <td>${(task.description)!''}</td>
-                        <td>${(task.result)!'-'}</td>
-                    </tr>
-                </#list>
+            <#list tasks as task>
+                <tr data-id="${task.id}" class="task" data-bs-toggle="modal" data-bs-target="#editTask">
+                    <td>${(task.application.id)!''}</td>
+                    <td>${(task.employee.getFIO())!''}</td>
+                    <td>${(task.application.company)!''}</td>
+                    <td>${(task.application.name)!''}</td>
+                    <td>${(task.type.name)!''}</td>
+                    <td>${(task.description)!''}</td>
+                    <td>${(task.result)!'-'}</td>
+                    <td>${(task.deadline)!''}</td>
+                </tr>
+            </#list>
             </tbody>
         </table>
 
-        <div class="modal fade" id="staticBackdrop" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="staticBackdrop" tabindex="-1" aria-labelledby="staticBackdropLabel"
+             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -52,7 +59,8 @@
                                 </select>
                             </div>
                             <div class="task_body_information">
-                                <input class="form-control" type="datetime-local" name="deadline" placeholder="Дата и время" required>
+                                <input class="form-control" type="datetime-local" name="deadline"
+                                       placeholder="Дата и время" required>
                                 <label for="employee">Для</label>
                                 <select class="form-select" name="employeeId" id="employee" required>
                                     <#list employees as employee>
@@ -66,7 +74,8 @@
                                 </select>
                             </div>
                             <div>
-                                <textarea class="form-control description" name="description" placeholder="Примечания к задаче"></textarea>
+                                <textarea class="form-control description" name="description"
+                                          placeholder="Примечания к задаче"></textarea>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -95,12 +104,14 @@
                             <div>
                                 <select class="form-select" name="operationId" id="operation" required>
                                     <#list operations as operation>
-                                        <option value="${operation.id}">${operation.name}</option>
+                                        <option value="${operation.id}">${operation.name}
+                                            | ${operation.company}</option>
                                     </#list>
                                 </select>
                             </div>
                             <div class="task_body_information">
-                                <input class="form-control" type="datetime-local" name="deadline" id="deadline" placeholder="Дата и время" required>
+                                <input class="form-control" type="datetime-local" name="deadline" id="deadline"
+                                       placeholder="Дата и время" required>
                                 <label for="employee">Для</label>
                                 <select class="form-select" name="employeeId" id="employee" required>
                                     <#list employees as employee>
@@ -109,16 +120,23 @@
                                 </select>
                                 <select class="form-select" name="typeId" id="typeId" required>
                                     <#list types as type>
-                                        <#if type.id == 2><option selected value="${type.id}">${type.name}</option></#if>
+                                        <#if type.id == 2>
+                                            <option selected value="${type.id}">${type.name}</option></#if>
                                         <option value="${type.id}">${type.name}</option>
                                     </#list>
                                 </select>
                             </div>
                             <div class="form-additional">
-                                <textarea class="form-control description" name="description" placeholder="Примечания к задаче"></textarea>
+                                <label for="description">Примечания:
+                                    <textarea class="form-control" id="description" name="description"
+                                              placeholder="Введите текст"></textarea>
+                                </label>
                             </div>
                             <div class="form-additional">
-                                    <textarea name="result" id="result" placeholder="Результат задачи"></textarea>
+                                <label for="result">Результат:
+                                    <textarea class="form-control" name="result" id="result"
+                                          placeholder="Введите результат выполнения задачи"></textarea>
+                                </label>
                             </div>
                         </div>
                         <div class="modal-footer">

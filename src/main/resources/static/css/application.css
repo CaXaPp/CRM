@@ -41,6 +41,10 @@
     vertical-align: middle;
 }
 
+.application_table_block thead button {
+    font-weight: 600;
+}
+
 .alert_success_msg_for_add {
     max-width: 300px;
     z-index: 10000;
