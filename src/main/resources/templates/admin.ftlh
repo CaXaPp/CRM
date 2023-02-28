@@ -16,6 +16,8 @@
         <a href="/admin/create/department" class="btn btn-success">Добавить
             департамент</a>
 
+        <a href="/admin/plans" class="btn btn-success">Сумма по плану</a>
+
     </div>
 
 </@g.general>
