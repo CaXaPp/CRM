@@ -58,7 +58,10 @@
 }
 
 .section_info {
-    max-width: 90%;
+    margin: 0 auto;
+}
+
+.section_info_inner_row {
     margin: 0 auto;
 }
 

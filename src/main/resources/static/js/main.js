@@ -8,9 +8,7 @@ let valueForDB;
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('btnradio5_text').innerText = start.getDate() + "." + start.getMonth() + 1 + "." + start.getFullYear() + "-" + start.getDate() + "." + start.getMonth() + 1 + "." + start.getFullYear();
     getRoleFromUser();
-    setTimeout(function () {
-        dataForToday();
-    }, 300)
+    dataForToday();
     getActiveDealForToday();
 })
 
@@ -35,14 +33,13 @@ function createCategoryInDashboard(user) {
 
             '<input type="radio" class="btn-check" value="my" name="btnradio1" id="btnradio7" autoComplete="off">' +
             '<label class="btn btn-outline-primary" for="btnradio7" onclick="dataForToday()">Мои</label>'
-        )
+        );
     } else {
         clearCategoryValue();
         document.getElementById('input_group_2').insertAdjacentHTML('beforeend',
             '<input type="radio" class="btn-check" value="all" name="btnradio1" id="btnradio6" autoComplete="off" checked>' +
-            '<label class="btn btn-outline-primary" for="btnradio6" id="btnradio100" onClick="getValueFromInputForAll()">Все</label>' +
-            // onchange="changeValue()"
-            '<select class="form-select" aria-label="Select status" onClick="getValueFromSelect()" id="selectDepartment" required>' +
+            '<label class="btn btn-outline-primary" for="btnradio6" id="btnradio100" onclick="getValueFromInputForAll()">Все</label>' +
+            '<select class="form-select" aria-label="Select status" onclick="getValueFromSelect()" id="selectDepartment" required>' +
             '<option selected disabled>По отделам</option>' +
             '</select>'
         )
@@ -50,7 +47,6 @@ function createCategoryInDashboard(user) {
     }
 }
 
-// фукнции используются внутри JS (НЕ УДАЛЯТЬ!)
 function getValueFromInputForAll() {
     dataForToday();
     document.getElementById('selectDepartment').querySelectorAll('option').item(0).selected = true;
@@ -94,62 +90,55 @@ function switchOptionDepartmentsSelect(department) {
 }
 
 function createNewStatements(response) {
-    document.getElementById('new_statements_count').innerText = "+" + response.count.toString();
-    document.getElementById('new_statements_total').innerText = response.count.toString() + " сделок, " + response.sum.toFixed(2).toString();
+    document.getElementById('new_statements_count').innerText = "+ " + response.count.toString();
+    document.getElementById('new_statements_total').innerText = "Сделки: " + response.count.toString();
     document.getElementById('new_statements_total_count').innerText = response.count.toString();
-    document.getElementById('new_statements_total_amount').innerText = response.sum.toFixed(2).toString();
-    document.getElementById('new_statements_total_extra_info').innerText = response.count.toString() + " сделок, " + response.sum.toFixed(2).toString();
+    document.getElementById('new_statements_total_extra_info').innerText = "Сумма: " + response.sum.toString();
 }
 
 function createNegotiation(response) {
-    document.getElementById('negotiation_total').innerText = response.count.toString() + " сделок, " + response.sum.toFixed(2).toString();
+    document.getElementById('negotiation_total').innerText = "Сделки: " + response.count.toString();
     document.getElementById('negotiation_count').innerText = response.count.toString();
-    document.getElementById('negotiation_amount').innerText = response.sum.toFixed(2).toString();
-    document.getElementById('negotiation_extra_info').innerText = response.count.toString() + " сделок, " + response.sum.toFixed(2).toString();
+    document.getElementById('negotiation_extra_info').innerText = "Сумма: " + response.sum.toString();
 }
 
 function createUnderMaintenance(response) {
-    document.getElementById('underMaintenance_total').innerText = response.count.toString() + " сделок, " + response.sum.toFixed(2).toString();
+    document.getElementById('underMaintenance_total').innerText = "Сделки: " + response.count.toString();
     document.getElementById('underMaintenance_total_count').innerText = response.count.toString();
-    document.getElementById('underMaintenance_total_amount').innerText = response.sum.toFixed(2).toString();
-    document.getElementById('underMaintenance_total_extra_info').innerText = response.count.toString() + " сделок, " + response.sum.toFixed(2).toString();
+    document.getElementById('underMaintenance_total_extra_info').innerText = "Сумма: " + response.sum.toString();
 }
 
 function createMakingDecisions(response) {
-    document.getElementById('makingDecisions_total').innerText = response.count.toString() + " сделок, " + response.sum.toFixed(2).toString();
+    document.getElementById('makingDecisions_total').innerText = "Сделки: " + response.count.toString();
     document.getElementById('makingDecisions_total_count').innerText = response.count.toString();
-    document.getElementById('makingDecisions_total_amount').innerText = response.sum.toFixed(2).toString();
-    document.getElementById('makingDecisions_total_extra_info').innerText = response.count.toString() + " сделок, " + response.sum.toFixed(2).toString();
+    document.getElementById('makingDecisions_total_extra_info').innerText = "Сумма: " + response.sum.toString();
 
 }
 
 function createSuccessfull(response) {
-    document.getElementById('makingDecisions_total_amount_extra_info').innerText = response.sum.toFixed(2).toString();
     document.getElementById('makingDecisions_total_count_extra_info').innerText = response.count.toString();
-    document.getElementById('makingDecisions_total_info').innerText = response.count.toString() + " сделок, " + response.sum.toFixed(2).toString();
+    document.getElementById('makingDecisions_total_info').innerText = "Сумма: " + response.sum.toString()
 }
 
 function clear() {
-    document.getElementById('new_statements_count').innerText = "+0";
-    document.getElementById('new_statements_total').innerText = "0 сделок, 0";
+    document.getElementById('new_statements_count').innerText = "+ 0";
+    document.getElementById('new_statements_total').innerText = "Сделки: 0";
     document.getElementById('new_statements_total_count').innerText = "0";
-    document.getElementById('new_statements_total_amount').innerText = "0";
-    document.getElementById('new_statements_total_extra_info').innerText = "0 сделок, 0";
-    document.getElementById('negotiation_total').innerText = "0 сделок, 0";
+    document.getElementById('new_statements_total_extra_info').innerText = "Сумма: 0";
+
+    document.getElementById('negotiation_total').innerText = "Сделки: 0";
     document.getElementById('negotiation_count').innerText = "0";
-    document.getElementById('negotiation_amount').innerText = "0";
-    document.getElementById('negotiation_extra_info').innerText = "0 сделок, 0";
-    document.getElementById('underMaintenance_total').innerText = "0 сделок, 0";
+    document.getElementById('negotiation_extra_info').innerText = "Сумма: 0";
+
+    document.getElementById('underMaintenance_total').innerText = "Сделки: 0";
     document.getElementById('underMaintenance_total_count').innerText = "0";
-    document.getElementById('underMaintenance_total_amount').innerText = "0";
-    document.getElementById('underMaintenance_total_extra_info').innerText = "0 сделок, 0";
-    document.getElementById('makingDecisions_total').innerText = "0 сделок, 0";
+    document.getElementById('underMaintenance_total_extra_info').innerText = "Сумма: 0";
+
+    document.getElementById('makingDecisions_total').innerText = "Сделки: 0";
     document.getElementById('makingDecisions_total_count').innerText = "0";
-    document.getElementById('makingDecisions_total_amount').innerText = "0";
-    document.getElementById('makingDecisions_total_extra_info').innerText = "0 сделок, 0";
+    document.getElementById('makingDecisions_total_extra_info').innerText = "Сумма: 0";
     document.getElementById('makingDecisions_total_count_extra_info').innerText = "0";
-    document.getElementById('makingDecisions_total_amount_extra_info').innerText = "0";
-    document.getElementById('makingDecisions_total_info').innerText = "0 сделок, 0";
+    document.getElementById('makingDecisions_total_info').innerText = "Сумма: 0";
 }
 
 function dataForToday() {
@@ -194,7 +183,7 @@ function dataForToday() {
                 getAllSumAndCount(monthDateStart.substring(0, monthDateStart.length - 1), monthDateEnd.substring(0, monthDateEnd.length - 1), valueForDB);
                 break;
         }
-    }, 1000);
+    }, 500);
 }
 
 function getValueFromLoop(value) {
@@ -251,7 +240,7 @@ function getActiveDealForToday() {
     spinnerDisplayFlex()
     $("#nav-tabContent td").remove();
     axios.get(BASE_URL + "/application/section/active").then(function (response) {
-        spinnerDisplayNone();
+            spinnerDisplayNone();
             for (let i = 0; i < response.data.length; i++) {
                 document.getElementById('list_active_body').insertAdjacentHTML('beforeend',
                     '<tr>' +
@@ -266,11 +255,13 @@ function getActiveDealForToday() {
         }
     )
 }
-function spinnerDisplayNone(){
+
+function spinnerDisplayNone() {
     document.getElementById('spinner_in_main').setAttribute('style', 'display:none !important');
 
 }
-function spinnerDisplayFlex(){
+
+function spinnerDisplayFlex() {
     document.getElementById('spinner_in_main').setAttribute('style', 'display:flex !important');
 }
 
@@ -278,8 +269,8 @@ function getCompletedDealOnToday() {
     spinnerDisplayFlex();
     $("#nav-tabContent td").remove();
     axios.get(BASE_URL + "/application/section/complete").then(function (response) {
-        spinnerDisplayNone();
-        for (let i = 0; i < response.data.length; i++) {
+            spinnerDisplayNone();
+            for (let i = 0; i < response.data.length; i++) {
                 document.getElementById('list_active_body').insertAdjacentHTML('beforeend',
                     '<tr>' +
                     '<td>' + response.data[i].employee.firstName + " " + response.data[i].employee.surname + '</td>' +

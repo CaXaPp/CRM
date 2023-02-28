@@ -41,7 +41,7 @@ public abstract class TaskMapper {
     public abstract Task toEntity(TaskDto taskDto);
 
     public Task toEntity(Application application, LocalDateTime deadline, User user,
-                         TaskType type, String description) {
+                         TaskType type, String description, String result) {
         return Task.builder()
                 .application(application)
                 .employee(user)
@@ -49,6 +49,7 @@ public abstract class TaskMapper {
                 .createdAt(LocalDateTime.now())
                 .description(description)
                 .type(type)
+                .result(result)
                 .build();
     }
 
@@ -59,6 +60,7 @@ public abstract class TaskMapper {
                 .employeeId(task.getEmployee().getId())
                 .typeId(task.getType().getId())
                 .description(task.getDescription())
+                .result(task.getResult())
                 .build();
     }
 }

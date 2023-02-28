@@ -3,104 +3,100 @@
 <@g.general scripts=["/js/application.js"] styles=["/css/application.css"]>
 
     <div class="application_list_class">
-        <div>
-            <div class="application_sort_block">
-                <label>
-                    <input type="search" class="form-control" id="search_data_input"
-                           placeholder="Поиск по наименованию">
-                </label>
-                <div class="btn-group" role="group" id="input_group_application"
-                     aria-label="Basic radio toggle button group">
-                    <input type="radio" class="btn-check" value="today" name="btnradio" id="btnradio_1_application"
-                           autocomplete="off">
-                    <label class="btn btn-outline-primary" for="btnradio_1_application"
-                           onclick="dataForTodayInApplication()">Сегодня</label>
+        <div class="application_sort_block">
+            <label>
+                <input type="search" class="form-control" id="search_data_input"
+                       placeholder="Поиск по наименованию">
+            </label>
+            <div class="btn-group" role="group" id="input_group_application"
+                 aria-label="Basic radio toggle button group">
+                <input type="radio" class="btn-check" value="today" name="btnradio" id="btnradio_1_application"
+                       autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio_1_application"
+                       onclick="dataForTodayInApplication()">Сегодня</label>
 
-                    <input type="radio" class="btn-check" value="yesterday" name="btnradio" id="btnradio_2_application"
-                           autocomplete="off">
-                    <label class="btn btn-outline-primary" for="btnradio_2_application"
-                           onclick="dataForTodayInApplication()">Вчера</label>
+                <input type="radio" class="btn-check" value="yesterday" name="btnradio" id="btnradio_2_application"
+                       autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio_2_application"
+                       onclick="dataForTodayInApplication()">Вчера</label>
 
-                    <input type="radio" class="btn-check" value="week" name="btnradio" id="btnradio_3_application"
-                           autocomplete="off">
-                    <label class="btn btn-outline-primary" for="btnradio_3_application"
-                           onclick="dataForTodayInApplication()">Неделя</label>
+                <input type="radio" class="btn-check" value="week" name="btnradio" id="btnradio_3_application"
+                       autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio_3_application"
+                       onclick="dataForTodayInApplication()">Неделя</label>
 
-                    <input type="radio" class="btn-check" value="month" name="btnradio" id="btnradio_4_application"
-                           autocomplete="off">
-                    <label class="btn btn-outline-primary" for="btnradio_4_application"
-                           onclick="dataForTodayInApplication()">Месяц</label>
+                <input type="radio" class="btn-check" value="month" name="btnradio" id="btnradio_4_application"
+                       autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio_4_application"
+                       onclick="dataForTodayInApplication()">Месяц</label>
 
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio_5_application"
-                           autocomplete="off"/>
-                    <label class="btn btn-outline-primary" id="btnradio5_in_application_text"
-                           for="btnradio_5_application"></label>
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio_5_application"
+                       autocomplete="off"/>
+                <label class="btn btn-outline-primary" id="btnradio5_in_application_text"
+                       for="btnradio_5_application"></label>
 
-                    <input type="radio" class="btn-check" value="infinity" name="btnradio" id="btnradio_6_application"
-                           autocomplete="off"
-                           checked>
-                    <label class="btn btn-outline-primary" for="btnradio_6_application"
-                           onclick="dataForTodayInApplication()">Все</label>
-                </div>
-                <div class="alert alert-success alert_success_msg_for_add" id="alert_new_msg" hidden role="alert">
-                    Добавлено новое заявление!
-                </div>
-                <div class="alert alert-success alert_success_msg_for_add" id="alert_delete_msg" hidden role="alert">
-                    Заявление успешно удалено!
-                </div>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#addNewApplication" onclick="fillNewApplication()">
-                    Добавить заявку
-                </button>
+                <input type="radio" class="btn-check" value="infinity" name="btnradio" id="btnradio_6_application"
+                       autocomplete="off"
+                       checked>
+                <label class="btn btn-outline-primary" for="btnradio_6_application"
+                       onclick="dataForTodayInApplication()">Все</label>
             </div>
-            <table class="table table-striped application_table_block">
-                <thead>
-                <tr>
-                    <th scope="col">
-                        <button class="btnToSortByProductName" onclick="sortFunctionByApplicationId()"
-                                style="cursor: pointer" type="button">№ <i class="fa-solid fa-sort"></i>
-                        </button>
-                    </th>
-                    <th scope="col">
-                        <button class="btnToSortByProductName" onclick="sortFunctionByApplicationCompany()"
-                                style="cursor: pointer" type="button">Наименование <i class="fa-solid fa-sort"></i>
-                        </button>
-                    </th>
-                    <th scope="col">
-                        <button class="btnToSortByProductName" onclick="sortFunctionByApplicationPrice()"
-                                style="cursor: pointer" type="button">Бюджет <i class="fa-solid fa-sort"></i></button>
-                    </th>
-                    <th scope="col">
-                        <button class="btnToSortByProductName" onclick="sortFunctionByApplicationProduct()"
-                                style="cursor: pointer" type="button">Товар/услуга <i class="fa-solid fa-sort"></i>
-                        </button>
-                    </th>
-                    <th scope="col">Контактное лицо</th>
-                    <th scope="col">Телефон</th>
-                    <th scope="col">Почта</th>
-                    <th scope="col">Адрес</th>
-                    <th scope="col">
-                        <button class="btnToSortByProductName" onclick="sortFunctionByApplicationStatus()"
-                                style="cursor: pointer" type="button">Статус <i class="fa-solid fa-sort"></i></button>
-                    </th>
-                    <th scope="col">
-                        <button class="btnToSortByProductName" onclick="sortFunctionByApplicationEmployee()"
-                                style="cursor: pointer" type="button">Ответственный сотрудник <i
-                                    class="fa-solid fa-sort"></i></button>
-                    </th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody id="tdsBlock">
-                </tbody>
-            </table>
-            <div class="d-flex spinner_in_application_pulls" id="spinner_in_application_pulls">
-                <strong class="text-primary">Загрузка данных...</strong>
-                <div class="spinner-border ms-auto text-primary" role="status" aria-hidden="true"></div>
+            <div class="alert alert-success alert_success_msg_for_add" id="alert_new_msg" hidden role="alert">
+                Добавлено новое заявление!
             </div>
-            <div id="emptyMsg" class="emptyMsg" style="display: none">
-                <span>Заявления отсутствуют</span>
+            <div class="alert alert-success alert_success_msg_for_add" id="alert_delete_msg" hidden role="alert">
+                Заявление успешно удалено!
             </div>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#addNewApplication" onclick="fillNewApplication()">
+                Добавить заявку
+            </button>
+        </div>
+        <table class="table table-striped application_table_block">
+            <thead>
+            <tr class="table-primary">
+                <th scope="col">
+                    <button class="btnToSortByProductName" onclick="sortFunctionByApplicationId()"
+                            style="cursor: pointer" type="button">№ <i class="fa-solid fa-sort"></i>
+                    </button>
+                </th>
+                <th scope="col">
+                    <button class="btnToSortByProductName" onclick="sortFunctionByApplicationCompany()"
+                            style="cursor: pointer" type="button">Наименование <i class="fa-solid fa-sort"></i>
+                    </button>
+                </th>
+                <th scope="col">
+                    <button class="btnToSortByProductName" onclick="sortFunctionByApplicationPrice()"
+                            style="cursor: pointer" type="button">Бюджет <i class="fa-solid fa-sort"></i></button>
+                </th>
+                <th scope="col">
+                    <button class="btnToSortByProductName" onclick="sortFunctionByApplicationProduct()"
+                            style="cursor: pointer" type="button">Товар/услуга <i class="fa-solid fa-sort"></i>
+                    </button>
+                </th>
+                <th scope="col">Контактное лицо</th>
+                <th scope="col">Телефон</th>
+                <th scope="col">Почта</th>
+                <th scope="col">Адрес</th>
+                <th scope="col">
+                    <button class="btnToSortByProductName" onclick="sortFunctionByApplicationStatus()"
+                            style="cursor: pointer" type="button">Статус <i class="fa-solid fa-sort"></i></button>
+                </th>
+                <th scope="col">
+                    <button class="btnToSortByProductName" onclick="sortFunctionByApplicationEmployee()"
+                            style="cursor: pointer" type="button">Сотрудник <i class="fa-solid fa-sort"></i></button>
+                </th>
+            </tr>
+            </thead>
+            <tbody id="tdsBlock">
+            </tbody>
+        </table>
+        <div class="d-flex spinner_in_application_pulls" id="spinner_in_application_pulls">
+            <strong class="text-primary">Загрузка данных...</strong>
+            <div class="spinner-border ms-auto text-primary" role="status" aria-hidden="true"></div>
+        </div>
+        <div id="emptyMsg" class="emptyMsg" style="display: none">
+            <span>Заявления отсутствуют</span>
         </div>
     </div>
 
@@ -314,7 +310,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
-                    <button type="submit" class="btn btn-primary" form="add_new_application" id="btnForSaveInApplication">
+                    <button type="submit" class="btn btn-primary" form="add_new_application"
+                            id="btnForSaveInApplication">
                         Сохранить
                     </button>
                 </div>

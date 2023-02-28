@@ -45,7 +45,6 @@
                                 <h5 class="card-title text-primary mb-1" id="new_statements_count">+ 0</h5>
                                 <p class="text-primary mb-0">Новые</p>
                             </div>
-                            <p class="text-primary mb-0">Потерянные</p>
                         </div>
 
                         <div class="dashboard_statistic_center">
@@ -53,49 +52,45 @@
                             <div class="dashboard_statistic_inner">
                                 <div class="border-2 border-bottom border-primary title_stat_block">
                                     <p class="text-primary mb-0">Новое</p>
-                                    <p class="text-primary mb-0" id="new_statements_total">0 сделок, 0</p>
+                                    <p class="text-primary mb-0" id="new_statements_total">Сделки: 0</p>
                                 </div>
                                 <div class="border-primary border rounded text-center py-3 mb-3">
                                     <h5 class="card-title text-primary mb-1" id="new_statements_total_count">0</h5>
-                                    <p class="text-primary mb-0" id="new_statements_total_amount">0</p>
                                 </div>
-                                <p class="text-primary mb-0" id="new_statements_total_extra_info">0 сделок, 0</p>
+                                <p class="text-primary mb-0" id="new_statements_total_extra_info">Сумма: 0</p>
                             </div>
 
                             <div class="dashboard_statistic_inner">
                                 <div class="border-2 border-bottom border-warning title_stat_block">
                                     <p class="text-primary mb-0">Переговоры</p>
-                                    <p class="text-primary mb-0" id="negotiation_total">0 сделок, 0</p>
+                                    <p class="text-primary mb-0" id="negotiation_total">Сделки: 0</p>
                                 </div>
                                 <div class="border-warning border rounded text-center py-3 mb-3">
                                     <h5 class="card-title text-primary mb-1" id="negotiation_count">0</h5>
-                                    <p class="text-primary mb-0" id="negotiation_amount">0</p>
                                 </div>
-                                <p class="text-primary mb-0" id="negotiation_extra_info">0 сделок, 0</p>
+                                <p class="text-primary mb-0" id="negotiation_extra_info">Сумма: 0</p>
                             </div>
 
                             <div class="dashboard_statistic_inner">
                                 <div class="border-2 border-bottom border-success title_stat_block">
                                     <p class="text-primary mb-0">Принятие решения</p>
-                                    <p class="text-primary mb-0" id="makingDecisions_total">0 сделок, 0</p>
+                                    <p class="text-primary mb-0" id="makingDecisions_total">Сделки: 0</p>
                                 </div>
                                 <div class="border-success border rounded text-center py-3 mb-3">
                                     <h5 class="card-title text-primary mb-1" id="makingDecisions_total_count">0</h5>
-                                    <p class="text-primary mb-0" id="makingDecisions_total_amount">0</p>
                                 </div>
-                                <p class="text-primary mb-0" id="makingDecisions_total_extra_info">0 сделок, 0</p>
+                                <p class="text-primary mb-0" id="makingDecisions_total_extra_info">Сумма: 0</p>
                             </div>
 
                             <div class="dashboard_statistic_inner">
                                 <div class="border-2 border-bottom border-danger title_stat_block">
                                     <p class="text-primary mb-0">На обслуживании</p>
-                                    <p class="text-primary mb-0" id="underMaintenance_total">0 сделок, 0</p>
+                                    <p class="text-primary mb-0" id="underMaintenance_total">Сделки: 0</p>
                                 </div>
                                 <div class="border-danger border rounded text-center py-3 mb-3">
                                     <h5 class="card-title text-primary mb-1" id="underMaintenance_total_count">0</h5>
-                                    <p class="text-primary mb-0" id="underMaintenance_total_amount">0</p>
                                 </div>
-                                <p class="text-primary mb-0" id="underMaintenance_total_extra_info">0 сделок, 0</p>
+                                <p class="text-primary mb-0" id="underMaintenance_total_extra_info">Сумма: 0</p>
                             </div>
                         </div>
 
@@ -103,9 +98,9 @@
                             <div class="text-center py-3 mb-3">
                                 <h5 class="card-title text-primary mb-1" id="makingDecisions_total_count_extra_info">
                                     0</h5>
-                                <p class="text-primary mb-0" id="makingDecisions_total_amount_extra_info">0</p>
+                                <p class="text-primary mb-0">Успешно</p>
                             </div>
-                            <p class="text-primary mb-0" id="makingDecisions_total_info">0 сделок, 0</p>
+                            <p class="text-primary mb-0" id="makingDecisions_total_info">Сумма: 0</p>
                         </div>
 
                     </div>
@@ -113,8 +108,8 @@
             </div>
         </div>
         <div class="section_info">
-            <div class="row">
-                <div class="col-4">
+            <div class="row section_info_inner_row">
+                <div class="col-3">
                     <div class="list-group" id="list-tab" role="tablist">
                         <a class="list-group-item list-group-item-action active" id="list_active_list"
                            data-bs-toggle="list" href="#list_active" onclick="getActiveDealForToday()" role="tab"
@@ -139,7 +134,7 @@
                            aria-controls="settings">Отказы в обслуживании</a>
                     </div>
                 </div>
-                <div class="col-8 information_block_inner_footer">
+                <div class="col-9 information_block_inner_footer">
                     <div class="d-flex justify-content-center" id="spinner_in_main">
                         <div class="spinner-border text-primary" role="status">
                             <span class="visually-hidden">Loading...</span>

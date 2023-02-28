@@ -19,6 +19,7 @@ import org.javers.repository.jql.QueryBuilder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -56,10 +57,19 @@ public class ApplicationService {
                 .collect(Collectors.toList());
     }
 
+    public List<ApplicationDto> getAllByUserId(Long id) {
+        List<Application> applications = applicationRepository.findAllByEmployee_Id(id);
+        return applications.stream()
+                .sorted(Comparator.comparing(Application::getCreatedAt).reversed())
+                .map(applicationMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
     public List<ApplicationDto> getAllOperationsByFunnelId(Long id) {
         List<Application> applications = applicationRepository.findAllByEmployeeNotNullAndStatus_Funnel_Id(id);
         return applications.stream().map(applicationMapper::toDto).collect(Collectors.toList());
     }
+
     public List<ApplicationDto> getAllOperationsByEmployeeIdAndFunnelId(Long id, Long funnelId) {
         List<Application> applications = applicationRepository.findAllByEmployeeIdAndEmployeeNotNullAndStatus_Funnel_Id(id, funnelId);
         return applications.stream().map(applicationMapper::toDto).collect(Collectors.toList());
@@ -69,6 +79,7 @@ public class ApplicationService {
         List<Application> applications = applicationRepository.findAllActiveOperationsByFunnelId(id, success, fail);
         return applications.stream().map(applicationMapper::toDto).collect(Collectors.toList());
     }
+
     public List<ApplicationDto> getAllActiveOperationsByEmployeeIdAndFunnelId(Long userId, Long funnelId) {
         List<Application> applications = applicationRepository.getAllActiveOperationsByEmployeeIdAndFunnelId(userId, funnelId, success, fail);
         return applications.stream().map(applicationMapper::toDto).collect(Collectors.toList());
@@ -78,6 +89,7 @@ public class ApplicationService {
         List<Application> applications = applicationRepository.findAllNotActiveOperationsByFunnelId(id, success, fail);
         return applications.stream().map(applicationMapper::toDto).collect(Collectors.toList());
     }
+
     public List<ApplicationDto> getAllNotActiveOperationsByEmployeeIdAndFunnelId(Long userId, Long funnelId) {
         List<Application> applications = applicationRepository.getAllNotActiveOperationsByEmployeeIdAndFunnelId(userId, funnelId, success, fail);
         return applications.stream().map(applicationMapper::toDto).collect(Collectors.toList());
@@ -121,6 +133,7 @@ public class ApplicationService {
         List<Application> applications = applicationRepository.findAllByProduct_Id(productId);
         return detailsDto(applications);
     }
+
     public ApplicationDetailsDto getApplicationBySource(Long sourceId) {
         List<Application> applications = applicationRepository.findAllBySource_Id(sourceId);
         return detailsDto(applications);
@@ -146,6 +159,7 @@ public class ApplicationService {
         dto.setFailSum(applications.stream().filter(a -> Objects.equals(a.getStatus().getName(), fail)).mapToDouble(a -> a.getPrice().doubleValue()).sum());
         return dto;
     }
+
     public Application findById(Long id) {
         return applicationRepository.getApplicationById(id);
     }
@@ -179,9 +193,15 @@ public class ApplicationService {
 
     private ApplicationDetailsAndStatusDto statusDto(List<Application> applications, String status) {
         ApplicationDetailsAndStatusDto dto = new ApplicationDetailsAndStatusDto();
-            dto.setStatus(status);
-            dto.setCount((int) applications.stream().filter(a -> Objects.equals(a.getStatus().getName(), status)).count());
-            dto.setSum(applications.stream().filter(a -> a.getPrice() != null).filter(a -> Objects.equals(a.getStatus().getName(), status)).mapToDouble(a -> a.getPrice().doubleValue()).sum());
+        dto.setStatus(status);
+        dto.setCount((int) applications.stream().filter(a -> Objects.equals(a.getStatus().getName(), status)).count());
+        double sum = applications.stream()
+                .filter(a -> a.getPrice() != null)
+                .filter(a -> Objects.equals(a.getStatus().getName(), status))
+                .mapToDouble(a -> a.getPrice().doubleValue())
+                .sum();
+        String formattedSum = String.format("%.2f", sum).replace(",", ".");
+        dto.setSum(Double.parseDouble(formattedSum));
         return dto;
     }
 
