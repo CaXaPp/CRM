@@ -51,3 +51,6 @@ INSERT INTO public.users (email, enabled, first_name, middle_name, password, sur
 INSERT INTO public.users (email, enabled, first_name, middle_name, password, surname, department_id, role_id, status_id) VALUES ('user2@user.com', true, 'Сотрудник №2', 'Отчество', '$2a$10$P5bYbQxHa2keo2DxGTdvsOQQVjcdKCLpeP9qs8wCKrc6viVlWe0LW', 'Фамилия', 2, 2, 1);
 INSERT INTO public.users (email, enabled, first_name, middle_name, password, surname, department_id, role_id, status_id) VALUES ('admin@admin.com', true, 'Админ', 'Отчество', '$2a$10$pa5MWgIvOkFwluTvR5Ize.7UfFW5tcMv.QsFXJ12ojQsCUcItKa8q', 'Фамилия', 1, 1, 1);
 INSERT INTO public.users (email, enabled, first_name, middle_name, password, surname, department_id, role_id, status_id) VALUES ('manager@manager.com', true, 'Руководитель', 'Отчество', '$2a$10$0ZsKgr8//yWQvy7Pl8qYqOeyd5uBh9v1gBKB/nDCpkxGP.fq5RZge', 'Фамилия', 1, 3, 1);
+
+INSERT INTO public.plan_sums (sum, department_id) VALUES (0.00, 1);
+INSERT INTO public.plan_sums (sum, department_id) VALUES (0.00, 2);
