@@ -11,10 +11,14 @@ import java.util.List;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findAllByEmployee_Id(Long id);
-    List<Task> findAllByApplication_Id(Long id);
-    List<Task> findAllByDeadlineBefore(LocalDateTime date);
-    List<Task> findAllByDeadlineBeforeAndEmployee_Id(LocalDateTime date, Long id);
-    List<Task> findAllByDeadlineAfter(LocalDateTime date);
-    List<Task> findAllByDeadlineAfterAndEmployee_Id(LocalDateTime date, Long id);
 
+    List<Task> findAllByApplication_Id(Long id);
+
+    List<Task> findAllByDeadlineBefore(LocalDateTime date);
+
+    List<Task> findAllByDeadlineBeforeAndEmployee_Id(LocalDateTime date, Long id);
+
+    List<Task> findAllByDeadlineAfter(LocalDateTime date);
+
+    List<Task> findAllByDeadlineAfterAndEmployee_Id(LocalDateTime date, Long id);
 }

@@ -12,9 +12,13 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
+
     boolean existsByEmail(String email);
+
     List<User> findAllByRole(Role role);
+
     List<User> findAllByRole_Value(String role);
+
     @Query("SELECT u FROM User u WHERE u.role.value NOT IN ('ROLE_ADMIN')")
     List<User> findAllUsersNotInAdmin();
 }
