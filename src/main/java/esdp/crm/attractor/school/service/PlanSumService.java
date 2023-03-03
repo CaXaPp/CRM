@@ -2,6 +2,7 @@ package esdp.crm.attractor.school.service;
 
 import esdp.crm.attractor.school.dto.PlanSumDto;
 import esdp.crm.attractor.school.dto.request.PlanSumRequest;
+import esdp.crm.attractor.school.entity.PlanSum;
 import esdp.crm.attractor.school.exception.NotFoundException;
 import esdp.crm.attractor.school.mapper.PlanSumMapper;
 import esdp.crm.attractor.school.repository.PlanSumRepository;

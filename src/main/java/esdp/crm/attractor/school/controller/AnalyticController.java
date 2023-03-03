@@ -25,7 +25,6 @@ public class AnalyticController {
     public ResponseEntity<ApplicationDetailsDto> getAllApplication() {
         return new ResponseEntity<>(applicationService.getSumAndCountOfApplication(), HttpStatus.OK);
     }
-
     @GetMapping("/product/{id}")
     public ResponseEntity<ApplicationDetailsDto> getApplicationByProduct(@PathVariable Long id) {
         return new ResponseEntity<>(applicationService.getApplicationByProduct(id), HttpStatus.OK);
@@ -38,9 +37,4 @@ public class AnalyticController {
     public ResponseEntity<ApplicationDetailsDto> getApplicationByEmployee(@PathVariable Long id) {
         return new ResponseEntity<>(applicationService.getApplicationByEmployee(id), HttpStatus.OK);
     }
-    @GetMapping("/status/{id}")
-    public ResponseEntity<ApplicationDetailsDto> getApplicationByStatus(@PathVariable Long id) {
-        return new ResponseEntity<>(applicationService.getApplicationByStatus(id), HttpStatus.OK);
-    }
-
 }

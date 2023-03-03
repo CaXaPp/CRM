@@ -35,9 +35,14 @@
                 <label class="btn btn-outline-primary" id="btnradio5_in_application_text"
                        for="btnradio_5_application"></label>
 
-                <input type="radio" class="btn-check" value="infinity" name="btnradio" id="btnradio_6_application"
+                <input type="radio" class="btn-check" value="all_active" name="btnradio" id="btnradio_7_application"
                        autocomplete="off"
                        checked>
+                <label class="btn btn-outline-primary" for="btnradio_7_application"
+                       onclick="dataForTodayInApplication()">Активные</label>
+
+                <input type="radio" class="btn-check" value="infinity" name="btnradio" id="btnradio_6_application"
+                       autocomplete="off">
                 <label class="btn btn-outline-primary" for="btnradio_6_application"
                        onclick="dataForTodayInApplication()">Все</label>
             </div>
@@ -54,7 +59,7 @@
         </div>
         <table class="table table-striped application_table_block">
             <thead>
-            <tr class="table-primary">
+            <tr class="table-light">
                 <th scope="col">
                     <button class="btnToSortByProductName" onclick="sortFunctionByApplicationId()"
                             style="cursor: pointer" type="button">№ <i class="fa-solid fa-sort"></i>
@@ -88,7 +93,7 @@
                 </th>
             </tr>
             </thead>
-            <tbody id="tdsBlock">
+            <tbody id="tdsBlock" class="table-group-divider">
             </tbody>
         </table>
         <div class="d-flex spinner_in_application_pulls" id="spinner_in_application_pulls">
@@ -192,19 +197,19 @@
 
                             <div class="information_field">
                                 <textarea class="form-control" name="description" id="applicationTextarea"
-                                          placeholder="Примечания к заявлению"></textarea>
+                                          placeholder="Примечание к заявлению"></textarea>
                             </div>
 
                             <input type="hidden" value="" id="hiddenApplicationId">
                             <input type="hidden" value="" name="sourceId" id="sourceId">
 
                         </form>
-                        <button type="button" class="btn btn-danger deleteBtn" value="" id="deleteBtn"
-                                data-bs-toggle="modal" data-bs-target="#deleteApplicationModal"
-                                onclick="getValueForRemoveApplication(this.value)">
-                        </button>
+<#--                        <button type="button" class="btn btn-danger deleteBtn" value="" id="deleteBtn"-->
+<#--                                data-bs-toggle="modal" data-bs-target="#deleteApplicationModal"-->
+<#--                                onclick="getValueForRemoveApplication(this.value)">-->
+<#--                        </button>-->
                     </div>
-                    <div class="modal-footer modal-footer-edit">
+                    <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" form="modal_edit_form">
                             Сохранить
                         </button>
@@ -244,8 +249,7 @@
                             <textarea class="form-control" name="description" id="textareaValue"
                                       placeholder="Примечания к задаче"></textarea>
                             <div class="task_footer_add">
-                                <button type="submit" class="btn btn-primary">Поставить</button>
-                                <button type="button" class="btn btn-secondary">Отменить</button>
+                                <button type="submit" class="btn btn-success">Поставить задачу</button>
                             </div>
                         </form>
                     </div>
@@ -259,7 +263,7 @@
             <div class="modal-content modal-new-app-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5">Новое заявление</h1>
-                    <button type="button" id="close_btn_new_app" class="btn-close" data-bs-dismiss="modal"
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="modal_body_form">
@@ -277,7 +281,7 @@
                             <label for="new_price">Бюджет</label>
                             <input type="number" class="form-control" step="any" min="0" name="price"
                                    id="new_price"
-                                   value="" placeholder="Введите бюджет">
+                                   value="0" placeholder="Введите бюджет">
                         </div>
                         <div class="information_field">
                             <label for="new_name">Контактное лицо</label>
@@ -311,7 +315,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
                     <button type="submit" class="btn btn-primary" form="add_new_application"
-                            id="btnForSaveInApplication">
+                            id="btnForSaveInApplication" data-bs-dismiss="modal">
                         Сохранить
                     </button>
                 </div>
@@ -319,33 +323,33 @@
         </div>
     </div>
 
-    <div class="modal fade" id="deleteApplicationModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Удаление заявления</h1>
-                    <button type="button" class="btn-close" id="close_btn_delete" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-danger" role="alert" id="deleteApplicationDiv">
-                    </div>
-                    <div>
-                        <#if _csrf??>
-                            <input type="hidden"
-                                   name="${_csrf.parameterName}" value="${_csrf.token}" id="x-csrf-token">
-                        </#if>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="removeApplicationBtnValue" value=""
-                            onclick="deleteApplication(this.value)">Удалить
-                    </button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
-                </div>
-            </div>
-        </div>
-    </div>
+<#--    <div class="modal fade" id="deleteApplicationModal" tabindex="-1" aria-labelledby="exampleModalLabel"-->
+<#--         aria-hidden="true">-->
+<#--        <div class="modal-dialog">-->
+<#--            <div class="modal-content">-->
+<#--                <div class="modal-header">-->
+<#--                    <h1 class="modal-title fs-5" id="exampleModalLabel">Удаление заявления</h1>-->
+<#--                    <button type="button" class="btn-close" data-bs-dismiss="modal"-->
+<#--                            aria-label="Close"></button>-->
+<#--                </div>-->
+<#--                <div class="modal-body">-->
+<#--                    <div class="alert alert-danger" role="alert" id="deleteApplicationDiv">-->
+<#--                    </div>-->
+<#--                    <div>-->
+<#--                        <#if _csrf??>-->
+<#--                            <input type="hidden"-->
+<#--                                   name="${_csrf.parameterName}" value="${_csrf.token}" id="x-csrf-token">-->
+<#--                        </#if>-->
+<#--                    </div>-->
+<#--                </div>-->
+<#--                <div class="modal-footer">-->
+<#--                    <button type="button" class="btn btn-primary" id="removeApplicationBtnValue" value=""-->
+<#--                            onclick="deleteApplication(this.value)" data-bs-dismiss="modal">Удалить-->
+<#--                    </button>-->
+<#--                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>-->
+<#--                </div>-->
+<#--            </div>-->
+<#--        </div>-->
+<#--    </div>-->
 
 </@g.general>

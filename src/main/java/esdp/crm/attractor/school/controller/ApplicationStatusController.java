@@ -36,5 +36,10 @@ public class ApplicationStatusController {
         return new ResponseEntity<>(applicationStatusService.findStatusIdByFunnel(statusName, funnelId), HttpStatus.OK);
     }
 
+    @GetMapping("/status-name/{id}")
+    public ResponseEntity<ApplicationStatusDto> getStatus(@PathVariable Long id) {
+        return new ResponseEntity<>(applicationStatusService.findStatusByFunnel_Id(id), HttpStatus.OK);
+    }
+
 
 }

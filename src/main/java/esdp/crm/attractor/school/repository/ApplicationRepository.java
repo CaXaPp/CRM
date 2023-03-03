@@ -17,6 +17,7 @@ import java.util.List;
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
     @Query("SELECT a FROM Application a WHERE a.status IN :statuses AND a.employee = :employee")
     List<Application> findAllByEmployee(@Param("employee") User employee, @Param("statuses") List<ApplicationStatus> statuses);
+    List<Application> findAllByStatus_NameNotIn(List<String> status);
     Application getApplicationById(Long id);
     List<Application> findAllByEmployeeNotNullAndStatus_Funnel_Id(Long id);
     List<Application> findAllByEmployeeIdAndEmployeeNotNullAndStatus_Funnel_Id(Long id, Long funnelId);
@@ -33,7 +34,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     List<Application> findAllByProduct_Id(Long id);
     List<Application> findAllBySource_Id(Long id);
     List<Application> findAllByEmployee_Id(Long id);
-    List<Application> findAllByStatus_Id(Long id);
     @Query("SELECT a FROM Application a WHERE a.status IN :statuses AND a.employee IS NOT NULL")
     List<Application> findOperationsByFunnel(List<ApplicationStatus> statuses);
     @Query("SELECT a FROM Application a WHERE a.status.name NOT IN (:status1, :status2) AND a.employee IS NOT NULL ORDER BY a.createdAt ASC")

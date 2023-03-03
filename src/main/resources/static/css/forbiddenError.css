@@ -1,0 +1,92 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #233142;
+
+}
+
+.whistle {
+    width: 20%;
+    fill: #f95959;
+    margin: 100px 40%;
+    text-align: left;
+    transform: translate(-50%, -50%);
+    transform: rotate(0);
+    transform-origin: 80% 30%;
+    animation: wiggle .2s infinite;
+}
+
+@keyframes wiggle {
+    0% {
+        transform: rotate(3deg);
+    }
+    50% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(3deg);
+    }
+}
+
+h1 {
+    margin-top: -100px;
+    margin-bottom: 20px;
+    color: #facf5a;
+    text-align: center;
+    font-family: 'Raleway';
+    font-size: 90px;
+    font-weight: 800;
+}
+
+h2 {
+    color: #455d7a;
+    text-align: center;
+    font-family: 'Raleway';
+    font-size: 30px;
+    text-transform: uppercase;
+}
+
+.divGetOutBtn {
+    margin: 40px 0;
+    text-align: center;
+}
+
+.getOutPageBtn {
+    background: #FF4742;
+    border: 1px solid #FF4742;
+    border-radius: 6px;
+    box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: nunito, roboto, proxima-nova, "proxima nova", sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 16px;
+    min-height: 40px;
+    outline: 0;
+    padding: 12px 14px;
+    text-align: center;
+    text-rendering: geometricprecision;
+    text-transform: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: middle;
+    text-decoration: none;
+}
+
+.getOutPageBtn:hover,
+.getOutPageBtn:active {
+    background-color: initial;
+    background-position: 0 0;
+    color: #FF4742;
+}
+
+.getOutPageBtn:active {
+    opacity: .5;
+}

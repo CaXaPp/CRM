@@ -23,7 +23,8 @@
             </thead>
             <tbody id="tbody">
             <#list tasks as task>
-                <tr data-id="${task.id}" class="task" data-bs-toggle="modal" data-bs-target="#editTask">
+                <tr data-id="${task.id}" id="task${task.id}" class="task" data-bs-toggle="modal"
+                    data-bs-target="#editTask">
                     <td>${(task.application.id)!''}</td>
                     <td>${(task.employee.getFIO())!''}</td>
                     <td>${(task.application.company)!''}</td>
@@ -35,6 +36,10 @@
                 </tr>
             </#list>
             </tbody>
+            <#if _csrf??>
+                <input type="hidden" id="x-csrf-token-task"
+                       name="${_csrf.parameterName}" value="${_csrf.token}">
+            </#if>
         </table>
 
         <div class="modal fade" id="staticBackdrop" tabindex="-1" aria-labelledby="staticBackdropLabel"
@@ -75,7 +80,7 @@
                             </div>
                             <div>
                                 <textarea class="form-control description" name="description"
-                                          placeholder="Примечания к задаче"></textarea>
+                                          placeholder="Примечание к задаче"></textarea>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -104,8 +109,13 @@
                             <div>
                                 <select class="form-select" name="operationId" id="operation" required>
                                     <#list operations as operation>
-                                        <option value="${operation.id}">${operation.name}
-                                            | ${operation.company}</option>
+                                        <option value="${operation.id}">
+                                            <#if operation.name?has_content>
+                                                ${operation.name}
+                                                <#else>
+                                                ${operation.company}
+                                            </#if>
+                                        </option>
                                     </#list>
                                 </select>
                             </div>
@@ -115,7 +125,7 @@
                                 <label for="employee">Для</label>
                                 <select class="form-select" name="employeeId" id="employee" required>
                                     <#list employees as employee>
-                                        <option value="${employee.id}">${employee.firstName}</option>
+                                        <option value="${employee.id}">${employee.getFIO()}</option>
                                     </#list>
                                 </select>
                                 <select class="form-select" name="typeId" id="typeId" required>
@@ -127,7 +137,7 @@
                                 </select>
                             </div>
                             <div class="form-additional">
-                                <label for="description">Примечания:
+                                <label for="description">Примечание:
                                     <textarea class="form-control" id="description" name="description"
                                               placeholder="Введите текст"></textarea>
                                 </label>
@@ -135,15 +145,25 @@
                             <div class="form-additional">
                                 <label for="result">Результат:
                                     <textarea class="form-control" name="result" id="result"
-                                          placeholder="Введите результат выполнения задачи"></textarea>
+                                              placeholder="Введите результат выполнения задачи"></textarea>
                                 </label>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
-                            <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Поставить</button>
-                        </div>
                     </form>
+
+                    <div class="modal-footer modal_footer_btns">
+                        <div>
+                            <button type="button" class="btn btn-danger" id="deleteTask" value=""
+                                    data-bs-dismiss="modal" onclick="deleteTask(this.value)" data-toggle="tooltip" data-placement="right" title="Задача будет удалена без подтверждения">Удалить <i
+                                        class="fa-solid fa-trash"></i></button>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
+                            <button type="submit" class="btn btn-success" data-bs-dismiss="modal" form="task-edit-form">
+                                Поставить
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

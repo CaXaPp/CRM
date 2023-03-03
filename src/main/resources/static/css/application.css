@@ -2,11 +2,6 @@
     margin: 0 auto;
 }
 
-.modal-footer-edit {
-    justify-content: flex-end;
-    padding: 20px 20px 28px;
-}
-
 .task_footer_add {
     display: flex;
     gap: 10px;
@@ -121,7 +116,7 @@
 
 .log_block_footer_inner {
     margin: 0 20px;
-    border: 1px solid green;
+    border: 2px solid lightgreen;
     border-radius: 3px;
     padding: 15px;
 }

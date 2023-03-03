@@ -73,6 +73,12 @@ public class TaskController {
         return new ResponseEntity<>(taskService.editTask(task, taskDto), HttpStatus.OK);
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteTask(@RequestParam(value = "id", required = false) Long id) {
+        taskService.deleteTask(id);
+        return new ResponseEntity<>("Task deleted", HttpStatus.OK);
+    }
+
     @GetMapping("/task/over")
     public ResponseEntity<List<TaskDto>> getOverdueTask(@AuthenticationPrincipal User user) {
         LocalDateTime localDateTime = LocalDateTime.now();

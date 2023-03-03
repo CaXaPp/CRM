@@ -17,7 +17,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/analytics">Аналитика</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" id="nav-admin-panel">
                     <a class="nav-link" href="/admin">Администрирование</a>
                 </li>
             </ul>

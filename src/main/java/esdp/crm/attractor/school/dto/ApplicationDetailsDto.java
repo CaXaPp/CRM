@@ -3,6 +3,8 @@ package esdp.crm.attractor.school.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -26,4 +28,10 @@ public class ApplicationDetailsDto {
 
     @JsonProperty("failSum")
     private double failSum;
+
+    @JsonProperty("planSum")
+    private List<PlanSumDto> planSum;
+
+    @JsonProperty("sumLastMonth")
+    private Double lastMonthSum;
 }

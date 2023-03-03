@@ -217,7 +217,7 @@ body {
 
 .log_block_footer_inner {
     margin: 0 20px;
-    border: 1px solid green;
+    border: 2px solid lightgreen;
     border-radius: 3px;
     padding: 15px;
 }
@@ -335,4 +335,10 @@ body {
     position: absolute;
     top: 50%;
     left: 45%;
+}
+
+.task_footer_add {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
 }

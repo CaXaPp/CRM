@@ -9,7 +9,7 @@
             <div class="alert alert-success alert_success_msg_for_status" id="alert_new_msg" hidden role="alert">
                 Добавлено новое заявление!
             </div>
-            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#selectAllFreeApplication" onclick="uploadApplicationData()">
+            <button type="button" class="btn btn-outline-success" id="selectFreeApplicationBtn" data-bs-toggle="modal" data-bs-target="#selectAllFreeApplication" onclick="uploadApplicationData()">
                 Выбрать
             </button>
             <select class="form-select" aria-label="Select status" id="funnels" onchange="changeFunnel(this.value)"
@@ -135,11 +135,11 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
                         <button type="submit" class="btn btn-primary" id="submitBtnForSave" form="modal_edit_form"
                                 onclick="getMessage()">
                             Сохранить
                         </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
                     </div>
                 </div>
                 <div class="log_block">
@@ -147,7 +147,12 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="blockForLogsInApplication">
-                        <div id="blockForLogsInApplication"></div>
+                        <div id="blockForLogsInApplication">
+                            <div class="d-flex align-items-center" id="spinner_in_operation_modal">
+                                <strong class="text-primary">Загрузка данных...</strong>
+                                <div class="spinner-border ms-auto text-primary" role="status" aria-hidden="true"></div>
+                            </div>
+                        </div>
                     </div>
                     <div class="log_block_footer" id="log_block_footer">
                         <form class="log_block_footer_inner" id="updateAddedTask">
@@ -170,9 +175,8 @@
                             <textarea class="form-control" name="description" id="textareaValue"
                                       placeholder="Примечания к задаче"></textarea>
 
-                            <div>
-                                <button type="submit" class="btn btn-primary">Поставить</button>
-                                <button type="button" class="btn btn-secondary">Отменить</button>
+                            <div class="task_footer_add">
+                                <button type="submit" class="btn btn-success">Поставить задачу</button>
                             </div>
                         </form>
                     </div>
@@ -187,7 +191,7 @@
             <div class="modal-content modal-new-app-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5">Новое заявление</h1>
-                    <button type="button" id="close_btn_new_app2" class="btn-close" data-bs-dismiss="modal"
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="modal_body_form">
@@ -235,11 +239,12 @@
 
                         <input type="hidden" id="employeeInNewApplication" value="" name="employeeId" required>
                         <input type="hidden" value="10" name="sourceId">
+                        <input type="hidden" value="0" name="statusId" id="statusInNewApplication">
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
-                    <button type="submit" class="btn btn-primary" form="add_new_application">
+                    <button type="submit" class="btn btn-primary" form="add_new_application" data-bs-dismiss="modal">
                         Сохранить
                     </button>
                 </div>

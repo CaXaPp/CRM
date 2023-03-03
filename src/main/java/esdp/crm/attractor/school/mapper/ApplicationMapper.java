@@ -37,6 +37,7 @@ public abstract class ApplicationMapper {
     @Mapping(target = "source", expression = "java(clientSourceRepository.getById(form.getSourceId()))")
     @Mapping(target = "createdAt", expression = "java(form.getCreatedAt() != null ? form.getCreatedAt() : java.time.LocalDateTime.now())")
     @Mapping(target = "employee", expression = "java(form.getEmployeeId() != null ? userRepository.getById(form.getEmployeeId()) : null)")
+    @Mapping(target = "price", expression = "java(form.getPrice() != null ? form.getPrice() : java.math.BigDecimal.ZERO)")
     public abstract Application toEntity(ApplicationFormDto form);
 
     public Application toEntity(ApplicationDto dto) {
