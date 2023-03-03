@@ -30,3 +30,8 @@
     width: 100%;
 }
 
+.modal_footer_btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

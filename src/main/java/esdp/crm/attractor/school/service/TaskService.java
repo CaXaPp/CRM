@@ -85,6 +85,10 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
+    public void deleteTask(Long id) {
+        taskRepository.deleteById(id);
+    }
+
     public List<TaskDto> getTasksByApplicationId(Long id) {
         return taskRepository.findAllByApplication_Id(id).stream().map(taskMapper::toDto).collect(Collectors.toList());
     }

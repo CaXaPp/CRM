@@ -1,49 +1,72 @@
 'use strict';
-const default_sum = 1000000;
 
 document.addEventListener("DOMContentLoaded", function () {
     getUsersForAnalytics();
     getProductsForAnalytics();
     getSourceForAnalytics();
-    selectedCategory('/analytics/application/all');
+    getAllAnalyticsData();
 })
 
-function selectedCategory(e) {
-    getAllApplicationForAnalytics(e);
+function getAllAnalyticsData() {
+    document.getElementById('analytics_product').querySelectorAll('option').item(0).selected = true;
+    document.getElementById('analytics_source').querySelectorAll('option').item(0).selected = true;
+    document.getElementById('analytics_employee').querySelectorAll('option').item(0).selected = true;
+    axios.get(BASE_URL + '/analytics/application/all').then(function (response) {
+        deleteAllStatistics();
+        createTdElemOnBodyForAnalytics(response.data);
+    })
 }
 
-function getAllApplicationForAnalytics(path) {
-    axios.get(BASE_URL + path).then(function (response) {
+function getAnalyticsDataByProduct(id) {
+    document.getElementById('analytics_source').querySelectorAll('option').item(0).selected = true;
+    document.getElementById('analytics_employee').querySelectorAll('option').item(0).selected = true;
+    axios.get(BASE_URL + '/analytics/product/' + id).then(function (response) {
+        deleteAllStatistics();
+        createTdElemOnBodyForAnalytics(response.data);
+    })
+}
+
+function getAnalyticsDataBySource(id) {
+    document.getElementById('analytics_product').querySelectorAll('option').item(0).selected = true;
+    document.getElementById('analytics_employee').querySelectorAll('option').item(0).selected = true;
+    axios.get(BASE_URL + '/analytics/source/' + id).then(function (response) {
+        deleteAllStatistics();
+        createTdElemOnBodyForAnalytics(response.data);
+    })
+}
+
+function getAnalyticsDataByUser(id) {
+    document.getElementById('analytics_product').querySelectorAll('option').item(0).selected = true;
+    document.getElementById('analytics_source').querySelectorAll('option').item(0).selected = true;
+    axios.get(BASE_URL + '/analytics/employee/' + id).then(function (response) {
         deleteAllStatistics();
         createTdElemOnBodyForAnalytics(response.data);
     })
 }
 
 function createTdElemOnBodyForAnalytics(response) {
-    document.getElementById('operation_amount').innerText = response.totalCount.toString();
-    document.getElementById('operation_sum_amount').innerText = response.totalSum.toFixed(2).toString();
-    document.getElementById('plan_amount').innerText = default_sum.toString();
-    document.getElementById('failures_amount').innerText = response.failSum.toFixed(2).toString();
-    document.getElementById('success_amount').innerText = response.successSum.toFixed(2).toString();
+    document.getElementById("lead_all_sum").innerText = response.totalSum.toString();
+    document.getElementById("lead_all_count").innerText = response.totalCount.toString();
+    document.getElementById("lead_success_sum").innerText = response.successSum.toString();
+    document.getElementById("lead_success_count").innerText = response.successCount.toString();
+    document.getElementById("lead_last_month_sum").innerText = response.sumLastMonth.toString();
+    document.getElementById("lead_fail_sum").innerText = response.failSum.toString();
+    document.getElementById("lead_fail_count").innerText = response.failCount.toString();
 
-    let fail = (response.failSum / response.totalSum) * 100;
-    let success = (response.successSum / default_sum) * 100;
-
-    if (response.totalSum !== 0) {
-        document.getElementById('total_operation_sum').innerText = "100%";
-        document.getElementById('total_operation_sum_line').style.width = "100%";
-    }
-
-    document.getElementById('plan_operation_sum').innerText = "100%";
-    document.getElementById('plan_operation_sum_line').style.width = "100%";
-
-    if (response.failSum !== 0) {
-        document.getElementById('sum_failures_percent_span').innerText = fail.toFixed(2).toString() + "%";
-        document.getElementById('sum_failures_percent_line').style.width = fail.toString() + "%";
-    }
-    if(response.successSum !== 0) {
-        document.getElementById('sum_success_percent_span').innerText = success.toFixed(2).toString() + "%";
-        document.getElementById('sum_success_percent_line').style.width = success.toString() + "%";
+    for (let i = 0; i < response.planSum.length; i++) {
+        document.getElementById('leads_space').insertAdjacentHTML('beforeend',
+            `
+            <div class="col abracadabra">
+                    <div class="card h-100">
+                        <div class="card-header bg-transparent border-success">Сумма по плану</div>
+                        <div class="card-body">
+                            <h5 class="text-uppercase text-muted mb-2">${response.planSum[i].department.name}</h5>
+                            <h2>${response.planSum[i].sum}</h2>
+                        </div>
+                    </div>
+                </div>
+            `
+        )
     }
 }
 
@@ -57,7 +80,7 @@ function getUsersForAnalytics() {
 
 function switchOptionEmployeeSelectForAnalytics(employee) {
     document.getElementById('analytics_employee').insertAdjacentHTML('beforeend',
-        '<option value="' + employee.id + '">' + employee.firstName + " " + employee.surname + '</option>'
+        '<option value="' + employee.id + '">' + employee.fio + '</option>'
     );
 }
 
@@ -88,39 +111,13 @@ function switchOptionSourceSelectForAnalytics(source) {
 }
 
 function deleteAllStatistics() {
-    document.getElementById('operation_amount').innerText = "0";
-    document.getElementById('operation_sum_amount').innerText = "0";
-    document.getElementById('plan_amount').innerText = "0";
-    document.getElementById('failures_amount').innerText = "0";
-    document.getElementById('success_amount').innerText = "0";
+    document.getElementById("lead_all_sum").innerText = "";
+    document.getElementById("lead_all_count").innerText = "";
+    document.getElementById("lead_success_sum").innerText = "";
+    document.getElementById("lead_success_count").innerText = "";
+    document.getElementById("lead_last_month_sum").innerText = "";
+    document.getElementById("lead_fail_sum").innerText = "";
+    document.getElementById("lead_fail_count").innerText = "";
 
-    document.getElementById('total_operation_sum').innerText = "0";
-    document.getElementById('total_operation_sum_line').style.width = "0";
-    document.getElementById('plan_operation_sum').innerText = "0";
-    document.getElementById('plan_operation_sum_line').style.width = "0";
-    document.getElementById('sum_failures_percent_span').innerText = "0";
-    document.getElementById('sum_failures_percent_line').style.width = "0";
-    document.getElementById('sum_success_percent_span').innerText = "0";
-    document.getElementById('sum_success_percent_line').style.width = "0";
+    $('.abracadabra').remove();
 }
-
-function defaultValueForSourceAndEmployee() {
-    document.getElementById('analytics_source').querySelectorAll('option').item(0).selected = true;
-    document.getElementById('analytics_employee').querySelectorAll('option').item(0).selected = true;
-}
-
-function defaultValueForProductAndEmployee() {
-    document.getElementById('analytics_product').querySelectorAll('option').item(0).selected = true;
-    document.getElementById('analytics_employee').querySelectorAll('option').item(0).selected = true;
-}
-
-function defaultValueForProductAndSource() {
-    document.getElementById('analytics_product').querySelectorAll('option').item(0).selected = true;
-    document.getElementById('analytics_source').querySelectorAll('option').item(0).selected = true;
-}
-
-$('all_operation').click(function () {
-    document.getElementById('analytics_product').querySelectorAll('option').item(0).selected = true;
-    document.getElementById('analytics_source').querySelectorAll('option').item(0).selected = true;
-    document.getElementById('analytics_employee').querySelectorAll('option').item(0).selected = true;
-})

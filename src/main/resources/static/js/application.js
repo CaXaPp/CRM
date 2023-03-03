@@ -1,5 +1,5 @@
 'use strict';
-let date = "232323";
+let date = "55555"; // default value
 let years_of_100 = 36500;
 let application_id = 0;
 let check = true;
@@ -7,34 +7,16 @@ let start = new Date();
 let userFullName;
 let start_date_for_sort = returnModifiedStartDateInApplication(years_of_100).substring(0, returnModifiedStartDateInApplication(years_of_100).length - 1);
 let end_date_for_sort = returnEndDateInApplication().substring(0, returnEndDateInApplication().length - 1);
+let status_value;
+
 document.getElementById('modal_edit_form').addEventListener('submit', updateEditedApplication);
 document.getElementById('updateAddedTask').addEventListener('submit', updateAddedTask);
 document.getElementById('add_new_application').addEventListener('submit', addApplication);
 
 document.addEventListener("DOMContentLoaded", function () {
-    getMainRoleToUser();
+    getAllActiveApplicationAllTime();
     document.getElementById('btnradio5_in_application_text').innerText = start.getDate() + "." + start.getMonth() + 1 + "." + start.getFullYear() + "-" + start.getDate() + "." + start.getMonth() + 1 + "." + start.getFullYear();
 })
-
-// Getter functions
-
-function getMainRoleToUser() {
-    axios.get(BASE_URL + "/users/auth_user").then(function (response) {
-        if (response.data.role === 'Сотрудник') {
-            getAllApplicationForUser();
-        } else {
-            getAllApplication();
-        }
-    })
-}
-
-function getAllApplicationForUser() {
-    axios.get(BASE_URL + "/application/all").then(function (response) {
-        for (let i = 0; i < response.data.length; i++) {
-            createTdElemOnBodyForUser(response.data[i]);
-        }
-    })
-}
 
 function getAllApplication() {
     document.getElementById('search_data_input').value = "";
@@ -42,6 +24,19 @@ function getAllApplication() {
     document.getElementById('spinner_in_application_pulls').setAttribute('style', 'display:flex !important');
     deleteAllApplication();
     axios.get(BASE_URL + "/application/all").then(function (response) {
+        for (let i = 0; i < response.data.length; i++) {
+            createTdElemOnBody(response.data[i]);
+        }
+    })
+}
+
+function getAllActiveApplicationAllTime() {
+    status_value = "all_active";
+    document.getElementById('search_data_input').value = "";
+    document.getElementById('emptyMsg').style.display = "none";
+    document.getElementById('spinner_in_application_pulls').setAttribute('style', 'display:flex !important');
+    deleteAllApplication();
+    axios.get(BASE_URL + "/application/all-active").then(function (response) {
         for (let i = 0; i < response.data.length; i++) {
             createTdElemOnBody(response.data[i]);
         }
@@ -62,14 +57,6 @@ function getUsers(id) {
     axios.get(BASE_URL + "/users/not-admin").then(function (response) {
         for (let i = 0; i < response.data.length; i++) {
             switchOptionEmployeeSelect(response.data[i], id);
-        }
-    })
-}
-
-function getAllUsers() {
-    axios.get(BASE_URL + "/users/not-admin").then(function (response) {
-        for (let i = 0; i < response.data.length; i++) {
-            switchOptionAllEmployeeSelect(response.data[i]);
         }
     })
 }
@@ -129,20 +116,6 @@ function getFunnels(id) {
     })
 }
 
-function getFunnelToNewApplication(id) {
-    axios.get(BASE_URL + "/funnels/funnel/" + id).then(function (response) {
-        for (let i = 0; i < response.data.length; i++) {
-            switchOptionAllFunnelsSelectForNewApplication(response.data[i]);
-        }
-    })
-}
-
-function getUserByEmail(email) {
-    axios.get(BASE_URL + "/users/email/" + email).then(function (response) {
-        userFullName = response.data.firstName + " " + response.data.surname;
-    })
-}
-
 function getMessage() {
     let msg = document.getElementById('alert_msg');
     msg.hidden = false;
@@ -187,7 +160,7 @@ function applicationEditModalWindow(id) {
     });
 }
 
-function getAllApplicationByDate(date_start, date_end) {
+function getAllApplicationByDate(date_start, date_end, status) {
     document.getElementById('search_data_input').value = "";
     document.getElementById('emptyMsg').style.display = "none";
     document.getElementById('spinner_in_application_pulls').setAttribute('style', 'display:flex !important');
@@ -197,7 +170,8 @@ function getAllApplicationByDate(date_start, date_end) {
     axios.get(BASE_URL + "/application/sort/by-date", {
         params: {
             startDate: date_start,
-            endDate: date_end
+            endDate: date_end,
+            status: status
         }
     }).then(function (response) {
         if (response.data.length === 0) {
@@ -210,8 +184,6 @@ function getAllApplicationByDate(date_start, date_end) {
     })
 }
 
-// Update functions
-
 function updateEditedApplication(e) {
     e.preventDefault();
     const form = e.target;
@@ -221,12 +193,11 @@ function updateEditedApplication(e) {
         method: 'PUT',
         body: data
     })
-        .then((response) => {
+        .then(() => {
             deleteAllApplication();
             getAllApplication();
             getLogsForApplication(application_id);
             getMessage();
-            console.log(response)
         })
         .catch((error) => {
             console.log('Error:', error);
@@ -242,9 +213,8 @@ function updateAddedTask(e) {
         method: 'POST',
         body: data
     })
-        .then((response) => {
+        .then(() => {
             getTasks(application_id);
-            console.log(response)
         })
         .catch((error) => {
             console.log('Error:', error);
@@ -267,13 +237,11 @@ function cleanNewApplicationForm() {
     document.getElementById('new_address').value = "";
 }
 
-//Sort functions
-
 function addApplication(e) {
     let saveBtn = document.getElementById('btnForSaveInApplication');
     saveBtn.insertAdjacentHTML('beforeend',
         '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
-        );
+    );
     saveBtn.disabled = true;
     e.preventDefault();
     const form = e.target;
@@ -285,8 +253,7 @@ function addApplication(e) {
     })
         .then(() => {
             deleteAllApplication();
-            getMainRoleToUser();
-            document.getElementById('close_btn_new_app').click();
+            getAllActiveApplicationAllTime();
             getMessageForCreate();
             deleteItems_v_3();
             saveBtn.disabled = false;
@@ -301,7 +268,8 @@ function sortFunctionByApplicationId() {
     axios.get(BASE_URL + "/application/sort/by-id", {
         params: {
             start: start_date_for_sort,
-            end: end_date_for_sort
+            end: end_date_for_sort,
+            status: status_value
         }
     }).then(function (response) {
         for (let i = 0; i < response.data.length; i++) {
@@ -316,7 +284,8 @@ function sortFunctionByApplicationCompany() {
     axios.get(BASE_URL + "/application/sort/by-company", {
         params: {
             start: start_date_for_sort,
-            end: end_date_for_sort
+            end: end_date_for_sort,
+            status: status_value
         }
     }).then(function (response) {
         for (let i = 0; i < response.data.length; i++) {
@@ -331,7 +300,8 @@ function sortFunctionByApplicationPrice() {
     axios.get(BASE_URL + "/application/sort/by-price", {
         params: {
             start: start_date_for_sort,
-            end: end_date_for_sort
+            end: end_date_for_sort,
+            status: status_value
         }
     }).then(function (response) {
         for (let i = 0; i < response.data.length; i++) {
@@ -346,7 +316,8 @@ function sortFunctionByApplicationProduct() {
     axios.get(BASE_URL + "/application/sort/by-product", {
         params: {
             start: start_date_for_sort,
-            end: end_date_for_sort
+            end: end_date_for_sort,
+            status: status_value
         }
     }).then(function (response) {
         for (let i = 0; i < response.data.length; i++) {
@@ -361,7 +332,8 @@ function sortFunctionByApplicationStatus() {
     axios.get(BASE_URL + "/application/sort/by-status", {
         params: {
             start: start_date_for_sort,
-            end: end_date_for_sort
+            end: end_date_for_sort,
+            status: status_value
         }
     }).then(function (response) {
         for (let i = 0; i < response.data.length; i++) {
@@ -376,7 +348,8 @@ function sortFunctionByApplicationEmployee() {
     axios.get(BASE_URL + "/application/sort/by-employee", {
         params: {
             start: start_date_for_sort,
-            end: end_date_for_sort
+            end: end_date_for_sort,
+            status: status_value
         }
     }).then(function (response) {
         for (let i = 0; i < response.data.length; i++) {
@@ -394,7 +367,8 @@ $('#search_data_input').on("input", function (ev) {
         params: {
             start: start_date_for_sort,
             end: end_date_for_sort,
-            text: ($(ev.target).val())
+            text: ($(ev.target).val()),
+            status: status_value
         }
     }).then(function (response) {
         if (response.data.length === 0) {
@@ -408,31 +382,6 @@ $('#search_data_input').on("input", function (ev) {
     })
 
 });
-
-// Creation functions
-
-function createTdElemOnBodyForUser(response) {
-    document.getElementById('spinner_in_application_pulls').setAttribute('style', 'display:none !important');
-    let employee = (response.employee !== null) ? response.employee.firstName + " " + response.employee.surname : "Не назначено";
-    let price = (response.price !== null) ? response.price : 0;
-
-    document.getElementById('tdsBlock').insertAdjacentHTML('beforeend',
-        '<tr>' +
-        '<td>' +
-        '<button type="button" class="' + createClassForBtn(response.status.name) + '">' + response.id + '</button>' +
-        '</td>' +
-        '<td>' + response.company + '</td>' +
-        '<td>' + price + '</td>' +
-        '<td>' + response.product.name + '</td>' +
-        '<td>' + response.name + '</td>' +
-        '<td>' + response.phone + '</td>' +
-        '<td>' + response.email + '</td>' +
-        '<td>' + response.address + '</td>' +
-        '<td>' + response.status.name + '</td>' +
-        '<td>' + employee + '</td>' +
-        '</tr>'
-    )
-}
 
 function createTdElemOnBody(response) {
     document.getElementById('spinner_in_application_pulls').setAttribute('style', 'display:none !important');
@@ -484,19 +433,6 @@ function createLogsBlock(response) {
     }
 }
 
-function elementCreationCycle(response) {
-    response.changes.reverse();
-    for (let i = 0; i < response.changes.length; i++) {
-        if (response.changes[i].property !== 'id' || response.changes[i].property !== 'Дата создания') {
-            document.getElementById('blockForLogsInApplication').insertAdjacentHTML('beforeend',
-                '<p>' + parseDateOnlyTime(response.date) + " " + response.author.firstName + " " + response.author.surname + " Для поля " + '<span class="badge rounded-pill bg-warning text-dark">' +
-                '' + response.changes[i].property + '</span>' + " установлено значение " +
-                '<span class="badge rounded-pill bg-info text-dark">' + response.changes[i].newRecord + '</span>' + '</p>'
-            )
-        }
-    }
-}
-
 function fillFields(response) {
     document.getElementById('modal_title_from_js').innerText = "Заявление # " + response.id;
     document.getElementById('id').value = response.id;
@@ -511,8 +447,6 @@ function fillFields(response) {
     document.getElementById('sourceId').value = response.source.id;
     document.getElementById('operationId').value = response.id;
     document.getElementById('departmentInApplication').value = response.product.department.name;
-    document.getElementById('deleteBtn').value = response.id;
-    document.getElementById('deleteBtn').innerText = "Удалить заявление № " + response.id;
 
     if (response.description === "null") {
         document.getElementById('applicationTextarea').innerText = "";
@@ -549,12 +483,6 @@ function switchOptionEmployeeSelect(employee, employeeId) {
 
 }
 
-function switchOptionAllEmployeeSelect(employee) {
-    document.getElementById('new_employee').insertAdjacentHTML('beforeend',
-        '<option value="' + employee.id + '">' + employee.firstName + " " + employee.surname + '</option>'
-    );
-}
-
 function switchOptionAllProductSelectForNewApplication(product) {
     document.getElementById('new_product').insertAdjacentHTML('beforeend',
         '<option value="' + product.id + '">' + product.name + '</option>')
@@ -562,11 +490,6 @@ function switchOptionAllProductSelectForNewApplication(product) {
 
 function switchOptionFunnelsSelect(funnel) {
     document.getElementById('funnelInApplication').insertAdjacentHTML('beforeend',
-        '<option value="' + funnel.id + '">' + funnel.name + '</option>')
-}
-
-function switchOptionAllFunnelsSelectForNewApplication(funnel) {
-    document.getElementById('new_funnelInApplication').insertAdjacentHTML('beforeend',
         '<option value="' + funnel.id + '">' + funnel.name + '</option>')
 }
 
@@ -579,24 +502,41 @@ function createTaskTypeOption(response) {
 function dataForTodayInApplication() {
     setTimeout(function () {
         let date = document.getElementById('input_group_application').querySelectorAll('input');
-        switch (getCheckedDateFromBody(date)) {
+        let value = getCheckedDateFromBody(date);
+        switch (value) {
             case 'today':
-                getAllApplicationByDate(returnStartDateInApplication().substring(0, returnStartDateInApplication().length - 1), returnEndDateInApplication().substring(0, returnStartDateInApplication().length - 1));
+                getAllApplicationByDate(returnStartDateInApplication().substring(0, returnStartDateInApplication().length - 1), returnEndDateInApplication().substring(0, returnStartDateInApplication().length - 1), status_value);
+                start_date_for_sort = returnStartDateInApplication().substring(0, returnStartDateInApplication().length - 1);
+                end_date_for_sort = returnEndDateInApplication().substring(0, returnStartDateInApplication().length - 1);
                 break;
             case 'yesterday':
-                getAllApplicationByDate(returnModifiedStartDateInApplication(1).substring(0, returnModifiedStartDateInApplication(1).length - 1), returnModifiedEndDateInApplication(1).substring(0, returnModifiedEndDateInApplication(1).length - 1));
+                getAllApplicationByDate(returnModifiedStartDateInApplication(1).substring(0, returnModifiedStartDateInApplication(1).length - 1), returnModifiedEndDateInApplication(1).substring(0, returnModifiedEndDateInApplication(1).length - 1), status_value);
+                start_date_for_sort = returnModifiedStartDateInApplication(1).substring(0, returnModifiedStartDateInApplication(1).length - 1);
+                end_date_for_sort = returnModifiedEndDateInApplication(1).substring(0, returnModifiedEndDateInApplication(1).length - 1);
                 break;
             case 'week':
-                getAllApplicationByDate(returnModifiedStartDateInApplication(7).substring(0, returnModifiedStartDateInApplication(7).length - 1), returnEndDateInApplication().substring(0, returnEndDateInApplication().length - 1));
+                getAllApplicationByDate(returnModifiedStartDateInApplication(7).substring(0, returnModifiedStartDateInApplication(7).length - 1), returnEndDateInApplication().substring(0, returnEndDateInApplication().length - 1), status_value);
+                start_date_for_sort = returnModifiedStartDateInApplication(7).substring(0, returnModifiedStartDateInApplication(7).length - 1);
+                end_date_for_sort = returnEndDateInApplication().substring(0, returnEndDateInApplication().length - 1);
                 break;
             case 'month':
-                getAllApplicationByDate(returnModifiedStartDateInApplication(30).substring(0, returnModifiedStartDateInApplication(30).length - 1), returnEndDateInApplication().substring(0, returnEndDateInApplication().length - 1));
+                getAllApplicationByDate(returnModifiedStartDateInApplication(30).substring(0, returnModifiedStartDateInApplication(30).length - 1), returnEndDateInApplication().substring(0, returnEndDateInApplication().length - 1), status_value);
+                start_date_for_sort = returnModifiedStartDateInApplication(30).substring(0, returnModifiedStartDateInApplication(30).length - 1);
+                end_date_for_sort = returnEndDateInApplication().substring(0, returnEndDateInApplication().length - 1);
                 break;
             case 'infinity':
                 getAllApplication();
                 start_date_for_sort = returnModifiedStartDateInApplication(years_of_100).substring(0, returnModifiedStartDateInApplication(years_of_100).length - 1);
                 end_date_for_sort = returnEndDateInApplication().substring(0, returnEndDateInApplication().length - 1);
+                status_value = value;
                 break;
+            case 'all_active':
+                getAllActiveApplicationAllTime();
+                start_date_for_sort = returnModifiedStartDateInApplication(years_of_100).substring(0, returnModifiedStartDateInApplication(years_of_100).length - 1);
+                end_date_for_sort = returnEndDateInApplication().substring(0, returnEndDateInApplication().length - 1);
+                status_value = value;
+                break;
+
         }
     }, 100);
 }
@@ -637,11 +577,9 @@ $(function () {
 });
 
 $('input[id="btnradio_5_application"]').on('apply.daterangepicker', function (ev, picker) {
-    getAllApplicationByDate(picker.startDate.format('YYYY-MM-DDTHH:mm:ss.sss'), picker.endDate.format('YYYY-MM-DDTHH:mm:ss.sss'));
+    getAllApplicationByDate(picker.startDate.format('YYYY-MM-DDTHH:mm:ss.sss'), picker.endDate.format('YYYY-MM-DDTHH:mm:ss.sss'), status_value);
     document.getElementById('btnradio5_in_application_text').innerText = picker.startDate.format('DD.MM.YYYY') + ' - ' + picker.endDate.format('DD.MM.YYYY');
 });
-
-// parsing functions
 
 function parseDateByFormat(date) {
     return date[0] + "-" + calcTimeInLoop(date[1]) + "-" + calcTimeInLoop(date[2]) + "T" + calcTimeInLoop(date[3]) + ":" + calcTimeInLoop(date[4]);
@@ -662,8 +600,6 @@ function calcTimeInLoop(time) {
         return time;
     }
 }
-
-// cleaning functions
 
 function deleteAllApplication() {
     deleteElemInLoop(document.getElementById('tdsBlock').querySelectorAll('tr'));
@@ -702,29 +638,4 @@ function deleteElemInLoop(a) {
     for (let i = 0; i < a.length; i++) {
         a[i].remove();
     }
-}
-
-function getValueForRemoveApplication(e) {
-    document.getElementById('deleteApplicationDiv').innerHTML = "";
-    document.getElementById('removeApplicationBtnValue').value = e;
-    document.getElementById('deleteApplicationDiv').insertAdjacentHTML('beforeend',
-        'Заявление № "<span class="badge rounded-pill text-bg-warning">' + e + '</span>" будет удалено безвозвратно!'
-        );
-}
-
-function deleteApplication(e) {
-    axios.delete(BASE_URL + "/application/delete", {
-        params: {
-            id: e
-        },
-        headers: {
-            'X-CSRF-TOKEN': document.getElementById('x-csrf-token').value
-        }
-    })
-        .then(function (response) {
-            getMainRoleToUser();
-            document.getElementById('close_btn_delete').click();
-            getMessageForDelete();
-        console.log(response);
-    })
 }

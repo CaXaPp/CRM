@@ -24,6 +24,7 @@ document.getElementById('updateAddedTask').addEventListener('submit', updateAdde
 // Getters
 
 function getApplicationById(e) {
+    document.getElementById('spinner_in_operation_modal').setAttribute('style', 'display:flex !important');
     application_id = e;
     axios
         .get(BASE_URL + '/application/edit/' + e).then(function (response) {
@@ -184,6 +185,8 @@ function getRoleForFunnels() {
         if (response.data.role === 'Сотрудник') {
             getFunnelsMain(response.data.department.id);
         } else {
+            document.getElementById('selectFreeApplicationBtn').disabled = true;
+            document.getElementById('selectFreeApplicationBtn').style.display = "none";
             getAllFunnels();
         }
     })
@@ -229,10 +232,23 @@ function getPrice(price) {
 }
 
 function getDataToNewApplication() {
+    document.getElementById('new_company').value = "";
+    document.getElementById('new_price').value = 0;
+    document.getElementById('new_name').value = "";
+    document.getElementById('new_phone').value = "";
+    document.getElementById('new_email').value = "";
+    document.getElementById('new_address').value = "";
     setTimeout(function () {
         getProductsForNewApplication();
         setUserValueForNewApplication();
+        getStatusByFunnelIdForNewApplication();
     }, 300);
+}
+
+function getStatusByFunnelIdForNewApplication() {
+    axios.get(BASE_URL + "/statuses/status-name/" + document.getElementById('funnels').value).then(function (response) {
+        document.getElementById('statusInNewApplication').value = response.data.id;
+    })
 }
 
 // Set/add/update functions
@@ -254,7 +270,6 @@ function addNewApplicationInOperation(e) {
             setTimeout(function () {
                 dragAndDropFunc();
             }, 1000);
-            document.getElementById('close_btn_new_app2').click();
             getMessageForCreate();
         })
         .catch((error) => {
@@ -487,11 +502,13 @@ function createDealNames(id) {
 
 function createLogsBlock(response) {
     if (date !== parseDateToLocalDate(response.date)) {
+        document.getElementById('spinner_in_operation_modal').setAttribute('style', 'display:none !important');
         document.getElementById('blockForLogsInApplication').insertAdjacentHTML('beforeend',
             '<p class="blockForLogsInApplication_main_date"><span>' + parseDateToLocalDate(response.date) + '</span></p>');
         elementCreationCycle(response);
         date = parseDateToLocalDate(response.date);
     } else {
+        document.getElementById('spinner_in_operation_modal').setAttribute('style', 'display:none !important');
         elementCreationCycle(response);
         date = parseDateToLocalDate(response.date);
     }
@@ -517,14 +534,6 @@ function createListOfFreeApplication(response) {
         '</form>'
     )
     getForm(response.id);
-}
-
-function elementCreationCycle(response) {
-    for (let i = 0; i < response.changes.length; i++) {
-        document.getElementById('blockForLogsInApplication').insertAdjacentHTML('beforeend',
-            '<p>' + parseDateOnlyTime(response.date) + " " + response.author.firstName + " " + response.author.surname + " Для поля " + response.changes[i].property + " установлено значение " + response.changes[i].newRecord + '</p>'
-        )
-    }
 }
 
 function fillFields(response) {

@@ -27,6 +27,7 @@ public class ApplicationStatusService {
     private final UserRepository userRepository;
     private final FunnelRepository funnelRepository;
     private final ApplicationStatusMapper statusMapper;
+    String STATUS = "Новое";
 
     public List<ApplicationStatus> getAll() {
         return applicationStatusRepository.findAll();
@@ -61,5 +62,9 @@ public class ApplicationStatusService {
 
     public Long findStatusIdByFunnel(String status, Long funnel) {
         return applicationStatusRepository.getStatusIdByFunnel(status, funnel);
+    }
+
+    public ApplicationStatusDto findStatusByFunnel_Id(Long id) {
+        return statusMapper.toDto(applicationStatusRepository.findByFunnel_IdAndName(id, STATUS));
     }
 }

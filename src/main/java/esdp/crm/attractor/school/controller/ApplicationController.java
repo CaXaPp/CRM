@@ -50,6 +50,16 @@ public class ApplicationController {
         return new ResponseEntity<>(applicationService.getAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/all-sort-by-id")
+    public ResponseEntity<List<ApplicationDto>> getAllSortById() {
+        return new ResponseEntity<>(applicationService.getAllSortedById(), HttpStatus.OK);
+    }
+
+    @GetMapping("/all-active")
+    public ResponseEntity<List<ApplicationDto>> getAllActive() {
+        return new ResponseEntity<>(applicationService.getAllActive(), HttpStatus.OK);
+    }
+
     @GetMapping("/all-free")
     public ResponseEntity<List<ApplicationDto>> getAllFreeApplication() {
         return new ResponseEntity<>(applicationService.getAllFreeApplications(), HttpStatus.OK);
@@ -152,50 +162,58 @@ public class ApplicationController {
 
     @GetMapping("/sort/by-date")
     public ResponseEntity<List<ApplicationDto>> getAllApplicationByDateSort(@RequestParam(value = "startDate", required = false) String date1,
-                                                                         @RequestParam(value = "endDate", required = false) String date2) {
-        return new ResponseEntity<>(applicationService.getAllApplicationByDate(LocalDateTime.parse(date1), LocalDateTime.parse(date2)), HttpStatus.OK);
+                                                                         @RequestParam(value = "endDate", required = false) String date2,
+                                                                            @RequestParam(value = "status", required = false) String status) {
+        return new ResponseEntity<>(applicationService.getAllApplicationByDate(LocalDateTime.parse(date1), LocalDateTime.parse(date2), status), HttpStatus.OK);
     }
 
     @GetMapping("/sort/by-id")
     public ResponseEntity<List<ApplicationDto>> sortById(@RequestParam(value = "start", required = false) String date1,
-                                                               @RequestParam(value = "end", required = false) String date2) {
-        return new ResponseEntity<>(applicationService.sortById(LocalDateTime.parse(date1), LocalDateTime.parse(date2)), HttpStatus.OK);
+                                                               @RequestParam(value = "end", required = false) String date2,
+                                                         @RequestParam(value = "status", required = false) String status) {
+        return new ResponseEntity<>(applicationService.sortById(LocalDateTime.parse(date1), LocalDateTime.parse(date2), status), HttpStatus.OK);
     }
 
     @GetMapping("/sort/by-company")
     public ResponseEntity<List<ApplicationDto>> sortByCompanyName(@RequestParam(value = "start", required = false) String date1,
-                                                               @RequestParam(value = "end", required = false) String date2) {
-        return new ResponseEntity<>(applicationService.sortByCompanyName(LocalDateTime.parse(date1), LocalDateTime.parse(date2)), HttpStatus.OK);
+                                                               @RequestParam(value = "end", required = false) String date2,
+                                                                  @RequestParam(value = "status", required = false) String status) {
+        return new ResponseEntity<>(applicationService.sortByCompanyName(LocalDateTime.parse(date1), LocalDateTime.parse(date2), status), HttpStatus.OK);
     }
 
     @GetMapping("/sort/by-price")
     public ResponseEntity<List<ApplicationDto>> sortByPrice(@RequestParam(value = "start", required = false) String date1,
-                                                         @RequestParam(value = "end", required = false) String date2) {
-        return new ResponseEntity<>(applicationService.sortByPrice(LocalDateTime.parse(date1), LocalDateTime.parse(date2)), HttpStatus.OK);
+                                                         @RequestParam(value = "end", required = false) String date2,
+                                                            @RequestParam(value = "status", required = false) String status) {
+        return new ResponseEntity<>(applicationService.sortByPrice(LocalDateTime.parse(date1), LocalDateTime.parse(date2), status), HttpStatus.OK);
     }
 
     @GetMapping("/sort/by-product")
     public ResponseEntity<List<ApplicationDto>> sortByProduct(@RequestParam(value = "start", required = false) String date1,
-                                                           @RequestParam(value = "end", required = false) String date2) {
-        return new ResponseEntity<>(applicationService.sortByProduct(LocalDateTime.parse(date1), LocalDateTime.parse(date2)), HttpStatus.OK);
+                                                           @RequestParam(value = "end", required = false) String date2,
+                                                              @RequestParam(value = "status", required = false) String status) {
+        return new ResponseEntity<>(applicationService.sortByProduct(LocalDateTime.parse(date1), LocalDateTime.parse(date2), status), HttpStatus.OK);
     }
 
     @GetMapping("/sort/by-status")
     public ResponseEntity<List<ApplicationDto>> sortByStatus(@RequestParam(value = "start", required = false) String date1,
-                                                          @RequestParam(value = "end", required = false) String date2) {
-        return new ResponseEntity<>(applicationService.sortByStatus(LocalDateTime.parse(date1), LocalDateTime.parse(date2)), HttpStatus.OK);
+                                                          @RequestParam(value = "end", required = false) String date2,
+                                                             @RequestParam(value = "status", required = false) String status) {
+        return new ResponseEntity<>(applicationService.sortByStatus(LocalDateTime.parse(date1), LocalDateTime.parse(date2), status), HttpStatus.OK);
     }
 
     @GetMapping("/sort/by-employee")
     public ResponseEntity<List<ApplicationDto>> sortByEmployee(@RequestParam(value = "start", required = false) String date1,
-                                                            @RequestParam(value = "end", required = false) String date2) {
-        return new ResponseEntity<>(applicationService.sortByEmployee(LocalDateTime.parse(date1), LocalDateTime.parse(date2)), HttpStatus.OK);
+                                                            @RequestParam(value = "end", required = false) String date2,
+                                                               @RequestParam(value = "status", required = false) String status) {
+        return new ResponseEntity<>(applicationService.sortByEmployee(LocalDateTime.parse(date1), LocalDateTime.parse(date2), status), HttpStatus.OK);
     }
 
     @GetMapping("/sort/find-by-company")
     public ResponseEntity<List<ApplicationDto>> sortAndFindByCompany(@RequestParam(value = "start", required = false) String date1,
                                                                   @RequestParam(value = "end", required = false) String date2,
-                                                                  @RequestParam(value = "text", required = false) String text) {
-        return new ResponseEntity<>(applicationService.findAllByCreatedAtBetweenAndCompanyStartingWith(LocalDateTime.parse(date1), LocalDateTime.parse(date2), text), HttpStatus.OK);
+                                                                  @RequestParam(value = "text", required = false) String text,
+                                                                     @RequestParam(value = "status", required = false) String status) {
+        return new ResponseEntity<>(applicationService.findAllByCreatedAtBetweenAndCompanyStartingWith(LocalDateTime.parse(date1), LocalDateTime.parse(date2), text, status), HttpStatus.OK);
     }
 }

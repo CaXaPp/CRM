@@ -3,6 +3,7 @@ package esdp.crm.attractor.school.service;
 import esdp.crm.attractor.school.dto.ApplicationDetailsDto;
 import esdp.crm.attractor.school.dto.ApplicationDto;
 import esdp.crm.attractor.school.dto.ApplicationDetailsAndStatusDto;
+import esdp.crm.attractor.school.dto.PlanSumDto;
 import esdp.crm.attractor.school.dto.request.ApplicationFormDto;
 import esdp.crm.attractor.school.entity.Application;
 import esdp.crm.attractor.school.entity.ApplicationStatus;
@@ -21,10 +22,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,6 +32,8 @@ public class ApplicationService {
     String success = "Успешно";
     String fail = "Отказ";
     String new_status = "Новое";
+    String allApplication = "infinity";
+    String activeApplication = "all_active";
     private final ApplicationRepository applicationRepository;
     private final ApplicationMapper applicationMapper;
     private final ProductService productService;
@@ -43,6 +43,7 @@ public class ApplicationService {
     private final Javers javers;
     private final StatusRepository statusRepository;
     private final ProductRepository productRepository;
+    private final PlanSumService planSumService;
 
     public ApplicationDto save(ApplicationFormDto form) {
         var application = applicationRepository.save(applicationMapper.toEntity(form));
@@ -51,6 +52,22 @@ public class ApplicationService {
 
     public List<ApplicationDto> getAll() {
         List<Application> applications = applicationRepository.findAll();
+        return applications.stream()
+                .sorted(Comparator.comparing(Application::getCreatedAt).reversed())
+                .map(applicationMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<ApplicationDto> getAllSortedById() {
+        List<Application> applications = applicationRepository.findAll();
+        return applications.stream()
+                .sorted(Comparator.comparing(Application::getId))
+                .map(applicationMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<ApplicationDto> getAllActive() {
+        List<Application> applications = applicationRepository.findAllByStatus_NameNotIn(Arrays.asList(success, fail));
         return applications.stream()
                 .sorted(Comparator.comparing(Application::getCreatedAt).reversed())
                 .map(applicationMapper::toDto)
@@ -111,7 +128,7 @@ public class ApplicationService {
 
     public void updateApplication(ApplicationFormDto application) {
         if (application.getId() != null) application.setCreatedAt
-                (applicationRepository.getApplicationById(application.getId()).getCreatedAt()); // TODO Временное решение
+                (applicationRepository.getApplicationById(application.getId()).getCreatedAt());
         applicationRepository.save(applicationMapper.toEntity(application));
     }
 
@@ -144,19 +161,23 @@ public class ApplicationService {
         return detailsDto(applications);
     }
 
-    public ApplicationDetailsDto getApplicationByStatus(Long id) {
-        List<Application> applications = applicationRepository.findAllByStatus_Id(id);
-        return detailsDto(applications);
-    }
-
     private ApplicationDetailsDto detailsDto(List<Application> applications) {
+        List<PlanSumDto> planSum = planSumService.findAll();
         ApplicationDetailsDto dto = new ApplicationDetailsDto();
+        LocalDateTime lastMonth = LocalDateTime.now().minusDays(30);
+
         dto.setTotalCount(applications.size());
         dto.setSuccessCount((int) applications.stream().filter(a -> Objects.equals(a.getStatus().getName(), success)).count());
         dto.setFailCount((int) applications.stream().filter(a -> Objects.equals(a.getStatus().getName(), fail)).count());
-        dto.setTotalSum(applications.stream().filter(a -> a.getPrice() != null).mapToDouble(a -> a.getPrice().doubleValue()).sum());
-        dto.setSuccessSum(applications.stream().filter(a -> Objects.equals(a.getStatus().getName(), success)).mapToDouble(a -> a.getPrice().doubleValue()).sum());
-        dto.setFailSum(applications.stream().filter(a -> Objects.equals(a.getStatus().getName(), fail)).mapToDouble(a -> a.getPrice().doubleValue()).sum());
+        double totalSum = applications.stream().filter(a -> a.getPrice() != null).mapToDouble(a -> a.getPrice().doubleValue()).sum();
+        dto.setTotalSum(Double.parseDouble(String.format("%.2f", totalSum).replace(",", ".")));
+        double successSum = applications.stream().filter(a -> Objects.equals(a.getStatus().getName(), success)).mapToDouble(a -> a.getPrice().doubleValue()).sum();
+        dto.setSuccessSum(Double.parseDouble(String.format("%.2f", successSum).replace(",", ".")));
+        double failSum = applications.stream().filter(a -> Objects.equals(a.getStatus().getName(), fail)).mapToDouble(a -> a.getPrice().doubleValue()).sum();
+        dto.setFailSum(Double.parseDouble(String.format("%.2f", failSum).replace(",", ".")));
+        dto.setPlanSum(planSum);
+        double sumOfLastMonth = applications.stream().filter(a -> a.getPrice() != null && a.getStatus().getName().equals(success) && a.getCreatedAt().isAfter(lastMonth)).mapToDouble(a -> a.getPrice().doubleValue()).sum();
+        dto.setLastMonthSum(Double.parseDouble(String.format("%.2f", sumOfLastMonth).replace(",", ".")));
         return dto;
     }
 
@@ -256,70 +277,125 @@ public class ApplicationService {
     }
 
 
-    public List<ApplicationDto> getAllApplicationByDate(LocalDateTime date1, LocalDateTime date2) {
+    public List<ApplicationDto> getAllApplicationByDate(LocalDateTime date1, LocalDateTime date2, String status) {
         List<Application> applications = applicationRepository.findAllByCreatedAtBetween(date1, date2);
-        return applications.stream().map(applicationMapper::toDto).collect(Collectors.toList());
+        if (status.equals(allApplication)) {
+            return applications.stream().map(applicationMapper::toDto).collect(Collectors.toList());
+        } else {
+            return applications.stream()
+                    .filter(a -> !success.equals(a.getStatus().getName()) && !fail.equals(a.getStatus().getName()))
+                    .map(applicationMapper::toDto)
+                    .collect(Collectors.toList());
+        }
     }
 
-    public List<ApplicationDto> sortById(LocalDateTime date1, LocalDateTime date2) {
+    public List<ApplicationDto> sortById(LocalDateTime date1, LocalDateTime date2, String status) {
         List<Application> applications = applicationRepository.findAllByCreatedAtBetween(date1, date2);
-        return applications
-                .stream()
-                .sorted(Comparator.comparing(Application::getId))
-                .map(applicationMapper::toDto).collect(Collectors.toList());
+        if (status.equals(allApplication)) {
+            return applications.stream().sorted(Comparator.comparing(Application::getId)).map(applicationMapper::toDto).collect(Collectors.toList());
+        } else {
+            return applications.stream().filter(a -> !success.equals(a.getStatus().getName()) && !fail.equals(a.getStatus().getName())).sorted(Comparator.comparing(Application::getId)).map(applicationMapper::toDto).collect(Collectors.toList());
+        }
     }
 
-    public List<ApplicationDto> sortByCompanyName(LocalDateTime date1, LocalDateTime date2) {
+    public List<ApplicationDto> sortByCompanyName(LocalDateTime date1, LocalDateTime date2, String status) {
         List<Application> applications = applicationRepository.findAllByCreatedAtBetween(date1, date2);
-        return applications
-                .stream()
-                .sorted(Comparator.comparing(Application::getCompany))
-                .map(applicationMapper::toDto).collect(Collectors.toList());
+        if (status.equals(allApplication)) {
+            return applications.stream().sorted(Comparator.comparing(Application::getCompany)).map(applicationMapper::toDto).collect(Collectors.toList());
+        } else {
+            return applications.stream().filter(a -> !success.equals(a.getStatus().getName()) && !fail.equals(a.getStatus().getName())).sorted(Comparator.comparing(Application::getCompany)).map(applicationMapper::toDto).collect(Collectors.toList());
+        }
     }
 
-    public List<ApplicationDto> sortByPrice(LocalDateTime date1, LocalDateTime date2) {
+    public List<ApplicationDto> sortByPrice(LocalDateTime date1, LocalDateTime date2, String status) {
         List<Application> applications = applicationRepository.findAllByCreatedAtBetween(date1, date2);
-        return applications
-                .stream()
-                .sorted(Comparator.nullsFirst(
-                        Comparator.comparing(a -> {
-                            BigDecimal price = a.getPrice();
-                            return price == null ? BigDecimal.ZERO : price;
-                        })
-                )).map(applicationMapper::toDto).collect(Collectors.toList());
+        if (status.equals(allApplication)) {
+            return applications
+                    .stream()
+                    .sorted(Comparator.nullsFirst(
+                            Comparator.comparing(a -> {
+                                BigDecimal price = a.getPrice();
+                                return price == null ? BigDecimal.ZERO : price;
+                            })
+                    )).map(applicationMapper::toDto).collect(Collectors.toList());
+        } else {
+            return applications
+                    .stream()
+                    .filter(a -> !success.equals(a.getStatus().getName()) && !fail.equals(a.getStatus().getName()))
+                    .sorted(Comparator.nullsFirst(
+                            Comparator.comparing(a -> {
+                                BigDecimal price = a.getPrice();
+                                return price == null ? BigDecimal.ZERO : price;
+                            })
+                    )).map(applicationMapper::toDto).collect(Collectors.toList());
+        }
     }
 
-    public List<ApplicationDto> sortByProduct(LocalDateTime date1, LocalDateTime date2) {
+    public List<ApplicationDto> sortByProduct(LocalDateTime date1, LocalDateTime date2, String status) {
         List<Application> applications = applicationRepository.findAllByCreatedAtBetween(date1, date2);
-        return applications
-                .stream()
-                .sorted(Comparator.comparing(a -> a.getProduct().getName()))
-                .map(applicationMapper::toDto).collect(Collectors.toList());
+        if (status.equals(allApplication)) {
+            return applications
+                    .stream()
+                    .sorted(Comparator.comparing(a -> a.getProduct().getName()))
+                    .map(applicationMapper::toDto).collect(Collectors.toList());
+        } else {
+            return applications
+                    .stream()
+                    .filter(a -> !success.equals(a.getStatus().getName()) && !fail.equals(a.getStatus().getName()))
+                    .sorted(Comparator.comparing(a -> a.getProduct().getName()))
+                    .map(applicationMapper::toDto).collect(Collectors.toList());
+        }
     }
 
-    public List<ApplicationDto> sortByStatus(LocalDateTime date1, LocalDateTime date2) {
+    public List<ApplicationDto> sortByStatus(LocalDateTime date1, LocalDateTime date2, String status) {
         List<Application> applications = applicationRepository.findAllByCreatedAtBetween(date1, date2);
-        return applications
-                .stream()
-                .sorted(Comparator.comparing(a -> a.getStatus().getName()))
-                .map(applicationMapper::toDto).collect(Collectors.toList());
+        if (status.equals(allApplication)) {
+            return applications
+                    .stream()
+                    .sorted(Comparator.comparing(a -> a.getStatus().getName()))
+                    .map(applicationMapper::toDto).collect(Collectors.toList());
+        } else {
+            return applications
+                    .stream()
+                    .filter(a -> !success.equals(a.getStatus().getName()) && !fail.equals(a.getStatus().getName()))
+                    .sorted(Comparator.comparing(a -> a.getStatus().getName()))
+                    .map(applicationMapper::toDto).collect(Collectors.toList());
+        }
     }
 
-    public List<ApplicationDto> sortByEmployee(LocalDateTime date1, LocalDateTime date2) {
+    public List<ApplicationDto> sortByEmployee(LocalDateTime date1, LocalDateTime date2, String status) {
         List<Application> applications = applicationRepository.findAllByCreatedAtBetween(date1, date2);
-        return applications
-                .stream()
-                .sorted(Comparator.nullsFirst(
-                        Comparator.comparing(a -> {
-                            User employee = a.getEmployee();
-                            return employee == null ? "" : employee.getFirstName() + " " + employee.getSurname();
-                        }))
-                ).map(applicationMapper::toDto).collect(Collectors.toList());
+        if (status.equals(allApplication)) {
+            return applications
+                    .stream()
+                    .sorted(Comparator.nullsFirst(
+                            Comparator.comparing(a -> {
+                                User employee = a.getEmployee();
+                                return employee == null ? "" : employee.getFirstName() + " " + employee.getSurname();
+                            }))
+                    ).map(applicationMapper::toDto).collect(Collectors.toList());
+        } else {
+            return applications
+                    .stream()
+                    .sorted(Comparator.nullsFirst(
+                            Comparator.comparing(a -> {
+                                User employee = a.getEmployee();
+                                return employee == null ? "" : employee.getFirstName() + " " + employee.getSurname();
+                            }))
+                    ).map(applicationMapper::toDto).collect(Collectors.toList());
+        }
     }
 
-    public List<ApplicationDto> findAllByCreatedAtBetweenAndCompanyStartingWith(LocalDateTime date1, LocalDateTime date2, String text) {
+    public List<ApplicationDto> findAllByCreatedAtBetweenAndCompanyStartingWith(LocalDateTime date1, LocalDateTime date2, String text, String status) {
         List<Application> applications = applicationRepository.findAllByCreatedAtBetweenAndCompanyStartingWithIgnoreCase(date1, date2, text);
-        return applications.stream().map(applicationMapper::toDto).collect(Collectors.toList());
+        if (status.equals(allApplication)) {
+            return applications.stream().map(applicationMapper::toDto).collect(Collectors.toList());
+        } else {
+            return applications.stream()
+                    .filter(application -> !success.equals(application.getStatus().getName()) && !fail.equals(application.getStatus().getName()))
+                    .map(applicationMapper::toDto)
+                    .collect(Collectors.toList());
+        }
     }
 
     public List<ApplicationDto> getAllSuccessfulAppsByToday() {

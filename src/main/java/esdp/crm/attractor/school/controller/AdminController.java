@@ -10,6 +10,7 @@ import esdp.crm.attractor.school.dto.request.RegisterFormDto;
 import esdp.crm.attractor.school.entity.User;
 import esdp.crm.attractor.school.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.EntityExistsException;
 import javax.validation.Valid;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/admin")
@@ -34,7 +36,15 @@ public class AdminController {
 
     @GetMapping
     public ModelAndView adminPage(@AuthenticationPrincipal User principal) {
-        return new ModelAndView("admin");
+        ModelAndView mav = new ModelAndView();
+        if (principal == null || !principal.getRole().getName().equals("Администратор")) {
+            mav.addObject("message", "У вас нет доступа для этого раздела!");
+            mav.setStatus(HttpStatus.FORBIDDEN);
+            mav.setViewName("forbiddenError");
+        } else {
+            mav.setViewName("admin");
+        }
+        return mav;
     }
 
     @GetMapping("/create/user")

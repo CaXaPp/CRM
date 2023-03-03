@@ -22,6 +22,17 @@ function createTasksInApplication(response) {
     )
 }
 
+function elementCreationCycle(response) {
+    response.changes.reverse();
+    for (let i = 0; i < response.changes.length; i++) {
+        document.getElementById('blockForLogsInApplication').insertAdjacentHTML('beforeend',
+            '<p>' + parseDateOnlyTime(response.date) + " " + response.author.firstName + " " + response.author.surname + " Для поля " + '<span class="badge rounded-pill bg-warning text-dark">' +
+            '' + response.changes[i].property + '</span>' + " установлено значение " +
+            '<span class="badge rounded-pill bg-info text-dark">' + response.changes[i].newRecord + '</span>' + '</p>'
+        )
+    }
+}
+
 function switchOptionProductSelect(product, productId) {
     if (product.id === productId) {
         document.getElementById('productId').insertAdjacentHTML('beforeend',

@@ -65,7 +65,6 @@ function getAllSumAndCount(date_start, date_end, value) {
             parameter: value
         }
     }).then(function (response) {
-        console.log(response.data);
         clear();
         createNewStatements(response.data[0]);
         createNegotiation(response.data[1]);
@@ -230,11 +229,6 @@ $('#myList a').on('click', function (e) {
     e.preventDefault()
     $(this).tab('active')
 })
-
-function clearInformationBlock() {
-    let elem = document.getElementById("information_table");
-    elem.remove();
-}
 
 function getActiveDealForToday() {
     spinnerDisplayFlex()
