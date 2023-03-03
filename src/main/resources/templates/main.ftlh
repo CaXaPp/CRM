@@ -1,6 +1,6 @@
 <#import "parts/general.ftlh" as g>
 
-<@g.general scripts=["/js/main.js"] styles=["/css/main.css"]>
+<@g.general scripts=["/crm/js/main.js"] styles=["/crm/css/main.css"]>
 
     <div class="dashboard_block">
 

@@ -1,6 +1,6 @@
 <#import "parts/general.ftlh" as g>
 
-<@g.general scripts=["/js/task.js"] styles=["/css/tasks.css"]>
+<@g.general scripts=["/crm/js/task.js"] styles=["/crm/css/tasks.css"]>
     <div class="task_header_block">
         <button type="button" class="btn btn-success" id="addTaskButton" data-bs-toggle="modal"
                 data-bs-target="#staticBackdrop">Добавить задачу

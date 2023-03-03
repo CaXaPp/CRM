@@ -1,5 +1,5 @@
 'use strict';
-const BASE_URL = 'http://localhost:9000';
+const BASE_URL = 'http://37.139.16.4:9000/crm';
 
 document.addEventListener("DOMContentLoaded", function () {
     getRole();
