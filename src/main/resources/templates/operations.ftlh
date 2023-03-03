@@ -1,6 +1,6 @@
 <#import "parts/general.ftlh" as g>
 
-<@g.general scripts=["/js/operation.js"] styles=["/css/operation.css"]>
+<@g.general scripts=["/crm/js/operation.js"] styles=["/crm/css/operation.css"]>
     <div class="main_block_inner_in_operations">
         <div class="operations_nav" id="operations_nav">
             <div class="alert alert-success alert_success_msg_for_status" id="alert_status" hidden role="alert">

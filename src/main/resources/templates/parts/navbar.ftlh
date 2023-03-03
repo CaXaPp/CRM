@@ -6,19 +6,19 @@
                     <a class="nav-link" href="#">Рабочий стол</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/application">Список заявлений</a>
+                    <a class="nav-link" href="/crm/application">Список заявок</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/operations">Операции</a>
+                    <a class="nav-link" href="/crm/operations">Операции</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/tasks">Задачи</a>
+                    <a class="nav-link" href="/crm/tasks">Задачи</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/analytics">Аналитика</a>
+                    <a class="nav-link" href="/crm/analytics">Аналитика</a>
                 </li>
                 <li class="nav-item" id="nav-admin-panel">
-                    <a class="nav-link" href="/admin">Администрирование</a>
+                    <a class="nav-link" href="/crm/admin">Администрирование</a>
                 </li>
             </ul>
 
@@ -28,7 +28,7 @@
                 <ul class="dropdown-menu dropdown_menu_inner" aria-labelledby="user_role">
                     <p id="user_role"></p>
                     <p id="user_role_department"></p>
-                    <form class="d-flex" action="/logout" method="post">
+                    <form class="d-flex" action="/crm/logout" method="post">
                         <#if _csrf??>
                             <input type="hidden" name="${(_csrf.parameterName)!'csrf'}"
                                    value="${(_csrf.token)!'not-token'}">

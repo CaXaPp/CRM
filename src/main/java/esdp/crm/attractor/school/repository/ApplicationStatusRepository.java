@@ -19,5 +19,5 @@ public interface ApplicationStatusRepository extends JpaRepository<ApplicationSt
     ApplicationStatus findByFunnel_IdAndName(Long id, String status);
 
     @Query("SELECT a.id FROM ApplicationStatus a WHERE a.name = :status AND a.funnel.id = :funnel")
-    Long getStatusIdByFunnel(String status, Long funnel);
+    Long getStatusIdByFunnel(@Param("status") String status, @Param("funnel") Long funnel);
 }

@@ -1,6 +1,6 @@
 <#import "parts/general.ftlh" as g>
 
-<@g.general scripts=["/js/application.js"] styles=["/css/application.css"]>
+<@g.general scripts=["/crm/js/application.js"] styles=["/crm/css/application.css"]>
 
     <div class="application_list_class">
         <div class="application_sort_block">

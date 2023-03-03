@@ -1,8 +1,8 @@
 <#import "parts/general.ftlh" as g>
 
-<@g.general styles=["/css/login.css"] scripts=["/js/registration.js"]>
+<@g.general styles=["/crm/css/login.css"] scripts=["/crm/js/registration.js"]>
   <div class="login-form">
-    <form action="/admin/edit/user/${form.id}" method="post" id="login-form">
+    <form action="/crm/admin/edit/user/${form.id}" method="post" id="login-form">
       <#if _csrf??>
         <input type="hidden"
                name="${_csrf.parameterName}" value="${_csrf.token}">

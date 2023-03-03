@@ -1,9 +1,9 @@
 <#import "parts/general.ftlh" as g>
 
-<@g.general styles=["/css/login.css"] scripts=["/js/funnel.js"]>
+<@g.general styles=["/crm/css/login.css"] scripts=["/crm/js/funnel.js"]>
 
     <div class="login-form">
-        <form action="/admin/create/funnel" method="post" id="login-form" modelA>
+        <form action="/crm/admin/create/funnel" method="post" id="login-form" modelA>
             <#if _csrf??>
                 <input type="hidden"
                        name="${_csrf.parameterName}" value="${_csrf.token}">

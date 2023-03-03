@@ -1,6 +1,6 @@
 <#import "parts/general.ftlh" as g>
 
-<@g.general scripts=["/js/analytics.js"] styles=["/css/analytics.css"]>
+<@g.general scripts=["/crm/js/analytics.js"] styles=["/crm/css/analytics.css"]>
     <div class="analytics-block">
         <div class="sort_selection_block">
             <select class="form-select" aria-label="Select product" id="analytics_product"

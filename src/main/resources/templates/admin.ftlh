@@ -1,22 +1,22 @@
 <#import "parts/general.ftlh" as g>
 
-<@g.general scripts=["/js/admin.js"] styles=["/css/admin.css"]>
+<@g.general scripts=["/crm/js/admin.js"] styles=["/crm/css/admin.css"]>
     <div class="admin_main_block">
-        <a href="/admin/create/product" class="btn btn-success">Добавить
+        <a href="/crm/admin/create/product" class="btn btn-success">Добавить
             продукт</a>
 
-        <a href="/admin/create/funnel" class="btn btn-success">Добавить воронку продаж</a>
+        <a href="/crm/admin/create/funnel" class="btn btn-success">Добавить воронку продаж</a>
 
-        <a href="/admin/create/user" class="btn btn-success">Добавить
+        <a href="/crm/admin/create/user" class="btn btn-success">Добавить
             пользователя</a>
 
-        <a href="/admin/find/user" class="btn btn-success">Изменить
+        <a href="/crm/admin/find/user" class="btn btn-success">Изменить
             пользователя</a>
 
-        <a href="/admin/create/department" class="btn btn-success">Добавить
+        <a href="/crm/admin/create/department" class="btn btn-success">Добавить
             департамент</a>
 
-        <a href="/admin/plans" class="btn btn-success">Сумма по плану</a>
+        <a href="/crm/admin/plans" class="btn btn-success">Сумма по плану</a>
 
         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#deleteApplicationAdmin" onclick="getAllApplicationToAdminPanel()">
             Удаление заявлений
