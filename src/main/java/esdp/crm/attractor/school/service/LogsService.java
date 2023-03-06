@@ -115,8 +115,11 @@ public class LogsService {
 
     private void deleteApplicationHistory(Long applicationId) {
         JqlQuery query = QueryBuilder.byInstanceId(applicationId, Application.class).build();
-        Set<Long> commitsIds = new HashSet<>();
-        javers.findShadows(query).forEach(objectShadow -> commitsIds.add(objectShadow.getCommitId().getMajorId()));
-        commitsIds.forEach(logsRepository::deleteCommitHistory);
+        javers.findShadows(query).forEach(objectShadow -> {
+            LocalDateTime dateTime = objectShadow.getCommitMetadata().getCommitDate();
+            String author = objectShadow.getCommitMetadata().getAuthor();
+            logsRepository.deleteCommitHistory(author, dateTime);
+        });
+
     }
 }
