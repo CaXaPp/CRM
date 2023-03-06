@@ -113,7 +113,7 @@ public class LogsService {
         return user.getFirstName() + " " + user.getSurname();
     }
 
-    private void deleteApplicationHistory(Long applicationId) {
+    public void deleteApplicationHistory(Long applicationId) {
         JqlQuery query = QueryBuilder.byInstanceId(applicationId, Application.class).build();
         javers.findShadows(query).forEach(objectShadow -> {
             LocalDateTime dateTime = objectShadow.getCommitMetadata().getCommitDate();

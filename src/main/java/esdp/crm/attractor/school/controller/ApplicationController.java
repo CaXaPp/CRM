@@ -2,6 +2,7 @@ package esdp.crm.attractor.school.controller;
 
 import esdp.crm.attractor.school.dto.ApplicationDto;
 import esdp.crm.attractor.school.dto.ApplicationDetailsAndStatusDto;
+import esdp.crm.attractor.school.dto.TaskDto;
 import esdp.crm.attractor.school.dto.request.ApplicationFormDto;
 import esdp.crm.attractor.school.entity.User;
 import esdp.crm.attractor.school.service.*;
@@ -26,6 +27,8 @@ public class ApplicationController {
     private final ProductService productService;
     private final ClientSourceService clientSourceService;
     private final ApplicationStatusService applicationStatusService;
+    private final LogsService logsService;
+    private final TaskService taskService;
     private final String employee_role = "ROLE_EMPLOYEE";
     @GetMapping
     public String mainApplications() {
@@ -74,12 +77,6 @@ public class ApplicationController {
     @PutMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void updateApplication(@Valid ApplicationFormDto application) {
         applicationService.updateApplication(application);
-    }
-
-    @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteApplication(@RequestParam(value = "id", required = false) Long id) {
-        applicationService.deleteApplication(id);
-        return new ResponseEntity<>("Application deleted", HttpStatus.OK);
     }
 
     @GetMapping("/set-status")
@@ -215,5 +212,26 @@ public class ApplicationController {
                                                                   @RequestParam(value = "text", required = false) String text,
                                                                      @RequestParam(value = "status", required = false) String status) {
         return new ResponseEntity<>(applicationService.findAllByCreatedAtBetweenAndCompanyStartingWith(LocalDateTime.parse(date1), LocalDateTime.parse(date2), text, status), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteApplication(@RequestParam(value = "id", required = false) Long id) {
+        List<TaskDto> tasks = taskService.getTasksByApplicationId(id);
+
+        for (TaskDto task : tasks) {
+            try {
+                taskService.deleteTask(task.getId());
+            } catch (Exception e) {
+                return new ResponseEntity<>("Error deleting task " + task.getId(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        try {
+            applicationService.deleteApplication(id);
+            logsService.deleteApplicationHistory(id);
+            return new ResponseEntity<>("Application " + id + " deleted", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error deleting application " + id, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
