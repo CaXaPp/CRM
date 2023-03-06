@@ -17,7 +17,7 @@ public class LogsRepository {
     private final JdbcTemplate jdbcTemplate;
 
     public void deleteCommitHistory(String author, LocalDateTime dateTime) {
-        String query =  "select * " +
+        String query =  "select commit_pk " +
                         "from jv_commit " +
                         "where author = ? and commit_date = ?;";
         Long id = jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Long.class), author, dateTime)
