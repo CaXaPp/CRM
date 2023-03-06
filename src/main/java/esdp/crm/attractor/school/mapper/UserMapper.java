@@ -40,12 +40,12 @@ public abstract class UserMapper {
 
     @Mapping(target = "status", expression = "java(statusRepository.getByName(dto.getStatus()))")
     @Mapping(target = "password", expression = "java(dto.getPassword() == userRepository.getById(dto.getId()).getPassword() ? dto.getPassword() : passwordEncoder.encode(dto.getPassword()))")
-    @Mapping(target = "department", expression = "java(departmentRepository.getById(dto.getDepartmentId()))")
+    @Mapping(target = "department", expression = "java(dto.getDepartmentId() != null ? departmentRepository.getById(dto.getDepartmentId()) : null)")
     @Mapping(target = "role", expression = "java(roleRepository.getById(dto.getRoleId()))")
     public abstract User toOldUser(RegisterFormDto dto);
 
     @Mapping(target = "status", expression = "java(user.getStatus().getName())")
-    @Mapping(target = "departmentId", expression = "java(user.getDepartment().getId())")
+    @Mapping(target = "departmentId", expression = "java(user.getDepartment() != null ? user.getDepartment().getId() : null)")
     @Mapping(target = "roleId", expression = "java(user.getRole().getId())")
     public abstract RegisterFormDto toForm(User user);
 
