@@ -29,6 +29,7 @@
             $("#user-option").change(function () {
                 CHOICE_LINK
                     = 'http://37.139.16.4:9000/crm/admin/edit/user/' + $('#user-option').val();
+                document.getElementById('search-btn').href = CHOICE_LINK;
             });
         });
 

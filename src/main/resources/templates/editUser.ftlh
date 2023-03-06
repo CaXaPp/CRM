@@ -65,7 +65,7 @@
         </div>
         <button class="btn btn-secondary mt-3" id="chang-password">Сменить пароль</button>
         <div class="input-field" hidden="hidden" id="password-block">
-          <input type="password" name="password" placeholder="Password" id="password-input" required>
+          <input type="password" name="password" placeholder="Password" id="password-input" value="${form.password}" required>
         </div>
       </div>
       <div class="action">
