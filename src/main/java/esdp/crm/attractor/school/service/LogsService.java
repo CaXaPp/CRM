@@ -13,12 +13,15 @@ import org.javers.core.ChangesByCommit;
 import org.javers.core.Javers;
 import org.javers.core.commit.CommitMetadata;
 import org.javers.core.diff.changetype.PropertyChange;
+import org.javers.repository.jql.JqlQuery;
 import org.javers.repository.jql.QueryBuilder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +32,7 @@ public class LogsService {
     private final ClientSourceRepository clientSourceRepository;
     private final Javers javers;
     private final UserMapper userMapper;
+    private final LogsRepository logsRepository;
 
     public List<LogsDto> getApplicationChanges(Long applicationId) {
         Changes changes = javers.findChanges(QueryBuilder.byInstanceId(applicationId, Application.class).build());
@@ -107,5 +111,12 @@ public class LogsService {
 
     private String getUserFullName(User user) {
         return user.getFirstName() + " " + user.getSurname();
+    }
+
+    private void deleteApplicationHistory(Long applicationId) {
+        JqlQuery query = QueryBuilder.byInstanceId(applicationId, Application.class).build();
+        Set<Long> commitsIds = new HashSet<>();
+        javers.findShadows(query).forEach(objectShadow -> commitsIds.add(objectShadow.getCommitId().getMajorId()));
+        commitsIds.forEach(logsRepository::deleteCommitHistory);
     }
 }
