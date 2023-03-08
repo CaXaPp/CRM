@@ -1,6 +1,6 @@
 <#import "parts/general.ftlh" as g>
 
-<@g.general styles=["/crm/css/login.css", "/crm/css/tasks.css", "/crm/css/application.css"] scripts=["/js/planSum.js"]>
+<@g.general styles=["/crm/css/login.css", "/crm/css/tasks.css", "/crm/css/application.css"] scripts=["/crm/js/planSum.js"]>
 
     <div class="login-form">
         <div class="card">

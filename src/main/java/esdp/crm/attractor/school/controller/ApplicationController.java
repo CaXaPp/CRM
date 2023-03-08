@@ -35,13 +35,6 @@ public class ApplicationController {
         return "applications";
     }
 
-    @GetMapping("/save")
-    public ModelAndView getLandingPage() {
-        return new ModelAndView("landing")
-                .addObject("products", productService.getAll())
-                .addObject("sources", clientSourceService.getAll());
-    }
-
     @PostMapping("/save")
     public String postApplicationFromLandingPage(@Valid @ModelAttribute ApplicationFormDto application) {
         applicationService.save(application);

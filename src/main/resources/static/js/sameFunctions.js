@@ -5,7 +5,7 @@ function getUserById(id) {
         getProducts(response.data.department.id, 1);
         setTimeout(function () {
             getStatuses(document.getElementById('funnelInApplication').value, 1);
-        }, 100);
+        }, 300);
         deleteElemInLoop(document.getElementById('taskForEmployee').querySelectorAll('option'));
         document.getElementById('taskForEmployee').insertAdjacentHTML('beforeend',
             '<option value="' + response.data.id + '">' + response.data.fio + '</option>'
@@ -26,11 +26,17 @@ function elementCreationCycle(response) {
     response.changes.reverse();
     for (let i = 0; i < response.changes.length; i++) {
         document.getElementById('blockForLogsInApplication').insertAdjacentHTML('beforeend',
-            '<p>' + parseDateOnlyTime(response.date) + " " + response.author.firstName + " " + response.author.surname + " Для поля " + '<span class="badge rounded-pill bg-warning text-dark">' +
+            '<p>' + parseDateOnlyTime(response.date) + " " + checkNull(response.author) + " " + "Для поля " + '<span class="badge rounded-pill bg-warning text-dark">' +
             '' + response.changes[i].property + '</span>' + " установлено значение " +
             '<span class="badge rounded-pill bg-info text-dark">' + response.changes[i].newRecord + '</span>' + '</p>'
         )
     }
+}
+
+function checkNull(author) {
+    if (author === null || author === undefined)
+        return "";
+    return author.fio;
 }
 
 function switchOptionProductSelect(product, productId) {

@@ -309,7 +309,7 @@
                                     name="productId" required>
                             </select>
                         </div>
-                        <input type="hidden" value="10" name="sourceId">
+                        <input type="hidden" value="9" name="sourceId">
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -322,34 +322,4 @@
             </div>
         </div>
     </div>
-
-<#--    <div class="modal fade" id="deleteApplicationModal" tabindex="-1" aria-labelledby="exampleModalLabel"-->
-<#--         aria-hidden="true">-->
-<#--        <div class="modal-dialog">-->
-<#--            <div class="modal-content">-->
-<#--                <div class="modal-header">-->
-<#--                    <h1 class="modal-title fs-5" id="exampleModalLabel">Удаление заявления</h1>-->
-<#--                    <button type="button" class="btn-close" data-bs-dismiss="modal"-->
-<#--                            aria-label="Close"></button>-->
-<#--                </div>-->
-<#--                <div class="modal-body">-->
-<#--                    <div class="alert alert-danger" role="alert" id="deleteApplicationDiv">-->
-<#--                    </div>-->
-<#--                    <div>-->
-<#--                        <#if _csrf??>-->
-<#--                            <input type="hidden"-->
-<#--                                   name="${_csrf.parameterName}" value="${_csrf.token}" id="x-csrf-token">-->
-<#--                        </#if>-->
-<#--                    </div>-->
-<#--                </div>-->
-<#--                <div class="modal-footer">-->
-<#--                    <button type="button" class="btn btn-primary" id="removeApplicationBtnValue" value=""-->
-<#--                            onclick="deleteApplication(this.value)" data-bs-dismiss="modal">Удалить-->
-<#--                    </button>-->
-<#--                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>-->
-<#--                </div>-->
-<#--            </div>-->
-<#--        </div>-->
-<#--    </div>-->
-
 </@g.general>

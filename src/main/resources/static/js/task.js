@@ -67,7 +67,7 @@ function editTask(task) {
 }
 
 function showTask(id) {
-    $.get(window.location.origin + `/tasks/task/${id}`, function (data) {
+    $.get(window.location.origin + `/crm/tasks/task/${id}`, function (data) {
         $("select#operation").val(data.operation_id).change()
         $("input[name='deadline']").val(getDate(data.deadline))
         $("select#employee").val(data.employee_id).change()
@@ -95,7 +95,7 @@ function edit(id) {
     $.ajax({
         type: "PUT",
         contentType: "application/json",
-        url: window.location.origin + `/tasks/task/${id}`,
+        url: window.location.origin + `/crm/tasks/task/${id}`,
         data: JSON.stringify(formData),
         data_type: "json",
         success: function () {

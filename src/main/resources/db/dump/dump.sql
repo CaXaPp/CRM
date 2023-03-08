@@ -14,6 +14,8 @@ INSERT INTO public.client_sources (name) VALUES ('Телевизор');
 INSERT INTO public.client_sources (name) VALUES ('Газета');
 INSERT INTO public.client_sources (name) VALUES ('Telegram');
 INSERT INTO public.client_sources (name) VALUES ('WhatsApp');
+INSERT INTO public.client_sources (name) VALUES ('Сайт');
+INSERT INTO public.client_sources (name) VALUES ('Сотрудник');
 INSERT INTO public.client_sources (name) VALUES ('Другое');
 
 INSERT INTO public.application_statuses (name, funnel_id) VALUES ('Новое', 1);
@@ -39,10 +41,10 @@ INSERT INTO public.task_types (name) VALUES ('Связаться');
 INSERT INTO public.task_types (name) VALUES ('Встретиться');
 INSERT INTO public.task_types (name) VALUES ('Другое');
 
-INSERT INTO public.products (name) VALUES ('Страхование жилья');
-INSERT INTO public.products (name) VALUES ('Страхование автомобиля');
-INSERT INTO public.products (name) VALUES ('Страхование компании');
-INSERT INTO public.products (name) VALUES ('Страхование жизни');
+INSERT INTO public.products (name, department_id) VALUES ('Страхование жилья', 1);
+INSERT INTO public.products (name, department_id) VALUES ('Страхование автомобиля', 1);
+INSERT INTO public.products (name, department_id) VALUES ('Страхование компании', 1);
+INSERT INTO public.products (name, department_id) VALUES ('Страхование жизни', 2);
 
 INSERT INTO public.departments_funnels (department_id, funnels_id) VALUES (1, 1);
 INSERT INTO public.departments_funnels (department_id, funnels_id) VALUES (2, 2);
