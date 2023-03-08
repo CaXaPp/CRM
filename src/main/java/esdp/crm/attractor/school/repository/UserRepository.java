@@ -11,25 +11,13 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByEmail(String email);
+    User findByEmail(String email);
+
     boolean existsByEmail(String email);
 
     List<User> findAllByRole(Role role);
 
-    @Query("SELECT u FROM User u WHERE u.role.value='ROLE_EMPLOYEE'")
-    List<User> findAllEmployees();
-
-    @Query("SELECT u.id FROM User u WHERE u.email = :email")
-    Long getIdByEmail(String email);
-
-    @Query("SELECT u.department.id FROM User u WHERE u.email = :email")
-    Long getDepartmentIdByEmail(String email);
-
-    @Query("SELECT u.id FROM User u WHERE u.department.id = :id")
-    List<Long> getAllIdByDepartmentId(Long id);
-
-    @Query("SELECT u.id, u.firstName, u.surname FROM User u WHERE u.role.value = 'ROLE_EMPLOYEE'")
-    List<Object[]> findAllEmployeeByRole();
+    List<User> findAllByRole_Value(String role);
 
     @Query("SELECT u FROM User u WHERE u.role.value NOT IN ('ROLE_ADMIN')")
     List<User> findAllUsersNotInAdmin();

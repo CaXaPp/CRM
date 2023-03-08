@@ -4,6 +4,7 @@ import esdp.crm.attractor.school.dto.ChangesDto;
 import esdp.crm.attractor.school.dto.LogsDto;
 import esdp.crm.attractor.school.dto.UserDto;
 import esdp.crm.attractor.school.entity.Application;
+import esdp.crm.attractor.school.entity.User;
 import esdp.crm.attractor.school.mapper.UserMapper;
 import esdp.crm.attractor.school.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -12,12 +13,15 @@ import org.javers.core.ChangesByCommit;
 import org.javers.core.Javers;
 import org.javers.core.commit.CommitMetadata;
 import org.javers.core.diff.changetype.PropertyChange;
+import org.javers.repository.jql.JqlQuery;
 import org.javers.repository.jql.QueryBuilder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +32,7 @@ public class LogsService {
     private final ClientSourceRepository clientSourceRepository;
     private final Javers javers;
     private final UserMapper userMapper;
+    private final LogsRepository logsRepository;
 
     public List<LogsDto> getApplicationChanges(Long applicationId) {
         Changes changes = javers.findChanges(QueryBuilder.byInstanceId(applicationId, Application.class).build());
@@ -43,9 +48,9 @@ public class LogsService {
         LogsDto logsDto = new LogsDto();
         CommitMetadata commit = changesByCommit.getCommit();
         try {
-            logsDto.setAuthor(userMapper.toUserDto(userRepository.findByEmail(commit.getAuthor()).get()));
+            logsDto.setAuthor(userMapper.toUserDto(userRepository.findByEmail(commit.getAuthor())));
         } catch (Exception e) {
-            logsDto.setAuthor(UserDto.builder().firstName("Неизвестный автор").build());
+            logsDto.setAuthor(UserDto.builder().firstName("Unknown author").build());
         }
         logsDto.setDate(commit.getCommitDate());
         Changes changes = javers.findChanges(QueryBuilder.byInstanceId(applicationId, Application.class)
@@ -88,10 +93,8 @@ public class LogsService {
             case "Сотрудник":
                 return ChangesDto.builder()
                         .property(propertyChange.getPropertyName())
-                        .oldRecord(propertyChange.getLeft() != null ? userRepository.getById(getIdFromPropertyStr(
-                                propertyChange.getLeft().toString())).getUsername() : UNDEFINED)
-                        .newRecord(propertyChange.getRight() != null ? userRepository.getById(getIdFromPropertyStr(
-                                propertyChange.getRight().toString())).getUsername() : UNDEFINED)
+                        .oldRecord(propertyChange.getLeft() != null ? getUserFullName(userRepository.getById(getIdFromPropertyStr(propertyChange.getLeft().toString()))) : UNDEFINED)
+                        .newRecord(propertyChange.getRight() != null ? getUserFullName(userRepository.getById(getIdFromPropertyStr(propertyChange.getRight().toString()))) : UNDEFINED)
                         .build();
             default:
                 return ChangesDto.builder()
@@ -104,5 +107,19 @@ public class LogsService {
 
     public Long getIdFromPropertyStr(String propertyStr) {
         return Long.parseLong(propertyStr.substring(propertyStr.lastIndexOf('/') + 1));
+    }
+
+    private String getUserFullName(User user) {
+        return user.getFirstName() + " " + user.getSurname();
+    }
+
+    public void deleteApplicationHistory(Long applicationId) {
+        JqlQuery query = QueryBuilder.byInstanceId(applicationId, Application.class).build();
+        javers.findShadows(query).forEach(objectShadow -> {
+            LocalDateTime dateTime = objectShadow.getCommitMetadata().getCommitDate();
+            String author = objectShadow.getCommitMetadata().getAuthor();
+            logsRepository.deleteCommitHistory(author, dateTime);
+        });
+
     }
 }

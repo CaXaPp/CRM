@@ -21,12 +21,17 @@
     align-items: center;
 }
 
-.description {
-    min-height: 150px;
-    max-height: 200px;
+.task_main_block {
+    max-width: 90%;
+    margin: 0 auto;
 }
 
-.result{
-    min-height: 150px;
-    max-height: 200px;
+.form-additional label {
+    width: 100%;
+}
+
+.modal_footer_btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }

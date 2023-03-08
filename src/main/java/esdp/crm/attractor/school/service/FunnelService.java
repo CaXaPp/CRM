@@ -45,12 +45,12 @@ public class FunnelService {
         });
     }
 
-    public List<Funnel> findById(Long id) {
+    public List<FunnelDto> findById(Long id) {
         List<Long> funnels_id = funnelRepository.findAllFunnelsIdByDepartmentId(id);
         List<Funnel> funnels = new ArrayList<>();
         for (Long aLong : funnels_id) {
             funnels.add(funnelRepository.findAllByFunnelsById(aLong));
         }
-        return funnels;
+        return funnels.stream().map(funnelMapper::toDto).collect(Collectors.toList());
     }
 }

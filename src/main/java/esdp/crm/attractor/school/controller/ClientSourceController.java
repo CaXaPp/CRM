@@ -1,6 +1,6 @@
 package esdp.crm.attractor.school.controller;
 
-import esdp.crm.attractor.school.entity.ClientSource;
+import esdp.crm.attractor.school.dto.ClientSourceDto;
 import esdp.crm.attractor.school.service.ClientSourceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ public class ClientSourceController {
     private final ClientSourceService clientSourceService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<ClientSource>> getAll() {
+    public ResponseEntity<List<ClientSourceDto>> getAll() {
         return new ResponseEntity<>(clientSourceService.getAll(), HttpStatus.OK);
     }
 }

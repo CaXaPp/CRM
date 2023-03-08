@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Landing page</title>
-    <base href="/">
+    <base href="/crm">
     <link rel="stylesheet" href="./css/landing.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -13,7 +13,7 @@
         <h3 class="text-center landing-head">Оставьте нам вашу заявку и наши сотрудники обязательно с вами свяжутся.
             <br>(для заявки просим вас ответить на вопросы ниже)</h3>
         <div class="d-flex justify-content-center">
-            <form id="application-form" action="/application/save"  method="post" class="pt-4 w-50 row d-flex justify-content-center">
+            <form id="application-form" action="/crm/client/save"  method="post" class="pt-4 w-50 row d-flex justify-content-center">
                 <#if _csrf??>
                     <input type="hidden"
                        name="${_csrf.parameterName}" value="${_csrf.token}">

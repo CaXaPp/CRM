@@ -14,6 +14,8 @@ INSERT INTO public.client_sources (name) VALUES ('Телевизор');
 INSERT INTO public.client_sources (name) VALUES ('Газета');
 INSERT INTO public.client_sources (name) VALUES ('Telegram');
 INSERT INTO public.client_sources (name) VALUES ('WhatsApp');
+INSERT INTO public.client_sources (name) VALUES ('Сайт');
+INSERT INTO public.client_sources (name) VALUES ('Сотрудник');
 INSERT INTO public.client_sources (name) VALUES ('Другое');
 
 INSERT INTO public.application_statuses (name, funnel_id) VALUES ('Новое', 1);
@@ -39,10 +41,10 @@ INSERT INTO public.task_types (name) VALUES ('Связаться');
 INSERT INTO public.task_types (name) VALUES ('Встретиться');
 INSERT INTO public.task_types (name) VALUES ('Другое');
 
-INSERT INTO public.products (name) VALUES ('Страхование жилья');
-INSERT INTO public.products (name) VALUES ('Страхование автомобиля');
-INSERT INTO public.products (name) VALUES ('Страхование компании');
-INSERT INTO public.products (name) VALUES ('Страхование жизни');
+INSERT INTO public.products (name, department_id) VALUES ('Страхование жилья', 1);
+INSERT INTO public.products (name, department_id) VALUES ('Страхование автомобиля', 1);
+INSERT INTO public.products (name, department_id) VALUES ('Страхование компании', 1);
+INSERT INTO public.products (name, department_id) VALUES ('Страхование жизни', 2);
 
 INSERT INTO public.departments_funnels (department_id, funnels_id) VALUES (1, 1);
 INSERT INTO public.departments_funnels (department_id, funnels_id) VALUES (2, 2);
@@ -51,3 +53,6 @@ INSERT INTO public.users (email, enabled, first_name, middle_name, password, sur
 INSERT INTO public.users (email, enabled, first_name, middle_name, password, surname, department_id, role_id, status_id) VALUES ('user2@user.com', true, 'Сотрудник №2', 'Отчество', '$2a$10$P5bYbQxHa2keo2DxGTdvsOQQVjcdKCLpeP9qs8wCKrc6viVlWe0LW', 'Фамилия', 2, 2, 1);
 INSERT INTO public.users (email, enabled, first_name, middle_name, password, surname, department_id, role_id, status_id) VALUES ('admin@admin.com', true, 'Админ', 'Отчество', '$2a$10$pa5MWgIvOkFwluTvR5Ize.7UfFW5tcMv.QsFXJ12ojQsCUcItKa8q', 'Фамилия', 1, 1, 1);
 INSERT INTO public.users (email, enabled, first_name, middle_name, password, surname, department_id, role_id, status_id) VALUES ('manager@manager.com', true, 'Руководитель', 'Отчество', '$2a$10$0ZsKgr8//yWQvy7Pl8qYqOeyd5uBh9v1gBKB/nDCpkxGP.fq5RZge', 'Фамилия', 1, 3, 1);
+
+INSERT INTO public.plan_sums (sum, department_id) VALUES (0.00, 1);
+INSERT INTO public.plan_sums (sum, department_id) VALUES (0.00, 2);

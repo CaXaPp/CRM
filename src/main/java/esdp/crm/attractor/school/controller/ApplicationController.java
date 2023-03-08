@@ -1,21 +1,21 @@
 package esdp.crm.attractor.school.controller;
 
 import esdp.crm.attractor.school.dto.ApplicationDto;
+import esdp.crm.attractor.school.dto.ApplicationDetailsAndStatusDto;
+import esdp.crm.attractor.school.dto.TaskDto;
 import esdp.crm.attractor.school.dto.request.ApplicationFormDto;
-import esdp.crm.attractor.school.entity.Application;
-import esdp.crm.attractor.school.entity.ApplicationStatus;
 import esdp.crm.attractor.school.entity.User;
 import esdp.crm.attractor.school.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -26,19 +26,13 @@ public class ApplicationController {
     private final ApplicationService applicationService;
     private final ProductService productService;
     private final ClientSourceService clientSourceService;
-    private final UserService userService;
     private final ApplicationStatusService applicationStatusService;
-
+    private final LogsService logsService;
+    private final TaskService taskService;
+    private final String employee_role = "ROLE_EMPLOYEE";
     @GetMapping
     public String mainApplications() {
         return "applications";
-    }
-
-    @GetMapping("/save")
-    public ModelAndView getLandingPage() {
-        return new ModelAndView("landing")
-                .addObject("products", productService.getAll())
-                .addObject("sources", clientSourceService.getAll());
     }
 
     @PostMapping("/save")
@@ -48,8 +42,23 @@ public class ApplicationController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Application>> applications() {
+    public ResponseEntity<List<ApplicationDto>> applications() {
         return new ResponseEntity<>(applicationService.getAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/all-sort-by-id")
+    public ResponseEntity<List<ApplicationDto>> getAllSortById() {
+        return new ResponseEntity<>(applicationService.getAllSortedById(), HttpStatus.OK);
+    }
+
+    @GetMapping("/all-active")
+    public ResponseEntity<List<ApplicationDto>> getAllActive() {
+        return new ResponseEntity<>(applicationService.getAllActive(), HttpStatus.OK);
+    }
+
+    @GetMapping("/all-free")
+    public ResponseEntity<List<ApplicationDto>> getAllFreeApplication() {
+        return new ResponseEntity<>(applicationService.getAllFreeApplications(), HttpStatus.OK);
     }
 
     @GetMapping("/edit/{id}")
@@ -61,151 +70,161 @@ public class ApplicationController {
     @PutMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void updateApplication(@Valid ApplicationFormDto application) {
         applicationService.updateApplication(application);
-//        return HttpStatus.OK;
     }
 
     @GetMapping("/set-status")
     public ResponseEntity<HttpStatus> setStatus(@RequestParam(value = "application", required = false) String applicationId,
                                 @RequestParam(value = "status", required = false) String status) {
-        Optional<ApplicationStatus> applicationStatus = applicationStatusService.getStatusById(Long.parseLong(status));
-        Application application = applicationService.findById(Long.parseLong(applicationId));
-        applicationService.updateStatus(applicationStatus.get(), application);
+        applicationService.updateStatus(applicationStatusService.getStatusById(Long.parseLong(status)), applicationService.findById(Long.parseLong(applicationId)));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/all/date")
-    public ResponseEntity<Map<String, List<Float>>> applicationsCountToday(
+    public ResponseEntity<List<ApplicationDetailsAndStatusDto>> applicationsCountToday(
             @RequestParam(value = "startDate", required = false) String date1,
             @RequestParam(value = "endDate", required = false) String date2,
             @RequestParam(value = "parameter", required = false) String parameter,
-            Principal principal) {
+            @AuthenticationPrincipal User user) {
 
-        String[] statuses = {"Новое", "Переговоры", "Принятие решения", "На обслуживании", "Успешно"};
+        String allDepartments = "all";
+        String myDepartment = "my";
+        parameter = parameter.equals(allDepartments) ? null : parameter.equals(myDepartment) ? myDepartment : parameter;
 
-        List<Long> usersId = (parameter.equals("all")) ? null :
-                (parameter.equals("my")) ? Arrays.asList(userService.getUserIdByEmail(principal.getName())) :
-                        userService.getAllUserId(Long.parseLong(parameter));
-
-        Map<String, List<Float>> data = new HashMap<>();
-
-        for (String status : statuses) {
-            List<ApplicationStatus> statusIds = applicationStatusService.getStatusIdByName(status);
-            Float fl1 = 0F;
-            Float fl2 = 0F;
-            for (ApplicationStatus applicationStatus : statusIds) {
-                List<Object[]> resultList;
-                if (usersId == null) {
-                    resultList = applicationService.findAllSumAndCountByApplication(LocalDateTime.parse(date1), LocalDateTime.parse(date2), applicationStatus.getId());
-                    for (Object[] obj : resultList) {
-                        fl1 += (obj[0] != null) ? Float.parseFloat(obj[0].toString()) : 0F;
-                        fl2 += (obj[1] != null) ? Float.parseFloat(obj[1].toString()) : 0F;
-                    }
-                    if (!resultList.isEmpty()) data.put(status, List.of(fl1, fl2));
-                } else {
-                    for (Long id : usersId) {
-                        resultList = applicationService.findAllSumAndCountByApplicationByEmployeeId(LocalDateTime.parse(date1), LocalDateTime.parse(date2), applicationStatus.getId(), id);
-                        for (Object[] obj : resultList) {
-                            fl1 += (obj[0] != null) ? Float.parseFloat(obj[0].toString()) : 0F;
-                            fl2 += (obj[1] != null) ? Float.parseFloat(obj[1].toString()) : 0F;
-                        }
-                        if (!resultList.isEmpty()) data.put(status, List.of(fl1, fl2));
-                    }
-                }
+        if (!Objects.equals(user.getRole().getValue(), employee_role)) {
+            if (parameter == null) {
+                return new ResponseEntity<>(applicationService.findAllSumAndCountByApplication(LocalDateTime.parse(date1), LocalDateTime.parse(date2)), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(applicationService.findAllSumAndCountByApplicationAndValue(LocalDateTime.parse(date1), LocalDateTime.parse(date2), Long.parseLong(parameter)), HttpStatus.OK);
+            }
+        } else {
+            if (Objects.equals(parameter, myDepartment)) {
+                return new ResponseEntity<>(applicationService.findAllSumAndCountByApplicationByEmployeeId(LocalDateTime.parse(date1), LocalDateTime.parse(date2), user.getId()), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(applicationService.findAllSumAndCountByApplicationAndValue(LocalDateTime.parse(date1), LocalDateTime.parse(date2), user.getDepartment().getId()), HttpStatus.OK);
             }
         }
-        return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
-    @GetMapping("/activeApplication")
-    public ResponseEntity<List<Object[]>> findAllActiveApplicationForToday(Principal principal) {
-        Optional<User> user = userService.findByEmail(principal.getName());
-        if (!Objects.equals(user.get().getRole().getName(), "Сотрудник")) {
+    @GetMapping("/section/active")
+    public ResponseEntity<List<ApplicationDto>> findAllActiveApplicationForToday(@AuthenticationPrincipal User user) {
+        if (!Objects.equals(user.getRole().getValue(), employee_role)) {
             return new ResponseEntity<>(applicationService.findAllActiveApplicationForToday(), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(applicationService.findAllActiveApplicationForTodayByUserId(user.get().getId()), HttpStatus.OK);
+            return new ResponseEntity<>(applicationService.findAllActiveApplicationForTodayByUserId(user.getId()), HttpStatus.OK);
         }
     }
 
-    @GetMapping("/completedDeal")
-    public ResponseEntity<List<Object[]>> findAllCompletedDealForToday(Principal principal) {
-        Optional<User> user = userService.findByEmail(principal.getName());
-        if (!Objects.equals(user.get().getRole().getName(), "Сотрудник")) {
-            return new ResponseEntity<>(applicationService.findAllComplatedDealsOnToday(), HttpStatus.OK);
+    @GetMapping("/section/complete")
+    public ResponseEntity<List<ApplicationDto>> findAllCompletedDealForToday(@AuthenticationPrincipal User user) {
+        if (!Objects.equals(user.getRole().getValue(), employee_role)) {
+            return new ResponseEntity<>(applicationService.findAllCompletedDealsOnToday(), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(applicationService.findAllComplatedDealsOnTodayByUserId(user.get().getId()), HttpStatus.OK);
+            return new ResponseEntity<>(applicationService.findAllCompletedDealsOnTodayByUserId(user.getId()), HttpStatus.OK);
         }
     }
 
-    @GetMapping("/sourceApplication")
-    public ResponseEntity<List<Object[]>> findAllSourceOfApplication(Principal principal) {
-        Optional<User> user = userService.findByEmail(principal.getName());
-        if (!Objects.equals(user.get().getRole().getName(), "Сотрудник")) {
+    @GetMapping("/section/source")
+    public ResponseEntity<List<ApplicationDto>> findAllSourceOfApplication(@AuthenticationPrincipal User user) {
+        if (!Objects.equals(user.getRole().getValue(), employee_role)) {
             return new ResponseEntity<>(applicationService.findAllSourceOfApplication(), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(applicationService.findAllSourceOfApplicationByUserId(user.get().getId()), HttpStatus.OK);
+            return new ResponseEntity<>(applicationService.findAllSourceOfApplicationByUserId(user.getId()), HttpStatus.OK);
         }
     }
 
-    @GetMapping("/deal-by-employee")
-    public ResponseEntity<List<Object[]>> findAllDealOfApplication(Principal principal) {
-        Optional<User> user = userService.findByEmail(principal.getName());
-        if (!Objects.equals(user.get().getRole().getName(), "Сотрудник")) {
+    @GetMapping("/section/deal")
+    public ResponseEntity<List<ApplicationDto>> findAllDealOfApplication(@AuthenticationPrincipal User user) {
+        if (!Objects.equals(user.getRole().getValue(), employee_role)) {
             return new ResponseEntity<>(applicationService.findAllDealOfApplication(), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(applicationService.findAllDealOfApplicationByUserId(user.get().getId()), HttpStatus.OK);
+            return new ResponseEntity<>(applicationService.findAllDealOfApplicationByUserId(user.getId()), HttpStatus.OK);
         }
     }
 
-    @GetMapping("/failureApplication")
-    public ResponseEntity<List<Object[]>> findAllFailureApplication(Principal principal) {
-        Optional<User> user = userService.findByEmail(principal.getName());
-        if (!Objects.equals(user.get().getRole().getName(), "Сотрудник")) {
+    @GetMapping("/section/failure")
+    public ResponseEntity<List<ApplicationDto>> findAllFailureApplication(@AuthenticationPrincipal User user) {
+        if (!Objects.equals(user.getRole().getValue(), employee_role)) {
             return new ResponseEntity<>(applicationService.findAllFailureApplication(), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(applicationService.findAllFailureApplicationByUserId(user.get().getId()), HttpStatus.OK);
+            return new ResponseEntity<>(applicationService.findAllFailureApplicationByUserId(user.getId()), HttpStatus.OK);
         }
     }
 
     @GetMapping("/sort/by-date")
-    public ResponseEntity<List<Application>> getAllApplicationByDateSort(@RequestParam(value = "startDate", required = false) String date1,
-                                                                         @RequestParam(value = "endDate", required = false) String date2) {
-        return new ResponseEntity<>(applicationService.getAllApplicationByDate(LocalDateTime.parse(date1), LocalDateTime.parse(date2)), HttpStatus.OK);
+    public ResponseEntity<List<ApplicationDto>> getAllApplicationByDateSort(@RequestParam(value = "startDate", required = false) String date1,
+                                                                         @RequestParam(value = "endDate", required = false) String date2,
+                                                                            @RequestParam(value = "status", required = false) String status) {
+        return new ResponseEntity<>(applicationService.getAllApplicationByDate(LocalDateTime.parse(date1), LocalDateTime.parse(date2), status), HttpStatus.OK);
+    }
+
+    @GetMapping("/sort/by-id")
+    public ResponseEntity<List<ApplicationDto>> sortById(@RequestParam(value = "start", required = false) String date1,
+                                                               @RequestParam(value = "end", required = false) String date2,
+                                                         @RequestParam(value = "status", required = false) String status) {
+        return new ResponseEntity<>(applicationService.sortById(LocalDateTime.parse(date1), LocalDateTime.parse(date2), status), HttpStatus.OK);
     }
 
     @GetMapping("/sort/by-company")
-    public ResponseEntity<List<Application>> sortByCompanyName(@RequestParam(value = "start", required = false) String date1,
-                                                               @RequestParam(value = "end", required = false) String date2) {
-        return new ResponseEntity<>(applicationService.sortByCompanyName(LocalDateTime.parse(date1), LocalDateTime.parse(date2)), HttpStatus.OK);
+    public ResponseEntity<List<ApplicationDto>> sortByCompanyName(@RequestParam(value = "start", required = false) String date1,
+                                                               @RequestParam(value = "end", required = false) String date2,
+                                                                  @RequestParam(value = "status", required = false) String status) {
+        return new ResponseEntity<>(applicationService.sortByCompanyName(LocalDateTime.parse(date1), LocalDateTime.parse(date2), status), HttpStatus.OK);
     }
 
     @GetMapping("/sort/by-price")
-    public ResponseEntity<List<Application>> sortByPrice(@RequestParam(value = "start", required = false) String date1,
-                                                         @RequestParam(value = "end", required = false) String date2) {
-        return new ResponseEntity<>(applicationService.sortByPrice(LocalDateTime.parse(date1), LocalDateTime.parse(date2)), HttpStatus.OK);
+    public ResponseEntity<List<ApplicationDto>> sortByPrice(@RequestParam(value = "start", required = false) String date1,
+                                                         @RequestParam(value = "end", required = false) String date2,
+                                                            @RequestParam(value = "status", required = false) String status) {
+        return new ResponseEntity<>(applicationService.sortByPrice(LocalDateTime.parse(date1), LocalDateTime.parse(date2), status), HttpStatus.OK);
     }
 
     @GetMapping("/sort/by-product")
-    public ResponseEntity<List<Application>> sortByProduct(@RequestParam(value = "start", required = false) String date1,
-                                                           @RequestParam(value = "end", required = false) String date2) {
-        return new ResponseEntity<>(applicationService.sortByProduct(LocalDateTime.parse(date1), LocalDateTime.parse(date2)), HttpStatus.OK);
+    public ResponseEntity<List<ApplicationDto>> sortByProduct(@RequestParam(value = "start", required = false) String date1,
+                                                           @RequestParam(value = "end", required = false) String date2,
+                                                              @RequestParam(value = "status", required = false) String status) {
+        return new ResponseEntity<>(applicationService.sortByProduct(LocalDateTime.parse(date1), LocalDateTime.parse(date2), status), HttpStatus.OK);
     }
 
     @GetMapping("/sort/by-status")
-    public ResponseEntity<List<Application>> sortByStatus(@RequestParam(value = "start", required = false) String date1,
-                                                          @RequestParam(value = "end", required = false) String date2) {
-        return new ResponseEntity<>(applicationService.sortByStatus(LocalDateTime.parse(date1), LocalDateTime.parse(date2)), HttpStatus.OK);
+    public ResponseEntity<List<ApplicationDto>> sortByStatus(@RequestParam(value = "start", required = false) String date1,
+                                                          @RequestParam(value = "end", required = false) String date2,
+                                                             @RequestParam(value = "status", required = false) String status) {
+        return new ResponseEntity<>(applicationService.sortByStatus(LocalDateTime.parse(date1), LocalDateTime.parse(date2), status), HttpStatus.OK);
     }
 
     @GetMapping("/sort/by-employee")
-    public ResponseEntity<List<Application>> sortByEmployee(@RequestParam(value = "start", required = false) String date1,
-                                                            @RequestParam(value = "end", required = false) String date2) {
-        return new ResponseEntity<>(applicationService.sortByEmployee(LocalDateTime.parse(date1), LocalDateTime.parse(date2)), HttpStatus.OK);
+    public ResponseEntity<List<ApplicationDto>> sortByEmployee(@RequestParam(value = "start", required = false) String date1,
+                                                            @RequestParam(value = "end", required = false) String date2,
+                                                               @RequestParam(value = "status", required = false) String status) {
+        return new ResponseEntity<>(applicationService.sortByEmployee(LocalDateTime.parse(date1), LocalDateTime.parse(date2), status), HttpStatus.OK);
     }
 
     @GetMapping("/sort/find-by-company")
-    public ResponseEntity<List<Application>> sortAndFindByCompany(@RequestParam(value = "start", required = false) String date1,
+    public ResponseEntity<List<ApplicationDto>> sortAndFindByCompany(@RequestParam(value = "start", required = false) String date1,
                                                                   @RequestParam(value = "end", required = false) String date2,
-                                                                  @RequestParam(value = "text", required = false) String text) {
-        return new ResponseEntity<>(applicationService.findAllByCreatedAtBetweenAndCompanyStartingWith(LocalDateTime.parse(date1), LocalDateTime.parse(date2), text), HttpStatus.OK);
+                                                                  @RequestParam(value = "text", required = false) String text,
+                                                                     @RequestParam(value = "status", required = false) String status) {
+        return new ResponseEntity<>(applicationService.findAllByCreatedAtBetweenAndCompanyStartingWith(LocalDateTime.parse(date1), LocalDateTime.parse(date2), text, status), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteApplication(@RequestParam(value = "id", required = false) Long id) {
+        List<TaskDto> tasks = taskService.getTasksByApplicationId(id);
+
+        for (TaskDto task : tasks) {
+            try {
+                taskService.deleteTask(task.getId());
+            } catch (Exception e) {
+                return new ResponseEntity<>("Error deleting task " + task.getId(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        try {
+            applicationService.deleteApplication(id);
+            logsService.deleteApplicationHistory(id);
+            return new ResponseEntity<>("Application " + id + " deleted", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error deleting application " + id, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

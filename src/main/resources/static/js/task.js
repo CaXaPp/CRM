@@ -1,7 +1,5 @@
 'use strict';
 
-const BASE_URL = 'http://localhost:9000'
-
 const tableBody = document.getElementById('tbody')
 const tasks = document.querySelectorAll(".task")
 let taskId;
@@ -50,7 +48,15 @@ function replaceNull(value) {
 }
 
 function getDate(date) {
-    return new Date(date[0], date[1], date[2], date[3], date[4])
+    return date[0] + "-" + calcTimeInLoop(date[1]) + "-" + calcTimeInLoop(date[2]) + "T" + calcTimeInLoop(date[3]) + ":" + calcTimeInLoop(date[4]);
+}
+
+function calcTimeInLoop(time) {
+    if (time < 10) {
+        return "0" + time;
+    } else {
+        return time;
+    }
 }
 
 tasks.forEach(task => task.addEventListener("click",  () => editTask(task)))
@@ -61,16 +67,18 @@ function editTask(task) {
 }
 
 function showTask(id) {
-    $.get(window.location.origin + `/tasks/task/${id}`, function (data) {
+    $.get(window.location.origin + `/crm/tasks/task/${id}`, function (data) {
         $("select#operation").val(data.operation_id).change()
-        $("input[name='deadline']").val(getDate(data.deadline).toISOString().slice(0, 19))
+        $("input[name='deadline']").val(getDate(data.deadline))
         $("select#employee").val(data.employee_id).change()
         $("select[name='typeId']").val(data.type_id).change()
         $("textarea#description").val(data.description)
+        $("textarea#result").val(data.result)
+        $("#deleteTask").val(id);
     })
 }
 
-$("#task-edit-form button[type='submit']").on("click", function (e) {
+$("#editTask button[type='submit']").on("click", function (e) {
     e.preventDefault()
     edit(taskId)
 })
@@ -87,7 +95,7 @@ function edit(id) {
     $.ajax({
         type: "PUT",
         contentType: "application/json",
-        url: window.location.origin + `/tasks/task/${id}`,
+        url: window.location.origin + `/crm/tasks/task/${id}`,
         data: JSON.stringify(formData),
         data_type: "json",
         success: function () {
@@ -99,4 +107,18 @@ function edit(id) {
             xhr.setRequestHeader(header, token)
         }
     })
+}
+
+function deleteTask(id) {
+    axios.delete(BASE_URL + "/tasks/delete", {
+        params: {
+            id: id
+        },
+        headers: {
+            'X-CSRF-TOKEN': document.getElementById('x-csrf-token-task').value
+        }
+    })
+        .then(function () {
+            document.getElementById('task' + id).remove();
+        })
 }

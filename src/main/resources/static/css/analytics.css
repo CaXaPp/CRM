@@ -1,3 +1,7 @@
+.analytics-block {
+    background: #f1f5f7;
+    height: 100vh;
+}
 .card-header {
     border-bottom: 1px solid transparent;
     background-color: transparent;
@@ -5,9 +9,10 @@
 
 .sort_selection_block {
     max-width: 1200px;
-    margin: 30px auto 100px;
+    margin: 0 auto;
     display: flex;
     justify-content: space-between;
+    padding: 35px 0;
 }
 
 .sort_selection_block select {
@@ -22,4 +27,10 @@
 .information_block_inner {
     background: ghostwhite;
     border: ghostwhite;
+}
+
+.card-footer-inner-for-sum {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }

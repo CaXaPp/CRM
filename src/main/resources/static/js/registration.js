@@ -24,6 +24,7 @@ if (CHANGE_PASSWORD_BTN != null) {
     CHANGE_PASSWORD_BTN.addEventListener('click', function () {
         document.getElementById('password-block').hidden = false;
         document.getElementById('password-input').value = '';
+        document.getElementById('password-input').required = true;
         CHANGE_PASSWORD_BTN.hidden = true;
     })
 }

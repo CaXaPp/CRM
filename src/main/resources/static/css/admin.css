@@ -1,0 +1,26 @@
+.admin_main_block {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -150px 0 0 -150px;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin_main_block a {
+    margin: 0 0 10px 0;
+}
+
+.modal-dialog-admin-panel {
+    max-width: 1600px;
+}
+
+.modal-body-admin-panel {
+    padding: 0 10px;
+}
+
+.tr-inner-table-admin-panel {
+    position: sticky;
+    top: 0;
+    background: aliceblue;
+}

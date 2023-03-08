@@ -42,6 +42,13 @@ public class TaskService {
                 .collect(Collectors.toList());
     }
 
+    public List<TaskDto> findAllByUserId(Long id) {
+        var tasks = taskRepository.findAllByEmployee_Id(id);
+        return tasks.stream()
+                .map(taskMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
     public Task assignUser(Task task, User user) {
         task.setEmployee(user);
         return taskRepository.save(task);
@@ -61,7 +68,7 @@ public class TaskService {
                 .orElseThrow(() -> new NotFoundException("Employee with id " + form.getEmployeeId() + " not found!"));
         TaskType taskType = taskTypeRepository.findById(form.getTypeId())
                 .orElseThrow(() -> new NotFoundException("Task type with id " + form.getTypeId() + " not found!"));
-        Task task = taskMapper.toEntity(application, form.getDeadline(), employee, taskType, form.getDescription());
+        Task task = taskMapper.toEntity(application, form.getDeadline(), employee, taskType, form.getDescription(), form.getResult());
         Task saved = taskRepository.save(task);
         return taskMapper.toDto(saved);
     }
@@ -78,23 +85,27 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
-    public List<Task> getTasksByApplicationId(Long id) {
-        return taskRepository.findAllByApplication_Id(id);
+    public void deleteTask(Long id) {
+        taskRepository.deleteById(id);
     }
 
-    public List<Object[]> getOverdueTask(LocalDateTime now) {
-        return taskRepository.findAllByDate(now);
+    public List<TaskDto> getTasksByApplicationId(Long id) {
+        return taskRepository.findAllByApplication_Id(id).stream().map(taskMapper::toDto).collect(Collectors.toList());
     }
 
-    public List<Object[]> getOverdueTaskByUserId(LocalDateTime now, Long userId) {
-        return taskRepository.findAllByDateAndByUserId(now, userId);
+    public List<TaskDto> getOverdueTask(LocalDateTime now) {
+        return taskRepository.findAllByDeadlineBefore(now).stream().map(taskMapper::toDto).collect(Collectors.toList());
     }
 
-    public List<Object[]> getAllActiveTask(LocalDateTime now) {
-        return taskRepository.findAllActiveTask(now);
+    public List<TaskDto> getOverdueTaskByUserId(LocalDateTime now, Long userId) {
+        return taskRepository.findAllByDeadlineBeforeAndEmployee_Id(now, userId).stream().map(taskMapper::toDto).collect(Collectors.toList());
     }
 
-    public List<Object[]> getAllActiveTaskByUserId(LocalDateTime now, Long userId) {
-        return taskRepository.findAllActiveTaskByUserId(now, userId);
+    public List<TaskDto> getAllActiveTask(LocalDateTime now) {
+        return taskRepository.findAllByDeadlineAfter(now).stream().map(taskMapper::toDto).collect(Collectors.toList());
+    }
+
+    public List<TaskDto> getAllActiveTaskByUserId(LocalDateTime now, Long userId) {
+        return taskRepository.findAllByDeadlineAfterAndEmployee_Id(now, userId).stream().map(taskMapper::toDto).collect(Collectors.toList());
     }
 }

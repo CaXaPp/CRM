@@ -8,25 +8,19 @@ import esdp.crm.attractor.school.dto.request.TaskFormDto;
 import esdp.crm.attractor.school.entity.Task;
 import esdp.crm.attractor.school.entity.User;
 import esdp.crm.attractor.school.mapper.TaskMapper;
-import esdp.crm.attractor.school.service.OperationService;
-import esdp.crm.attractor.school.service.TaskService;
-import esdp.crm.attractor.school.service.TaskTypeService;
-import esdp.crm.attractor.school.service.UserService;
+import esdp.crm.attractor.school.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -37,15 +31,26 @@ public class TaskController {
     private final OperationService operationService;
     private final TaskTypeService taskTypeService;
     private final UserService userService;
-
+    private final ApplicationService applicationService;
     private final TaskMapper taskMapper;
+    private final String employee_role = "ROLE_EMPLOYEE";
+
 
     @GetMapping
     public ModelAndView getTasks(@AuthenticationPrincipal User principal) {
-        List<TaskDto> tasks = taskService.findAll();
-        List<ApplicationDto> operations = (List<ApplicationDto>) operationService.getAll(principal, 0L).get("operations");
+        List<TaskDto> tasks = null;
+        List<ApplicationDto> operations = null;
+        if (!Objects.equals(principal.getRole().getValue(), employee_role)) {
+            tasks = taskService.findAll();
+            operations = (List<ApplicationDto>) operationService.getAll(principal, 0L).get("operations");
+        } else {
+            tasks = taskService.findAllByUserId(principal.getId());
+            operations = applicationService.getAllByUserId(principal.getId());
+        }
+
         List<UserDto> employees = userService.findAllByUser(principal);
         List<TaskTypeDto> types = taskTypeService.findAll();
+
         return new ModelAndView("tasks")
                 .addObject("tasks", tasks)
                 .addObject("operations", operations)
@@ -68,31 +73,34 @@ public class TaskController {
         return new ResponseEntity<>(taskService.editTask(task, taskDto), HttpStatus.OK);
     }
 
-    @GetMapping("/task/over")
-    public ResponseEntity<List<Object[]>> getOverdueTask(Principal principal) {
-        LocalDateTime localDateTime = LocalDateTime.now();
-        Optional<User> user = userService.findByEmail(principal.getName());
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteTask(@RequestParam(value = "id", required = false) Long id) {
+        taskService.deleteTask(id);
+        return new ResponseEntity<>("Task deleted", HttpStatus.OK);
+    }
 
-        if (!Objects.equals(user.get().getRole().getName(), "Сотрудник")) {
+    @GetMapping("/task/over")
+    public ResponseEntity<List<TaskDto>> getOverdueTask(@AuthenticationPrincipal User user) {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        if (!Objects.equals(user.getRole().getValue(), "ROLE_EMPLOYEE")) {
             return new ResponseEntity<>(taskService.getOverdueTask(localDateTime), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(taskService.getOverdueTaskByUserId(localDateTime, user.get().getId()), HttpStatus.OK);
+            return new ResponseEntity<>(taskService.getOverdueTaskByUserId(localDateTime, user.getId()), HttpStatus.OK);
         }
     }
-    @GetMapping("/task/active")
-    public ResponseEntity<List<Object[]>> getAllActiveTask(Principal principal) {
-        LocalDateTime localDateTime = LocalDateTime.now();
-        Optional<User> user = userService.findByEmail(principal.getName());
 
-        if (!Objects.equals(user.get().getRole().getName(), "Сотрудник")) {
+    @GetMapping("/task/active")
+    public ResponseEntity<List<TaskDto>> getAllActiveTask(@AuthenticationPrincipal User user) {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        if (!Objects.equals(user.getRole().getValue(), "ROLE_EMPLOYEE")) {
             return new ResponseEntity<>(taskService.getAllActiveTask(localDateTime), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(taskService.getAllActiveTaskByUserId(localDateTime, user.get().getId()), HttpStatus.OK);
+            return new ResponseEntity<>(taskService.getAllActiveTaskByUserId(localDateTime, user.getId()), HttpStatus.OK);
         }
     }
 
     @GetMapping("/tasks-by-id/{id}")
-    public ResponseEntity<List<Task>> getTasksByApplicationId(@PathVariable Long id) {
+    public ResponseEntity<List<TaskDto>> getTasksByApplicationId(@PathVariable Long id) {
         return new ResponseEntity<>(taskService.getTasksByApplicationId(id), HttpStatus.OK);
     }
 }

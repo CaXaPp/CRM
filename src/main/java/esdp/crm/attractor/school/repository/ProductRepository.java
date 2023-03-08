@@ -14,8 +14,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     boolean existsByName(String name);
 
-    @Query("SELECT p.id, p.name FROM Product p")
-    List<Object[]> getProductNameAndId();
-    @Query("SELECT p FROM Product p WHERE p.department.id = :id")
-    List<Product> findAllByDepartmentId(Long id);
+    List<Product> findAllByDepartment_id(Long id);
 }

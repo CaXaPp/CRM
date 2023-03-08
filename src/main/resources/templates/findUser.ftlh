@@ -1,6 +1,6 @@
 <#import "parts/general.ftlh" as g>
 
-<@g.general styles=["/css/login.css"]>
+<@g.general styles=["/crm/css/login.css"]>
     <div class="login-form">
         <h2 class="text-center">Поиск сотрудника</h2>
         <div class="content">
@@ -17,7 +17,7 @@
 
     <script>
 
-        let CHOICE_LINK = 'http://localhost:9000/admin/edit/user/' + $('#user-option').val();
+        let CHOICE_LINK = 'http://37.139.16.4:9000/crm/admin/edit/user/' + $('#user-option').val();
 
         document.getElementById('search-btn').href = CHOICE_LINK;
 
@@ -28,7 +28,8 @@
         $(document).ready(function() {
             $("#user-option").change(function () {
                 CHOICE_LINK
-                    = 'http://localhost:9000/admin/edit/user/' + $('#user-option').val();
+                    = 'http://37.139.16.4:9000/crm/admin/edit/user/' + $('#user-option').val();
+                document.getElementById('search-btn').href = CHOICE_LINK;
             });
         });
 

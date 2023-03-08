@@ -1,5 +1,6 @@
 package esdp.crm.attractor.school.controller;
 
+import esdp.crm.attractor.school.dto.ApplicationStatusDto;
 import esdp.crm.attractor.school.entity.ApplicationStatus;
 import esdp.crm.attractor.school.service.ApplicationStatusService;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +26,20 @@ public class ApplicationStatusController {
     }
 
     @GetMapping("/status/{id}")
-    public ResponseEntity<List<ApplicationStatus>> getAll(@PathVariable Long id) {
+    public ResponseEntity<List<ApplicationStatusDto>> getAll(@PathVariable Long id) {
         return new ResponseEntity<>(applicationStatusService.findAllByFunnel_Id(id), HttpStatus.OK);
     }
+
+    @GetMapping("/funnels-status")
+    public ResponseEntity<Long> getStatusIdByFunnel(@RequestParam(value = "status", required = false) String statusName,
+                                                                          @RequestParam(value = "funnel", required = false) Long funnelId) {
+        return new ResponseEntity<>(applicationStatusService.findStatusIdByFunnel(statusName, funnelId), HttpStatus.OK);
+    }
+
+    @GetMapping("/status-name/{id}")
+    public ResponseEntity<ApplicationStatusDto> getStatus(@PathVariable Long id) {
+        return new ResponseEntity<>(applicationStatusService.findStatusByFunnel_Id(id), HttpStatus.OK);
+    }
+
 
 }

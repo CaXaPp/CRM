@@ -5,9 +5,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>CRM system</title>
-        <base href="/">
-        <link rel="stylesheet" href="./css/main.css">
-        <link rel="stylesheet" href="./css/navbar.css">
+        <base href="/crm">
+        <link rel="stylesheet" href="/crm/css/navbar.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
               crossorigin="anonymous">
@@ -44,7 +43,8 @@
         <script src="${scriptSource}"></script>
     </#list>
 
-    <script src="/js/navbar.js"></script>
+    <script src="/crm/js/navbar.js"></script>
+    <script src="/crm/js/sameFunctions.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
