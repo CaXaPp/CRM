@@ -332,6 +332,7 @@ body {
     padding: 0;
 }
 .spinner_in_operations {
+    z-index: 1000;
     position: absolute;
     top: 50%;
     left: 45%;

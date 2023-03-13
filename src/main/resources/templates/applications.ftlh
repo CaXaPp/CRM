@@ -194,20 +194,18 @@
                                        name="createdAt"
                                        id="createdAt">
                             </div>
-
+                            <div class="information_field">
+                                <label for="status">Источник</label>
+                                <select class="form-select" aria-label="Select source" id="sourceId"
+                                        name="sourceId" required></select>
+                            </div>
                             <div class="information_field">
                                 <textarea class="form-control" name="description" id="applicationTextarea"
                                           placeholder="Примечание к заявлению"></textarea>
                             </div>
-
                             <input type="hidden" value="" id="hiddenApplicationId">
-                            <input type="hidden" value="" name="sourceId" id="sourceId">
 
                         </form>
-<#--                        <button type="button" class="btn btn-danger deleteBtn" value="" id="deleteBtn"-->
-<#--                                data-bs-toggle="modal" data-bs-target="#deleteApplicationModal"-->
-<#--                                onclick="getValueForRemoveApplication(this.value)">-->
-<#--                        </button>-->
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" form="modal_edit_form">
