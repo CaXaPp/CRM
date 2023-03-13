@@ -59,6 +59,16 @@ function switchOptionStatusSelect(status, statusId) {
     }
 }
 
+function switchOptionSourceSelect(source, sourceId) {
+    if (source.id === sourceId) {
+        document.getElementById('sourceId').insertAdjacentHTML('beforeend',
+            '<option selected value="' + source.id + '">' + source.name + '</option>');
+    } else {
+        document.getElementById('sourceId').insertAdjacentHTML('beforeend',
+            '<option value="' + source.id + '">' + source.name + '</option>');
+    }
+}
+
 
 function deleteItems() {
     deleteElemInLoop(document.getElementById('employee').querySelectorAll('option'));

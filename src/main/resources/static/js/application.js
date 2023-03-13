@@ -24,8 +24,14 @@ function getAllApplication() {
     document.getElementById('spinner_in_application_pulls').setAttribute('style', 'display:flex !important');
     deleteAllApplication();
     axios.get(BASE_URL + "/application/all").then(function (response) {
-        for (let i = 0; i < response.data.length; i++) {
-            createTdElemOnBody(response.data[i]);
+        if (response.data.length === 0) {
+            document.getElementById('spinner_in_application_pulls').setAttribute('style', 'display:none !important');
+            document.getElementById('emptyMsg').style.display = "block";
+        } else {
+            document.getElementById('emptyMsg').style.display = "none";
+            for (let i = 0; i < response.data.length; i++) {
+                createTdElemOnBody(response.data[i]);
+            }
         }
     })
 }
@@ -37,8 +43,14 @@ function getAllActiveApplicationAllTime() {
     document.getElementById('spinner_in_application_pulls').setAttribute('style', 'display:flex !important');
     deleteAllApplication();
     axios.get(BASE_URL + "/application/all-active").then(function (response) {
-        for (let i = 0; i < response.data.length; i++) {
-            createTdElemOnBody(response.data[i]);
+        if (response.data.length === 0) {
+            document.getElementById('spinner_in_application_pulls').setAttribute('style', 'display:none !important');
+            document.getElementById('emptyMsg').style.display = "block";
+        } else {
+            document.getElementById('emptyMsg').style.display = "none";
+            for (let i = 0; i < response.data.length; i++) {
+                createTdElemOnBody(response.data[i]);
+            }
         }
     })
 }
@@ -91,6 +103,14 @@ function getStatuses(id, statusId) {
     })
 }
 
+function getSources(id) {
+    axios.get(BASE_URL + "/source/all").then(function (response) {
+        for (let i = 0; i < response.data.length; i++) {
+            switchOptionSourceSelect(response.data[i], id);
+        }
+    })
+}
+
 function getTasks(id) {
     deleteAllTaskElement();
     axios.get(BASE_URL + "/tasks/tasks-by-id/" + id).then(function (response) {
@@ -132,14 +152,6 @@ function getMessageForCreate() {
     }, 2000);
 }
 
-function getMessageForDelete() {
-    let msg = document.getElementById('alert_delete_msg');
-    msg.hidden = false;
-    setTimeout(function () {
-        msg.hidden = true
-    }, 2000);
-}
-
 function applicationEditModalWindow(id) {
     document.getElementById('spinner_in_application').setAttribute('style', 'display:flex !important');
     axios
@@ -157,6 +169,7 @@ function applicationEditModalWindow(id) {
         getFunnels(response.data.product.department.id);
         getProducts(response.data.product.department.id, response.data.product.id);
         getStatuses(response.data.product.department.id, response.data.status.id);
+        getSources(response.data.source.id);
     });
 }
 
@@ -221,11 +234,9 @@ function updateAddedTask(e) {
         })
 }
 
-function fillNewApplication() {
+async function fillNewApplication() {
     cleanNewApplicationForm();
-    setTimeout(function () {
-        getProductsForNewApplication();
-    }, 300);
+    await getProductsForNewApplication();
 }
 
 function cleanNewApplicationForm() {
@@ -444,7 +455,6 @@ function fillFields(response) {
     document.getElementById('address').value = response.address;
     document.getElementById('hiddenApplicationId').value = response.id;
     document.getElementById('createdAt').value = parseDateByFormat(response.created_at);
-    document.getElementById('sourceId').value = response.source.id;
     document.getElementById('operationId').value = response.id;
     document.getElementById('departmentInApplication').value = response.product.department.name;
 
@@ -500,45 +510,43 @@ function createTaskTypeOption(response) {
 }
 
 function dataForTodayInApplication() {
-    setTimeout(function () {
-        let date = document.getElementById('input_group_application').querySelectorAll('input');
-        let value = getCheckedDateFromBody(date);
-        switch (value) {
-            case 'today':
-                getAllApplicationByDate(returnStartDateInApplication().substring(0, returnStartDateInApplication().length - 1), returnEndDateInApplication().substring(0, returnStartDateInApplication().length - 1), status_value);
-                start_date_for_sort = returnStartDateInApplication().substring(0, returnStartDateInApplication().length - 1);
-                end_date_for_sort = returnEndDateInApplication().substring(0, returnStartDateInApplication().length - 1);
-                break;
-            case 'yesterday':
-                getAllApplicationByDate(returnModifiedStartDateInApplication(1).substring(0, returnModifiedStartDateInApplication(1).length - 1), returnModifiedEndDateInApplication(1).substring(0, returnModifiedEndDateInApplication(1).length - 1), status_value);
-                start_date_for_sort = returnModifiedStartDateInApplication(1).substring(0, returnModifiedStartDateInApplication(1).length - 1);
-                end_date_for_sort = returnModifiedEndDateInApplication(1).substring(0, returnModifiedEndDateInApplication(1).length - 1);
-                break;
-            case 'week':
-                getAllApplicationByDate(returnModifiedStartDateInApplication(7).substring(0, returnModifiedStartDateInApplication(7).length - 1), returnEndDateInApplication().substring(0, returnEndDateInApplication().length - 1), status_value);
-                start_date_for_sort = returnModifiedStartDateInApplication(7).substring(0, returnModifiedStartDateInApplication(7).length - 1);
-                end_date_for_sort = returnEndDateInApplication().substring(0, returnEndDateInApplication().length - 1);
-                break;
-            case 'month':
-                getAllApplicationByDate(returnModifiedStartDateInApplication(30).substring(0, returnModifiedStartDateInApplication(30).length - 1), returnEndDateInApplication().substring(0, returnEndDateInApplication().length - 1), status_value);
-                start_date_for_sort = returnModifiedStartDateInApplication(30).substring(0, returnModifiedStartDateInApplication(30).length - 1);
-                end_date_for_sort = returnEndDateInApplication().substring(0, returnEndDateInApplication().length - 1);
-                break;
-            case 'infinity':
-                getAllApplication();
-                start_date_for_sort = returnModifiedStartDateInApplication(years_of_100).substring(0, returnModifiedStartDateInApplication(years_of_100).length - 1);
-                end_date_for_sort = returnEndDateInApplication().substring(0, returnEndDateInApplication().length - 1);
-                status_value = value;
-                break;
-            case 'all_active':
-                getAllActiveApplicationAllTime();
-                start_date_for_sort = returnModifiedStartDateInApplication(years_of_100).substring(0, returnModifiedStartDateInApplication(years_of_100).length - 1);
-                end_date_for_sort = returnEndDateInApplication().substring(0, returnEndDateInApplication().length - 1);
-                status_value = value;
-                break;
+    let date = document.getElementById('input_group_application').querySelectorAll('input');
+    let value = getCheckedDateFromBody(date);
+    switch (value) {
+        case 'today':
+            getAllApplicationByDate(returnStartDateInApplication().substring(0, returnStartDateInApplication().length - 1), returnEndDateInApplication().substring(0, returnStartDateInApplication().length - 1), status_value);
+            start_date_for_sort = returnStartDateInApplication().substring(0, returnStartDateInApplication().length - 1);
+            end_date_for_sort = returnEndDateInApplication().substring(0, returnStartDateInApplication().length - 1);
+            break;
+        case 'yesterday':
+            getAllApplicationByDate(returnModifiedStartDateInApplication(1).substring(0, returnModifiedStartDateInApplication(1).length - 1), returnModifiedEndDateInApplication(1).substring(0, returnModifiedEndDateInApplication(1).length - 1), status_value);
+            start_date_for_sort = returnModifiedStartDateInApplication(1).substring(0, returnModifiedStartDateInApplication(1).length - 1);
+            end_date_for_sort = returnModifiedEndDateInApplication(1).substring(0, returnModifiedEndDateInApplication(1).length - 1);
+            break;
+        case 'week':
+            getAllApplicationByDate(returnModifiedStartDateInApplication(7).substring(0, returnModifiedStartDateInApplication(7).length - 1), returnEndDateInApplication().substring(0, returnEndDateInApplication().length - 1), status_value);
+            start_date_for_sort = returnModifiedStartDateInApplication(7).substring(0, returnModifiedStartDateInApplication(7).length - 1);
+            end_date_for_sort = returnEndDateInApplication().substring(0, returnEndDateInApplication().length - 1);
+            break;
+        case 'month':
+            getAllApplicationByDate(returnModifiedStartDateInApplication(30).substring(0, returnModifiedStartDateInApplication(30).length - 1), returnEndDateInApplication().substring(0, returnEndDateInApplication().length - 1), status_value);
+            start_date_for_sort = returnModifiedStartDateInApplication(30).substring(0, returnModifiedStartDateInApplication(30).length - 1);
+            end_date_for_sort = returnEndDateInApplication().substring(0, returnEndDateInApplication().length - 1);
+            break;
+        case 'infinity':
+            getAllApplication();
+            start_date_for_sort = returnModifiedStartDateInApplication(years_of_100).substring(0, returnModifiedStartDateInApplication(years_of_100).length - 1);
+            end_date_for_sort = returnEndDateInApplication().substring(0, returnEndDateInApplication().length - 1);
+            status_value = value;
+            break;
+        case 'all_active':
+            getAllActiveApplicationAllTime();
+            start_date_for_sort = returnModifiedStartDateInApplication(years_of_100).substring(0, returnModifiedStartDateInApplication(years_of_100).length - 1);
+            end_date_for_sort = returnEndDateInApplication().substring(0, returnEndDateInApplication().length - 1);
+            status_value = value;
+            break;
 
-        }
-    }, 100);
+    }
 }
 
 function getCheckedDateFromBody(value) {

@@ -221,7 +221,6 @@ public class ApplicationController {
 
         try {
             applicationService.deleteApplication(id);
-            logsService.deleteApplicationHistory(id);
             return new ResponseEntity<>("Application " + id + " deleted", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Error deleting application " + id, HttpStatus.INTERNAL_SERVER_ERROR);

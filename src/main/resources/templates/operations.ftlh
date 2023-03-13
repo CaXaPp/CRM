@@ -127,11 +127,15 @@
                                        id="createdAt">
                             </div>
                             <div class="information_field">
+                                <label for="status">Источник</label>
+                                <select class="form-select" aria-label="Select source" id="sourceId"
+                                        name="sourceId" required></select>
+                            </div>
+                            <div class="information_field">
                                 <textarea class="form-control" name="description" id="applicationTextarea"
                                           placeholder="Примечания к заявлению"></textarea>
                             </div>
                             <input type="hidden" value="" id="hiddenApplicationId">
-                            <input type="hidden" value="" name="sourceId" id="sourceId">
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -238,7 +242,7 @@
                         </div>
 
                         <input type="hidden" id="employeeInNewApplication" value="" name="employeeId" required>
-                        <input type="hidden" value="10" name="sourceId">
+                        <input type="hidden" value="9" name="sourceId">
                         <input type="hidden" value="0" name="statusId" id="statusInNewApplication">
                     </form>
                 </div>
