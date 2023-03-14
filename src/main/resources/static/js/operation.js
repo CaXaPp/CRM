@@ -7,14 +7,13 @@ let employee;
 let product;
 let statusIdForPut;
 let outputStatusId;
+let ACTIVE = "ACTIVE";
+let NOT_ACTIVE = "NOT_ACTIVE";
+let ALL = "ALL";
 
 document.addEventListener("DOMContentLoaded", function () {
     getRoleForFunnels();
-    getStatusesByFunnelId(funnel_id);
-    getAllActiveApplication(funnel_id);
-    setTimeout(function () {
-        dragAndDropFunc();
-    }, 1000);
+    getStatusesByFunnelId(funnel_id, ACTIVE);
 })
 
 document.getElementById('addNewApplicationInOperationSource').addEventListener('submit', addNewApplicationInOperation);
@@ -40,6 +39,7 @@ function getApplicationById(e) {
         getFunnels(response.data.product.department.id);
         getProducts(response.data.product.department.id, response.data.product.id);
         getStatuses(response.data.product.department.id, response.data.status.id);
+        getSources(response.data.source.id);
     });
 }
 
@@ -73,6 +73,14 @@ function getStatuses(id, statusId) {
     axios.get(BASE_URL + "/statuses/status/" + id).then(function (response) {
         for (let i = 0; i < response.data.length; i++) {
             switchOptionStatusSelect(response.data[i], statusId);
+        }
+    })
+}
+
+function getSources(id) {
+    axios.get(BASE_URL + "/source/all").then(function (response) {
+        for (let i = 0; i < response.data.length; i++) {
+            switchOptionSourceSelect(response.data[i], id);
         }
     })
 }
@@ -134,13 +142,21 @@ function getForm(e) {
     })
 }
 
-function getStatusesByFunnelId(id) {
+function getStatusesByFunnelId(id, status_type) {
     deleteAllApplication();
     axios.get(BASE_URL + "/statuses/status/" + id).then(function (response) {
         for (let i = 0; i < response.data.length; i++) {
             createStatusBlock(response.data[i]);
         }
         createBtnForAddNewApplication(response.data[0].id);
+    }).then(function () {
+        if (ACTIVE === status_type) {
+            getAllActiveApplication(id);
+        } else if(NOT_ACTIVE === status_type) {
+            getAllNotActiveApplication(id);
+        } else {
+            getAllApplication(id);
+        }
     })
 }
 
@@ -154,29 +170,44 @@ function getProductsForNewApplication() {
 }
 
 function getAllApplication(id) {
-    deleteAllApplication();
     axios.get(BASE_URL + "/operations/funnel/all/" + id).then(function (response) {
-        for (let i = 0; i < response.data.length; i++) {
-            createTableInBody(response.data[i]);
+        if (response.data.length === 0) {
+            document.getElementById('spinner_in_operations').setAttribute('style', 'display:none !important');
+        } else {
+            for (let i = 0; i < response.data.length; i++) {
+                createTableInBody(response.data[i]);
+            }
         }
+    }).then(function () {
+        dragAndDropFunc();
     })
 }
 
 function getAllActiveApplication(id) {
-    deleteAllApplication();
     axios.get(BASE_URL + "/operations/funnel/active/" + id).then(function (response) {
-        for (let i = 0; i < response.data.length; i++) {
-            createTableInBody(response.data[i]);
+        if (response.data.length === 0) {
+            document.getElementById('spinner_in_operations').setAttribute('style', 'display:none !important');
+        } else {
+            for (let i = 0; i < response.data.length; i++) {
+                createTableInBody(response.data[i]);
+            }
         }
+    }).then(function () {
+        dragAndDropFunc();
     })
 }
 
 function getAllNotActiveApplication(id) {
-    deleteAllApplication();
     axios.get(BASE_URL + "/operations/funnel/not-active/" + id).then(function (response) {
-        for (let i = 0; i < response.data.length; i++) {
-            createTableInBody(response.data[i]);
+        if (response.data.length === 0) {
+            document.getElementById('spinner_in_operations').setAttribute('style', 'display:none !important');
+        } else {
+            for (let i = 0; i < response.data.length; i++) {
+                createTableInBody(response.data[i]);
+            }
         }
+    }).then(function () {
+        dragAndDropFunc();
     })
 }
 
@@ -265,11 +296,7 @@ function addNewApplicationInOperation(e) {
         .then((response) => {
             console.log(response);
             getRoleForFunnels();
-            getStatusesByFunnelId(funnel_id);
-            getAllActiveApplication(funnel_id);
-            setTimeout(function () {
-                dragAndDropFunc();
-            }, 1000);
+            getStatusesByFunnelId(funnel_id, ACTIVE);
             getMessageForCreate();
         })
         .catch((error) => {
@@ -322,12 +349,7 @@ function updateApplication(e) {
         body: data
     })
         .then(() => {
-            deleteAllApplication();
-            getStatusesByFunnelId(funnel_id);
-            getAllActiveApplication(funnel_id);
-            setTimeout(function () {
-                dragAndDropFunc();
-            }, 1000);
+            getStatusesByFunnelId(funnel_id, ACTIVE);
         })
 }
 
@@ -343,12 +365,7 @@ function updateFreeApplication(e) {
         .then((response) => {
             document.getElementById('freeApplicationFrom' + form.id.value).remove();
             document.getElementById('spinner_in_operations').setAttribute('style', 'display:flex !important');
-            getStatusesByFunnelId(document.getElementById('funnels').value);
-            getAllActiveApplication(document.getElementById('funnels').value);
-            setTimeout(function () {
-                dragAndDropFunc();
-            }, 1000);
-            getMessage();
+            getStatusesByFunnelId(document.getElementById('funnels').value, ACTIVE);
             console.log(response)
         })
         .catch((error) => {
@@ -363,40 +380,24 @@ function setIdForForm(e) {
 // Changes
 
 function changeToActiveApplication() {
-    getStatusesByFunnelId(funnel_id);
+    getStatusesByFunnelId(funnel_id, ACTIVE);
     document.getElementById('spinner_in_operations').setAttribute('style', 'display:flex !important');
-    getAllActiveApplication(funnel_id);
-    setTimeout(function () {
-        dragAndDropFunc();
-    }, 1000);
 }
 
 function changeToAllApplication() {
-    getStatusesByFunnelId(funnel_id);
+    getStatusesByFunnelId(funnel_id, ALL);
     document.getElementById('spinner_in_operations').setAttribute('style', 'display:flex !important');
-    getAllApplication(funnel_id);
-    setTimeout(function () {
-        dragAndDropFunc();
-    }, 1000);
 }
 
 function changeToNotActiveApplication() {
-    getStatusesByFunnelId(funnel_id);
+    getStatusesByFunnelId(funnel_id, NOT_ACTIVE);
     document.getElementById('spinner_in_operations').setAttribute('style', 'display:flex !important');
-    getAllNotActiveApplication(funnel_id);
-    setTimeout(function () {
-        dragAndDropFunc();
-    }, 1000);
 }
 
 function changeFunnel(e) {
     document.getElementById('spinner_in_operations').setAttribute('style', 'display:flex !important');
     funnel_id = e;
-    getStatusesByFunnelId(e);
-    getAllActiveApplication(e);
-    setTimeout(function () {
-        dragAndDropFunc();
-    }, 1000);
+    getStatusesByFunnelId(e, ACTIVE);
     document.getElementById('switch1').checked = true;
 }
 
@@ -465,7 +466,6 @@ function createStatusBlock(response) {
 }
 
 function createTableInBody(response) {
-    document.getElementById('spinner_in_operations').setAttribute('style', 'display:none !important');
     document.getElementById('column-list-to-drag' + response.status.id).insertAdjacentHTML('beforeend',
         '<div class="item-list-to-drag" id="application' + response.id + '" draggable="true" onclick="getApplicationById(' + response.id + ')" data-bs-toggle="modal" data-bs-target="#exampleModal2">' +
         '<input type="text" value="Заявление № ' + response.id + '">' +
@@ -547,7 +547,6 @@ function fillFields(response) {
     document.getElementById('address').value = response.address;
     document.getElementById('hiddenApplicationId').value = response.id;
     document.getElementById('createdAt').value = parseDateByPostgreFormat(response.created_at);
-    document.getElementById('sourceId').value = response.source.id;
     document.getElementById('operationId').value = response.id;
     document.getElementById('departmentInApplication').value = response.product.department.name;
 
@@ -657,6 +656,7 @@ function dragAndDropFunc() {
             }
         });
     });
+    document.getElementById('spinner_in_operations').setAttribute('style', 'display:none !important');
 }
 
 function getNewPosition(column, posY) {
