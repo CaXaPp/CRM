@@ -7,12 +7,13 @@ let employee;
 let product;
 let statusIdForPut;
 let outputStatusId;
+let ACTIVE = "ACTIVE";
+let NOT_ACTIVE = "NOT_ACTIVE";
+let ALL = "ALL";
 
 document.addEventListener("DOMContentLoaded", function () {
     getRoleForFunnels();
-    getStatusesByFunnelId(funnel_id);
-    getAllActiveApplication(funnel_id);
-    setTimeout(dragAndDropFunc, 2000);
+    getStatusesByFunnelId(funnel_id, ACTIVE);
 })
 
 document.getElementById('addNewApplicationInOperationSource').addEventListener('submit', addNewApplicationInOperation);
@@ -141,13 +142,21 @@ function getForm(e) {
     })
 }
 
-function getStatusesByFunnelId(id) {
+function getStatusesByFunnelId(id, status_type) {
     deleteAllApplication();
     axios.get(BASE_URL + "/statuses/status/" + id).then(function (response) {
         for (let i = 0; i < response.data.length; i++) {
             createStatusBlock(response.data[i]);
         }
         createBtnForAddNewApplication(response.data[0].id);
+    }).then(function () {
+        if (ACTIVE === status_type) {
+            getAllActiveApplication(id);
+        } else if(NOT_ACTIVE === status_type) {
+            getAllNotActiveApplication(id);
+        } else {
+            getAllApplication(id);
+        }
     })
 }
 
@@ -161,38 +170,44 @@ function getProductsForNewApplication() {
 }
 
 function getAllApplication(id) {
-    deleteAllApplication();
     axios.get(BASE_URL + "/operations/funnel/all/" + id).then(function (response) {
-        for (let i = 0; i < response.data.length; i++) {
-            createTableInBody(response.data[i]);
-        }
         if (response.data.length === 0) {
             document.getElementById('spinner_in_operations').setAttribute('style', 'display:none !important');
+        } else {
+            for (let i = 0; i < response.data.length; i++) {
+                createTableInBody(response.data[i]);
+            }
         }
+    }).then(function () {
+        dragAndDropFunc();
     })
 }
 
 function getAllActiveApplication(id) {
-    deleteAllApplication();
     axios.get(BASE_URL + "/operations/funnel/active/" + id).then(function (response) {
-        for (let i = 0; i < response.data.length; i++) {
-            createTableInBody(response.data[i]);
-        }
         if (response.data.length === 0) {
             document.getElementById('spinner_in_operations').setAttribute('style', 'display:none !important');
+        } else {
+            for (let i = 0; i < response.data.length; i++) {
+                createTableInBody(response.data[i]);
+            }
         }
+    }).then(function () {
+        dragAndDropFunc();
     })
 }
 
 function getAllNotActiveApplication(id) {
-    deleteAllApplication();
     axios.get(BASE_URL + "/operations/funnel/not-active/" + id).then(function (response) {
-        for (let i = 0; i < response.data.length; i++) {
-            createTableInBody(response.data[i]);
-        }
         if (response.data.length === 0) {
             document.getElementById('spinner_in_operations').setAttribute('style', 'display:none !important');
+        } else {
+            for (let i = 0; i < response.data.length; i++) {
+                createTableInBody(response.data[i]);
+            }
         }
+    }).then(function () {
+        dragAndDropFunc();
     })
 }
 
@@ -281,9 +296,7 @@ function addNewApplicationInOperation(e) {
         .then((response) => {
             console.log(response);
             getRoleForFunnels();
-            getStatusesByFunnelId(funnel_id);
-            getAllActiveApplication(funnel_id);
-            setTimeout(dragAndDropFunc, 2000);
+            getStatusesByFunnelId(funnel_id, ACTIVE);
             getMessageForCreate();
         })
         .catch((error) => {
@@ -336,10 +349,7 @@ function updateApplication(e) {
         body: data
     })
         .then(() => {
-            deleteAllApplication();
-            getStatusesByFunnelId(funnel_id);
-            getAllActiveApplication(funnel_id);
-            setTimeout(dragAndDropFunc, 2000);
+            getStatusesByFunnelId(funnel_id, ACTIVE);
         })
 }
 
@@ -355,10 +365,7 @@ function updateFreeApplication(e) {
         .then((response) => {
             document.getElementById('freeApplicationFrom' + form.id.value).remove();
             document.getElementById('spinner_in_operations').setAttribute('style', 'display:flex !important');
-            getStatusesByFunnelId(document.getElementById('funnels').value);
-            getAllActiveApplication(document.getElementById('funnels').value);
-            setTimeout(dragAndDropFunc, 2000);
-            getMessage();
+            getStatusesByFunnelId(document.getElementById('funnels').value, ACTIVE);
             console.log(response)
         })
         .catch((error) => {
@@ -373,32 +380,24 @@ function setIdForForm(e) {
 // Changes
 
 function changeToActiveApplication() {
-    getStatusesByFunnelId(funnel_id);
+    getStatusesByFunnelId(funnel_id, ACTIVE);
     document.getElementById('spinner_in_operations').setAttribute('style', 'display:flex !important');
-    getAllActiveApplication(funnel_id);
-    setTimeout(dragAndDropFunc, 2000);
 }
 
 function changeToAllApplication() {
-    getStatusesByFunnelId(funnel_id);
+    getStatusesByFunnelId(funnel_id, ALL);
     document.getElementById('spinner_in_operations').setAttribute('style', 'display:flex !important');
-    getAllApplication(funnel_id);
-    setTimeout(dragAndDropFunc, 2000);
 }
 
 function changeToNotActiveApplication() {
-    getStatusesByFunnelId(funnel_id);
+    getStatusesByFunnelId(funnel_id, NOT_ACTIVE);
     document.getElementById('spinner_in_operations').setAttribute('style', 'display:flex !important');
-    getAllNotActiveApplication(funnel_id);
-    setTimeout(dragAndDropFunc, 2000);
 }
 
 function changeFunnel(e) {
     document.getElementById('spinner_in_operations').setAttribute('style', 'display:flex !important');
     funnel_id = e;
-    getStatusesByFunnelId(e);
-    getAllActiveApplication(e);
-    setTimeout(dragAndDropFunc, 2000);
+    getStatusesByFunnelId(e, ACTIVE);
     document.getElementById('switch1').checked = true;
 }
 
